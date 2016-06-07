@@ -1,0 +1,166 @@
+# depslib dependency file v1.0
+1380560456 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_GLUT_evenement.c
+	<stdlib.h>
+	<stdio.h>
+	<GL/freeglut.h>
+	"MNS.h"
+
+1380582483 /home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS.h
+	"MNS_type.h"
+	"MNS_structure.h"
+	"MNS_GL_structure.h"
+
+1426974675 /home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_type.h
+
+1380188082 /home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_structure.h
+
+1451148583 /home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_GL_structure.h
+
+1393757776 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_GL_2D.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<string.h>
+	<float.h>
+	"MNS.h"
+
+1380224434 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_GL_Camera.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<float.h>
+	"MNS_type.h"
+	"MNS_GL_structure.h"
+
+1380560750 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_GL_Texture.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<string.h>
+	<float.h>
+	"MNS.h"
+
+1451657352 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_GL_animation.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<float.h>
+	"MNS_type.h"
+	"MNS_GL_structure.h"
+
+1451146347 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_GL_load.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"MNS.h"
+
+1465308046 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_GL_rendu.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<GL/glew.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<float.h>
+	"MNS.h"
+
+1441029996 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_Scripts.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
+1380184192 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_fps.c
+	<stdlib.h>
+	<stdio.h>
+	<time.h>
+	"MNS_structure.h"
+
+1451146680 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_read_write.c
+	<stdio.h>
+	<stdlib.h>
+
+1380554625 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_rotation.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<float.h>
+	"MNS_structure.h"
+
+1380422190 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_script.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
+1426974675 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/MNS_type.c
+	<stdlib.h>
+	<stdio.h>
+	"MNS.h"
+
+1380578885 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/bcm.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"MNS.h"
+
+1451145748 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/bmp.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"MNS_structure.h"
+
+1380554732 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/obj.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"MNS.h"
+
+1451145748 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/pcx.c
+	<stdio.h>
+	<stdlib.h>
+	"MNS_structure.h"
+
+1451145909 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/png.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<libpng10/png.h>
+	<png.h>
+	"MNS_structure.h"
+
+1451069115 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/smd.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<string.h>
+	<GL/glew.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	"MNS.h"
+
+1451654103 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/game.c
+	<stdio.h>
+	<stdlib.h>
+	<GL/glew.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/freeglut.h>
+	"MNS/MNS.h"
+
+1451330190 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/main.c
+	<stdio.h>
+	<stdlib.h>
+	<GL/glew.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/freeglut.h>
+

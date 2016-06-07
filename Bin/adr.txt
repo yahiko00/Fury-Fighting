@@ -1,0 +1,10 @@
+[config]
+
+Load = DATA/test/MainCharacter_static.smd
+
+Anim = DATA/test/MainCharacter_walk_gun.smd
+
+cadence =5
+
+
+
