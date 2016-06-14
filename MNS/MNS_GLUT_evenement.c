@@ -2,13 +2,6 @@
 #include <stdio.h>
 
 #include <GL/glew.h>
-
-#if !defined( USE_GLFW )
-#	include <GL/freeglut.h>
-#else
-#	include <GLFW/glfw3.h>
-#endif
-
 #include "MNS.h"
 
 MNS_event event;
