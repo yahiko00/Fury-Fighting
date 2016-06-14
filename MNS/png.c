@@ -4,11 +4,9 @@
 
 
 #ifdef __MINGW32__
-#include <libpng10/png.h>
-#endif
-
-#ifndef __MINGW32__
-#include <png.h>
+#	include <libpng10/png.h>
+#else
+#	include <png.h>
 #endif
 
 #include "MNS_structure.h"

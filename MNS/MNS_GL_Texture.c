@@ -1,6 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
+#include <GL/glew.h>
+
+#if !defined( USE_GLFW )
+#	include <GL/freeglut.h>
+#else
+#	include <GLFW/glfw3.h>
+#endif
+
 #include <GL/gl.h>
 #include <GL/glu.h>
 
