@@ -129,7 +129,7 @@
 	<stdlib.h>
 	"MNS_structure.h"
 
-1451145909 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/png.c
+1465421083 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/MNS/png.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -147,7 +147,7 @@
 	<GL/glu.h>
 	"MNS.h"
 
-1451654103 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/game.c
+1465311511 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/game.c
 	<stdio.h>
 	<stdlib.h>
 	<GL/glew.h>
@@ -163,4 +163,14 @@
 	<GL/gl.h>
 	<GL/glu.h>
 	<GL/freeglut.h>
+
+1465928702 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/main.cpp
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<SDL/SDL.h>
+	<GL/gl.h>
+	"MNS/MNS.h"
+
+1465929991 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/LMP3D/LMP3D_windows.cpp
 
