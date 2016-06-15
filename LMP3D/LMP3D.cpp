@@ -1,23 +1,24 @@
 #include "LMP3D.h"
 
-static SDL_Joystick *joystick = NULL;
-
-void LMP3D::Init()
+namespace LMP3D
 {
-	SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK );
+	static SDL_Joystick *joystick = nullptr;
 
+	void Init()
+	{
+		SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK );
 
-	SDL_ShowCursor( 0 );
-	SDL_JoystickEventState( SDL_ENABLE );
-	joystick = SDL_JoystickOpen( 0 );
+		SDL_ShowCursor( 0 );
+		SDL_JoystickEventState( SDL_ENABLE );
+		joystick = SDL_JoystickOpen( 0 );
 
-	SDL_WM_SetIcon( NULL, NULL );
+		SDL_WM_SetIcon( nullptr, nullptr );
+	}
+
+	void Close()
+	{
+		SDL_JoystickClose( joystick );
+		SDL_Quit();
+	}
 }
-
-void LMP3D::Close()
-{
-    SDL_JoystickClose( joystick );
-	SDL_Quit();
-}
-
 

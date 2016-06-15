@@ -1,45 +1,44 @@
-
-
-#ifndef _LMP3D_Window__
-#define _LMP3D_Window__
+#ifndef ___LMP3D_Window___
+#define ___LMP3D_Window___
 
 #include "LMP3D.h"
 
-
-
 namespace LMP3D
 {
-    namespace Windows
-    {
-        typedef struct
-        {
-            int sourisx,sourisy;
-            char quit,clikdroit,clikgauche;
+	namespace Windows
+	{
+		struct Event
+		{
+			int sourisx{ 0 };
+			int sourisy{ 0 };
+			char quit{ 0 };
+			char clikdroit{ 0 };
+			char clikgauche{ 0 };
+			char touche[350];
+		};
 
-            char touche[350];
+		class Window
+		{
+		public:
+			Window();
+			~Window();
 
+			void setName( const char *name );
+			void setSize( int w, int h );
+			void pollEvent();
+			void fps( int fps );
 
-        }Event;
+			inline Event const & getEvent() const
+			{
+				return event;
+			}
 
-        class Window
-        {
-            public:
-                Window();
-                ~Window();
-                void setName(const char *name);
-                void setSize(int w,int h);
-                void initEvent();
-                void getEvent();
-                void fps(int fps);
-
-                Event event;
-
-            private:
-                unsigned int time_a,time_b;
-        };
-    }
-
+		private:
+			Event event;
+			unsigned int time_a{ 0 };
+			unsigned int time_b{ 0 };
+		};
+	}
 }
-
 
 #endif
