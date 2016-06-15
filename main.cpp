@@ -14,16 +14,18 @@
 
 #include "LMP3D/LMP3D.h"
 
-LMP3D::Windows windows;
 
-void game();
+
+void game(LMP3D::Window::Window &window);
 
 int main( void )
 {
 
+
     LMP3D::Init();
-    windows.setName("Fury Fighting");
-    windows.setSize(640, 480);
+    LMP3D::Window::Window window;
+    window.setName("Fury Fighting");
+    window.setSize(640, 480);
 
 
 	glClearColor( 0.5, 0.5, 0.5, 0 );
@@ -34,27 +36,27 @@ int main( void )
 	glAlphaFunc( GL_GREATER, 0.0f );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-	game();
+	game(window);
 
     LMP3D::Close();
 
 	return 0;
 }
 
-void game()
+void game(LMP3D::Window::Window &window)
 {
 
-    windows.initEvent();
-	while(windows.event.quit == 0)
+    window.initEvent();
+	while(window.event.quit == 0)
 	{
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-        windows.getEvent();
+        window.getEvent();
 
 		glFlush();
 		SDL_GL_SwapBuffers();
 
-		windows.fps(30);
+		window.fps(30);
 	}
 }
 
