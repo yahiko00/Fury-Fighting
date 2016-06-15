@@ -7,7 +7,6 @@
 #endif
 
 #include "LMP3D/LMP3D.h"
-#include "LMP3D/LMP3D_Window.h"
 
 void game( LMP3D::Windows::Window &window );
 
@@ -35,11 +34,15 @@ int main( int argc, char ** argv )
 
 void game( LMP3D::Windows::Window &window )
 {
+	auto mesh = LMP3D::Graphics::LoadObjFile( "DATA/lightning.obj" );
+
 	while( !window.getEvent().quit )
 	{
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 		window.pollEvent();
+
+		mesh->draw();
 
 		glFlush();
 		SDL_GL_SwapBuffers();

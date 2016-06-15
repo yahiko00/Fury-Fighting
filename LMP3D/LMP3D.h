@@ -4,10 +4,14 @@
 #include <SDL/SDL.h>
 #include <GL/glew.h>
 
+#include "LMP3D_windows.h"
+#include "LMP3D_Window.h"
+#include "Graphics/Graphics.h"
+
 namespace LMP3D
 {
-    void Init();
-    void Close();
+	void Init();
+	void Close();
 }
 
 #endif

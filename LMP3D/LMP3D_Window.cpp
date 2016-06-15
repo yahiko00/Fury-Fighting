@@ -1,5 +1,7 @@
 #include "LMP3D_Window.h"
 
+#include <SDL/SDL.h>
+
 namespace LMP3D
 {
 	namespace Windows

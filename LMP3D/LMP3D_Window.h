@@ -1,8 +1,6 @@
 #ifndef ___LMP3D_Window___
 #define ___LMP3D_Window___
 
-#include "LMP3D.h"
-
 namespace LMP3D
 {
 	namespace Windows
