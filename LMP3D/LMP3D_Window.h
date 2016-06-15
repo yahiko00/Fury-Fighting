@@ -5,20 +5,22 @@
 
 #include "LMP3D.h"
 
-typedef struct
-{
-    int sourisx,sourisy;
-    char quit,clikdroit,clikgauche;
 
-    char touche[350];
-
-
-}Event;
 
 namespace LMP3D
 {
     namespace Windows
     {
+        typedef struct
+        {
+            int sourisx,sourisy;
+            char quit,clikdroit,clikgauche;
+
+            char touche[350];
+
+
+        }Event;
+
         class Window
         {
             public:
