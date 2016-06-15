@@ -12,24 +12,19 @@
 #	undef main
 #endif
 
+#include "LMP3D/LMP3D.h"
+
+LMP3D::Windows windows;
 
 void game();
 
 int main( void )
 {
-	SDL_Joystick *joystick = NULL;
-	SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK );
 
-	srand( time( NULL ) );
+    LMP3D::Init();
+    windows.setName("Fury Fighting");
+    windows.setSize(640, 480);
 
-	SDL_ShowCursor( 0 );
-	SDL_JoystickEventState( SDL_ENABLE );
-	joystick = SDL_JoystickOpen( 0 );
-
-	SDL_WM_SetIcon( NULL, NULL );
-	SDL_WM_SetCaption( "Fury Fighting", NULL );
-
-	SDL_SetVideoMode( 640, 480, 24, SDL_OPENGL );
 
 	glClearColor( 0.5, 0.5, 0.5, 0 );
 
@@ -41,20 +36,25 @@ int main( void )
 
 	game();
 
-	SDL_JoystickClose( joystick );
-	SDL_Quit();
+    LMP3D::Close();
 
 	return 0;
 }
 
 void game()
 {
-	//while(1)
+
+    windows.initEvent();
+	while(windows.event.quit == 0)
 	{
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+        windows.getEvent();
+
 		glFlush();
 		SDL_GL_SwapBuffers();
-		SDL_Delay( 1000 );
+
+		windows.fps(30);
 	}
 }
 
