@@ -13,11 +13,11 @@ typedef struct
     char touche[350];
 
 
-}LMP3D_event;
+}Event;
 
 namespace LMP3D
 {
-    namespace Window
+    namespace Windows
     {
         class Window
         {
@@ -30,7 +30,7 @@ namespace LMP3D
                 void getEvent();
                 void fps(int fps);
 
-                LMP3D_event event;
+                Event event;
 
             private:
                 unsigned int time_a,time_b;

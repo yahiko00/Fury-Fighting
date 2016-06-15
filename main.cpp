@@ -16,14 +16,14 @@
 
 
 
-void game(LMP3D::Window::Window &window);
+void game(LMP3D::Windows::Window &window);
 
 int main( void )
 {
 
 
     LMP3D::Init();
-    LMP3D::Window::Window window;
+    LMP3D::Windows::Window window;
     window.setName("Fury Fighting");
     window.setSize(640, 480);
 
@@ -43,7 +43,7 @@ int main( void )
 	return 0;
 }
 
-void game(LMP3D::Window::Window &window)
+void game(LMP3D::Windows::Window &window)
 {
 
     window.initEvent();

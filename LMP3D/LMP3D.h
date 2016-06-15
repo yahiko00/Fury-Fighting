@@ -16,10 +16,7 @@ namespace LMP3D
     void Init();
     void Close();
 
-    namespace Window
-    {
-        class Window;
-    }
+
 
 
 }

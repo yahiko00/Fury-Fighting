@@ -40,8 +40,8 @@
 		</Linker>
 		<Unit filename="LMP3D/LMP3D.cpp" />
 		<Unit filename="LMP3D/LMP3D.h" />
-		<Unit filename="LMP3D/LMP3D_windows.cpp" />
-		<Unit filename="LMP3D/LMP3D_windows.h" />
+		<Unit filename="LMP3D/LMP3D_Window.cpp" />
+		<Unit filename="LMP3D/LMP3D_Window.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

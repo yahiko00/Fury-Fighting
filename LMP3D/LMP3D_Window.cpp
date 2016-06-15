@@ -2,7 +2,7 @@
 
 namespace LMP3D
 {
-    namespace Window
+    namespace Windows
     {
         Window::Window()
         {
