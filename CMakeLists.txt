@@ -1,0 +1,91 @@
+cmake_minimum_required( VERSION 3.0 )
+
+# Used to look for external modules
+set( CMAKE_MODULE_PATH
+	${CMAKE_SOURCE_DIR}/CMake
+	${CMAKE_SOURCE_DIR}/CMake/Modules
+)
+set( CMAKE_TEMPLATES_DIR ${CMAKE_SOURCE_DIR}/CMake/Templates )
+
+project( FuryFighting )
+
+include( ExternalDependencies )
+
+# Organize projects into folders
+set_property( GLOBAL PROPERTY USE_FOLDERS ON )
+
+# Prepare binary paths
+if("${PROJECTS_BINARIES_OUTPUT_DIR}" STREQUAL "")
+    set( PROJECTS_BINARIES_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Bin" CACHE PATH "The path to the built binaries" )
+endif()
+
+set( PROJECTS_BINARIES_OUTPUT_DIR_RELEASE ${PROJECTS_BINARIES_OUTPUT_DIR} )
+set( PROJECTS_BINARIES_OUTPUT_DIR_DEBUG ${PROJECTS_BINARIES_OUTPUT_DIR} )
+
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}" )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}" )
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}" )
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}" )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}" )
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}" )
+# Look for needed libraries
+find_package( OpenGL )
+find_package( GLEW )
+
+set( SDL_BUILDING_LIBRARY ON )
+find_package( SDL )
+find_package( SDL_image )
+
+if( OPENGL_FOUND AND GLEW_FOUND AND SDL_FOUND )
+	add_definitions( "-DUSE_GLFW -D_CRT_SECURE_NO_WARNINGS" )
+
+	include_directories(
+		${GLEW_INCLUDE_DIR}
+		${SDL_INCLUDE_DIR}
+	)
+
+	add_subdirectory( LMP3D )
+
+	include_directories(
+		${CMAKE_SOURCE_DIR}/Src
+	)
+
+	set( BASE_LIBRARIES
+		${OPENGL_gl_LIBRARY}
+		${OPENGL_glu_LIBRARY}
+		${GLEW_LIBRARY}
+		${SDL_LIBRARY}
+	)
+
+	file( GLOB ${PROJECT_NAME}_HEADER_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/*.h
+		${CMAKE_CURRENT_SOURCE_DIR}/*.inl
+	)
+
+	file( GLOB ${PROJECT_NAME}_SOURCE_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/*.c
+		${CMAKE_CURRENT_SOURCE_DIR}/*.cc
+	)
+
+	add_executable( ${PROJECT_NAME} ${${PROJECT_NAME}_HEADER_FILES} ${${PROJECT_NAME}_SOURCE_FILES} )
+
+	target_link_libraries( ${PROJECT_NAME}
+		${BASE_LIBRARIES}
+		LMP3D
+	)
+
+	copy_dll( ${PROJECT_NAME} ${SDL_LIBRARY} Debug )
+	copy_dll( ${PROJECT_NAME} ${SDL_LIBRARY} Release )
+else()
+	if ( NOT OPENGL_FOUND )
+		message( SEND_ERROR "OpenGL library not found" )
+	endif ()
+	if ( NOT GLEW_FOUND )
+		message( SEND_ERROR "GLEW library not found" )
+	endif ()
+	if ( NOT SDL_FOUND )
+		message( SEND_ERROR "SDL library not found" )
+	endif ()
+endif()

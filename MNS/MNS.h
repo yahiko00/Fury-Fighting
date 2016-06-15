@@ -22,7 +22,12 @@ void MNS_Fps(MNS_FPS *tim,int fps);
 
 
 //Evenement
+#if !defined( USE_GLFW )
 MNS_event MNS_Evenement(void);
+#else
+typedef struct GLFWwindow GLFWwindow;
+MNS_event MNS_Evenement( GLFWwindow * window );
+#endif
 void MNS_Evenement_init(void);
 void MNS_Fenetre(int largeur,int hauteur,int fullscreen);
 void MNS_Fenetre_redimension(float *radio);

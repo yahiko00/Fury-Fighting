@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
+#include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 
@@ -26,7 +28,7 @@ void MNS_bone_rotation(MNS_Model3D *obj)
         p.y = v[l].y;
         p.z = v[l].z;
 
-        id = obj->id[l];
+        id = ( int )obj->id[l];
 
 
         p.x -= obj->defaut.skeleton[id].p.x;
@@ -36,24 +38,24 @@ void MNS_bone_rotation(MNS_Model3D *obj)
         ty = p.y;
         tz = p.z;
         r = -obj->defaut.skeleton[id].r.x;
-        c = cos(r);
-        s = sin(r);
+        c = ( float )cos(r);
+        s = ( float )sin(r);
         p.z = ( c * tz ) - ( s *ty);
         p.y = ( s * tz ) + ( c *ty);
 
         tx = p.x;
         ty = p.y;
         r = -obj->defaut.skeleton[id].r.y;
-        c = cos(r);
-        s = sin(r);
+        c = ( float )cos(r);
+        s = ( float )sin(r);
         p.y = ( c * ty ) - ( s *tx);
         p.x = ( s * ty ) + ( c *tx);
 
         tx = p.x;
         tz = p.z;
         r = obj->defaut.skeleton[id].r.z;
-        c = cos(r);
-        s = sin(r);
+        c = ( float )cos(r);
+        s = ( float )sin(r);
         p.x = ( c * tx ) - ( s *tz);
         p.z = ( s * tx ) + ( c *tz);
 
@@ -121,7 +123,7 @@ void MNS_bone_rotation_old(MNS_Model3D *obj)
         p.y = v[l].y;
         p.z = v[l].z;
 
-        id = obj->id[l];
+        id = ( int )obj->id[l];
 
         while(1)
         {
@@ -172,7 +174,6 @@ void MNS_bone_transition_old(MNS_Model3D *obj)
 {
     int ida,idas,id,f = obj->play;
     float r;
-    float x,y,z;
     VEC3 rot[200];
 
     for(id = 0;id < obj->nbones;id++)
@@ -191,8 +192,8 @@ void MNS_bone_transition_old(MNS_Model3D *obj)
         r += obj->anim[f]->skeleton[ida].r.x;
         rot[id].x = r;
 
-        obj->precalcul[id].p.x = cos(-r);
-        obj->precalcul[id].r.x = sin(-r);
+        obj->precalcul[id].p.x = ( float )cos(-r);
+        obj->precalcul[id].r.x = ( float )sin(-r);
 
         r = obj->anim[f]->skeleton[idas].r.y - obj->anim[f]->skeleton[ida].r.y;
         r = r/(obj->anim[f]->ncadence+1);
@@ -200,8 +201,8 @@ void MNS_bone_transition_old(MNS_Model3D *obj)
         r += obj->anim[f]->skeleton[ida].r.y;
         rot[id].y = r;
 
-        obj->precalcul[id].p.y = cos(-r);
-        obj->precalcul[id].r.y = sin(-r);
+        obj->precalcul[id].p.y = ( float )cos(-r);
+        obj->precalcul[id].r.y = ( float )sin(-r);
 
         r = obj->anim[f]->skeleton[idas].r.z - obj->anim[f]->skeleton[ida].r.z;
         r = r/(obj->anim[f]->ncadence+1);
@@ -209,8 +210,8 @@ void MNS_bone_transition_old(MNS_Model3D *obj)
         r += obj->anim[f]->skeleton[ida].r.z;
         rot[id].z = r;
 
-        obj->precalcul[id].p.z = cos(r);
-        obj->precalcul[id].r.z = sin(r);
+        obj->precalcul[id].p.z = ( float )cos(r);
+        obj->precalcul[id].r.z = ( float )sin(r);
     }
 
     int i;
