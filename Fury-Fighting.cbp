@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="Moteur3D" />
+		<Option title="Fury-Fighting" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -13,8 +13,6 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Linker>
-					<Add library="libpng" />
-					<Add library="glut" />
 					<Add library="GL" />
 					<Add library="GLU" />
 				</Linker>
@@ -26,8 +24,6 @@
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Linker>
-					<Add library="libpng12" />
-					<Add library="freeglut" />
 					<Add library="opengl32" />
 					<Add library="glu32" />
 				</Linker>
@@ -39,74 +35,14 @@
 		</Compiler>
 		<Linker>
 			<Add option="-s" />
+			<Add library="SDL" />
+			<Add library="SDL_image" />
 		</Linker>
-		<Unit filename="MNS/MNS.h" />
-		<Unit filename="MNS/MNS_GLUT_evenement.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/MNS_GL_2D.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/MNS_GL_Camera.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/MNS_GL_Texture.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/MNS_GL_animation.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/MNS_GL_load.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/MNS_GL_rendu.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/MNS_GL_structure.h" />
-		<Unit filename="MNS/MNS_Scripts.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/MNS_fps.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/MNS_read_write.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/MNS_rotation.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/MNS_script.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/MNS_structure.h" />
-		<Unit filename="MNS/MNS_type.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/MNS_type.h" />
-		<Unit filename="MNS/bcm.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/bmp.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/obj.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/pcx.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/png.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="MNS/smd.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="game.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="main.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="LMP3D/LMP3D.cpp" />
+		<Unit filename="LMP3D/LMP3D.h" />
+		<Unit filename="LMP3D/LMP3D_windows.cpp" />
+		<Unit filename="LMP3D/LMP3D_windows.h" />
+		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
