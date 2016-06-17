@@ -35,8 +35,8 @@ namespace LMP3D
 
 		private:
 			Event event;
-			unsigned int time_a{ 0 };
-			unsigned int time_b{ 0 };
+			unsigned int time_a;
+			unsigned int time_b;
 		};
 	}
 }

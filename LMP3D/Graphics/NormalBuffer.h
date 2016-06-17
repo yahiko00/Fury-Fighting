@@ -21,8 +21,12 @@ namespace LMP3D
 
 			inline bool bind()const
 			{
-				glEnableClientState( GL_NORMAL_ARRAY );
-				glNormalPointer( GL_FLOAT, 0, &m_data[0] );
+				if ( getCount() )
+				{
+					glEnableClientState( GL_NORMAL_ARRAY );
+					glNormalPointer( GL_FLOAT, 0, &m_data[0] );
+				}
+
 				return checkGlError( "glNormalPointer" );
 			}
 

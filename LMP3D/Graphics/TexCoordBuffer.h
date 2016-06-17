@@ -21,9 +21,13 @@ namespace LMP3D
 
 			inline bool bind()const
 			{
-				glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-				glTexCoordPointer( 2, GL_FLOAT, 0, &m_data[0] );
-				return checkGlError( "glVertexPointer" );
+				if ( getCount() )
+				{
+					glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+					glTexCoordPointer( 2, GL_FLOAT, 0, &m_data[0] );
+				}
+
+				return checkGlError( "glTexCoordPointer" );
 			}
 
 			inline void unbind()const
