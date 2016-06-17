@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ___LMP3D_Graphics_ObjLoader_H___
+#define ___LMP3D_Graphics_ObjLoader_H___
 
 #include <string>
 
@@ -8,6 +9,8 @@ namespace LMP3D
 {
 	namespace Graphics
 	{
-		MeshPtr LoadObjFile( std::string const & fileName );
+		Object LoadObjFile( std::string const & fileName, MaterialMap materials );
 	}
 }
+
+#endif

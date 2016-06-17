@@ -98,7 +98,7 @@ namespace LMP3D
 
 		//		obj->id = malloc( obj->nv * 1 * sizeof( float ) );
 		//		obj->bones = malloc( obj->nbones * 1 * sizeof( short ) );
-		//		obj->nodes = malloc( obj->nbones * 1 * sizeof( VEC3 ) );
+		//		obj->nodes = malloc( obj->nbones * 1 * sizeof( Vector3 ) );
 		//		obj->precalcul = malloc( obj->nbones * 1 * sizeof( MATRIX3x2 ) );
 		//		obj->defaut.skeleton = malloc( obj->defaut.n * 1 * sizeof( MATRIX3x2 ) );
 
@@ -335,7 +335,7 @@ namespace LMP3D
 
 		//void MNS_SMD_create_skeleton( MNS_Anim3D *anim, int n, short *bones )
 		//{
-		//	VEC3 bone[200], p[200];
+		//	Vector3 bone[200], p[200];
 		//	int id, i, l;
 		//	float rx, ry, rz;
 

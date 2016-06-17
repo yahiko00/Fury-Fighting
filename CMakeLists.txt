@@ -58,6 +58,8 @@ if( OPENGL_FOUND AND GLEW_FOUND AND SDL_FOUND )
 	include_directories(
 		${GLEW_INCLUDE_DIR}
 		${SDL_INCLUDE_DIR}
+		${SDL_INCLUDE_DIR}/SDL
+		${SDL_IMAGE_INCLUDE_DIR}
 	)
 
 	add_subdirectory( LMP3D )
@@ -71,6 +73,7 @@ if( OPENGL_FOUND AND GLEW_FOUND AND SDL_FOUND )
 		${OPENGL_glu_LIBRARY}
 		${GLEW_LIBRARY}
 		${SDL_LIBRARY}
+		${SDL_IMAGE_LIBRARY}
 	)
 
 	file( GLOB ${PROJECT_NAME}_HEADER_FILES
@@ -94,6 +97,8 @@ if( OPENGL_FOUND AND GLEW_FOUND AND SDL_FOUND )
 
 	copy_dll( ${PROJECT_NAME} ${SDL_LIBRARY} Debug )
 	copy_dll( ${PROJECT_NAME} ${SDL_LIBRARY} Release )
+	copy_dll( ${PROJECT_NAME} ${SDL_IMAGE_LIBRARY} Debug )
+	copy_dll( ${PROJECT_NAME} ${SDL_IMAGE_LIBRARY} Release )
 else()
 	if ( NOT OPENGL_FOUND )
 		message( SEND_ERROR "OpenGL library not found" )

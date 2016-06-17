@@ -8,6 +8,12 @@
 
 #include "LMP3D/LMP3D.h"
 
+namespace
+{
+	static int const WINDOW_WIDTH = 640;
+	static int const WINDOW_HEIGHT = 480;
+}
+
 void game( LMP3D::Windows::Window &window );
 
 int main( int argc, char ** argv )
@@ -15,9 +21,9 @@ int main( int argc, char ** argv )
 	LMP3D::Init();
 	LMP3D::Windows::Window window;
 	window.setName( "Fury Fighting" );
-	window.setSize( 640, 480 );
+	window.setSize( WINDOW_WIDTH, WINDOW_HEIGHT );
 
-	glClearColor( 0.5, 0.5, 0.5, 0 );
+	glClearColor( 0.5f, 0.5f, 0.5f, 0.0f );
 
 	//glEnable( GL_CULL_FACE );
 
@@ -34,19 +40,31 @@ int main( int argc, char ** argv )
 
 void game( LMP3D::Windows::Window &window )
 {
-	auto mesh = LMP3D::Graphics::LoadObjFile( "DATA/lightning.obj" );
+	LMP3D::Graphics::Viewport viewport( LMP3D::Graphics::Size( WINDOW_WIDTH, WINDOW_HEIGHT ) );
+	LMP3D::Graphics::Camera camera;
+	LMP3D::Graphics::MaterialMap materials;
+	LMP3D::Graphics::Object object = LMP3D::Graphics::LoadObjFile( "DATA/lightning.obj", materials );
 
-	while( !window.getEvent().quit )
+	camera.translate( -50.0f, 0.0f, 0.0f );
+
+	while ( !window.getEvent().quit )
 	{
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 		window.pollEvent();
-
-		mesh->draw();
+		viewport.perspective();
+		camera.bind();
+		object.draw();
+		camera.unbind();
 
 		glFlush();
 		SDL_GL_SwapBuffers();
 
 		window.fps( 30 );
+	}
+
+	for ( LMP3D::Graphics::MaterialMap::iterator it = materials.begin(); it != materials.end(); ++it )
+	{
+		delete it->second;
 	}
 }

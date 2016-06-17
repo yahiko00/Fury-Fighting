@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ___LMP3D_Graphics_TexCoordBuffer_H___
+#define ___LMP3D_Graphics_TexCoordBuffer_H___
 
 #include "Common.h"
 
@@ -9,24 +10,25 @@ namespace LMP3D
 		class TexCoordBuffer
 		{
 		public:
-			explicit inline TexCoordBuffer()
-				: m_data{}
+			explicit inline TexCoordBuffer( Vector2Array const & data )
+				: m_data( data )
 			{
 			}
 
-			inline ~TexCoordBuffer()noexcept
+			inline ~TexCoordBuffer()throw()
 			{
-			}
-
-			inline void setData( Vector2Array && data )
-			{
-				m_data = std::move( data );
 			}
 
 			inline bool bind()const
 			{
-				glTexCoordPointer( 2, GL_FLOAT, 0, m_data.data() );
+				glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+				glTexCoordPointer( 2, GL_FLOAT, 0, &m_data[0] );
 				return checkGlError( "glVertexPointer" );
+			}
+
+			inline void unbind()const
+			{
+				glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 			}
 
 			inline GLsizei getCount()const
@@ -39,3 +41,5 @@ namespace LMP3D
 		};
 	}
 }
+
+#endif

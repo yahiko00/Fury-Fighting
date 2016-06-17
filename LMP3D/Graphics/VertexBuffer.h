@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ___LMP3D_Graphics_VertexBuffer_H___
+#define ___LMP3D_Graphics_VertexBuffer_H___
 
 #include "Common.h"
 
@@ -9,27 +10,28 @@ namespace LMP3D
 		class VertexBuffer
 		{
 		public:
-			explicit inline VertexBuffer()
-				: m_data{}
+			explicit inline VertexBuffer( Vector3Array const & data )
+				: m_data( data )
 			{
 			}
 
-			inline ~VertexBuffer()noexcept
+			inline ~VertexBuffer()throw()
 			{
-			}
-
-			inline void setData( Vector3Array && data )
-			{
-				m_data = std::move( data );
 			}
 
 			inline bool bind()const
 			{
-				glVertexPointer( 3, GL_FLOAT, 0, m_data.data() );
+				glEnableClientState( GL_VERTEX_ARRAY );
+				glVertexPointer( 3, GL_FLOAT, 0, &m_data[0] );
 				return checkGlError( "glVertexPointer" );
 			}
 
-			inline GLsizei getSize()const
+			inline void unbind()const
+			{
+				glDisableClientState( GL_VERTEX_ARRAY );
+			}
+
+			inline GLsizei getCount()const
 			{
 				return static_cast< GLsizei >( m_data.size() );
 			}
@@ -39,3 +41,5 @@ namespace LMP3D
 		};
 	}
 }
+
+#endif

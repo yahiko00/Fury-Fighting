@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ___LMP3D_Graphics_NormalBuffer_H___
+#define ___LMP3D_Graphics_NormalBuffer_H___
 
 #include "Common.h"
 
@@ -9,24 +10,25 @@ namespace LMP3D
 		class NormalBuffer
 		{
 		public:
-			explicit inline NormalBuffer()
-				: m_data{}
+			explicit inline NormalBuffer( Vector3Array const & data )
+				: m_data( data )
 			{
 			}
 
-			inline ~NormalBuffer()noexcept
+			inline ~NormalBuffer()throw()
 			{
-			}
-
-			inline void setData( Vector3Array && data )
-			{
-				m_data = std::move( data );
 			}
 
 			inline bool bind()const
 			{
-				glNormalPointer( GL_FLOAT, 0, m_data.data() );
+				glEnableClientState( GL_NORMAL_ARRAY );
+				glNormalPointer( GL_FLOAT, 0, &m_data[0] );
 				return checkGlError( "glNormalPointer" );
+			}
+
+			inline void unbind()const
+			{
+				glDisableClientState( GL_NORMAL_ARRAY );
 			}
 
 			inline GLsizei getCount()const
@@ -39,3 +41,5 @@ namespace LMP3D
 		};
 	}
 }
+
+#endif

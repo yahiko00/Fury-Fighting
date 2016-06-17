@@ -1,53 +1,98 @@
 #include "ObjLoader.h"
 
-#include "TexturedMesh.h"
+#include "Mesh.h"
+#include "Object.h"
+#include "Material.h"
+#include "Texture.h"
+
+#include "LMP3D/StringUtils.h"
 
 #include <cstdlib>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <map>
+
+#include <SDL/SDL_image.h>
 
 namespace LMP3D
 {
 	namespace Graphics
 	{
-		inline void trim_left( std::string & text )
+		template< typename T >
+		struct pointer
 		{
-			auto index = text.find_first_not_of( " \t" );
+			typedef void( *dtorFunc )( T * );
 
-			if ( index != std::string::npos )
+			inline pointer( T * pointer, dtorFunc dtor )
+				: m_pointer( pointer )
+				, m_dtor( dtor )
 			{
-				text = text.substr( index );
 			}
-		}
 
-		inline void trim_right( std::string & text )
-		{
-			auto index = text.find_last_not_of( " \t" );
-
-			if ( index != std::string::npos )
+			inline ~pointer()
 			{
-				text = text.substr( 0, index + 1 );
+				( *m_dtor )( m_pointer );
 			}
+
+			inline T * operator->()
+			{
+				return m_pointer;
+			}
+
+			inline operator T*()
+			{
+				return m_pointer;
+			}
+
+		private:
+			T * m_pointer;
+			dtorFunc m_dtor;
+		};
+
+		TexturePtr LoadTexture( std::string const & fileName )
+		{
+			pointer< SDL_Surface > image( IMG_Load( fileName.c_str() ), SDL_FreeSurface );
+			TexturePtr ret = NULL;
+
+			if ( image )
+			{
+				int format = GL_BGR;
+
+				if ( image->format->BytesPerPixel == 3 )
+				{
+					format = GL_RGB;
+				}
+				else if ( image->format->BytesPerPixel == 4 )
+				{
+					if ( image->format->Amask > image->format->Rmask )
+					{
+						format = GL_BGRA;
+					}
+					else
+					{
+						format = GL_RGBA;
+					}
+				}
+
+				uint8_t * data = reinterpret_cast< uint8_t * >( image->pixels );
+				ret = new Texture( ByteArray( data, data + image->pitch * image->h ), Size( image->w, image->h ), format );
+			}
+
+			return ret;
 		}
 
-		inline void trim( std::string & text )
+		void LoadMtlFile( std::string const & fileName, Mesh & mesh, MaterialMap & materials )
 		{
-			trim_left( text );
-			trim_right( text );
-		}
-
-		void LoadMtlFile( std::string const & fileName, TexturedMesh & mesh, std::vector< std::string > & names )
-		{
-			std::ifstream file{ fileName };
+			std::ifstream file( fileName.c_str() );
 			std::string line;
-			auto select = names.end();
+			MaterialMap::iterator select = materials.end();
 
 			while ( std::getline( file, line ) )
 			{
 				trim( line );
-				std::stringstream stream{ line };
+				std::stringstream stream( line );
 				std::string ident;
 				stream >> ident;
 
@@ -55,34 +100,69 @@ namespace LMP3D
 				{
 					std::string name;
 					stream >> name;
-					select = std::find( names.begin(), names.end(), name );
+					select = materials.find( name );
 				}
-				else if ( ident == "map_Kd" )
+				else if ( select != materials.end() )
 				{
-					std::string path;
-					stream >> path;
-					*select = path;
+					if ( ident == "Ka" )
+					{
+						Colour3 value;
+						stream >> value.r >> value.g >> value.b;
+						select->second->setAmbient( value );
+					}
+					else if ( ident == "Kd" )
+					{
+						Colour3 value;
+						stream >> value.r >> value.g >> value.b;
+						select->second->setDiffuse( value );
+					}
+					else if ( ident == "Ks" )
+					{
+						Colour3 value;
+						stream >> value.r >> value.g >> value.b;
+						select->second->setSpecular( value );
+					}
+					else if ( ident == "Ns" )
+					{
+						float value;
+						stream >> value;
+						select->second->setExponent( value );
+					}
+					else if ( ident == "d" )
+					{
+						float value;
+						stream >> value;
+						select->second->setOpacity( value );
+					}
+					else if ( ident == "map_Kd" )
+					{
+						std::string path;
+						stream >> path;
+						select->second->setTexture( LoadTexture( getPath( fileName ) + PATH_SEPARATOR + path ) );
+					}
 				}
 			}
 		}
 
-		MeshPtr LoadObjFile( std::string const & fileName )
+		Object LoadObjFile( std::string const & fileName, MaterialMap materials )
 		{
-			std::ifstream file{ fileName };
+			std::ifstream file( fileName.c_str() );
 			std::string line;
 			std::string mtlfile;
-			uint32_t nv{ 0u };
-			uint32_t nvt{ 0u };
-			uint32_t nvn{ 0u };
-			uint32_t nf{ 0u };
-			uint32_t ntf{ 0u };
-			uint32_t ng{ 0u };
-			std::vector< FaceArray > faces;
+			uint16_t nv = 0u;
+			uint16_t nvt = 0u;
+			uint16_t nvn = 0u;
+			uint16_t nf = 0u;
+			uint16_t ntf = 0u;
+			uint16_t ng = 0u;
+			std::vector< uint16_t > faces;
+			MaterialArray submeshesMaterials;
+			std::string mtlname;
 
 			while ( std::getline( file, line ) )
 			{
 				trim_left( line );
-				std::stringstream stream{ line };
+				std::stringstream stream( line );
 				std::string ident;
 				stream >> ident;
 
@@ -90,7 +170,7 @@ namespace LMP3D
 				{
 					if ( ntf )
 					{
-						faces.push_back( FaceArray{ ntf } );
+						faces.push_back( ntf );
 						ntf = 0u;
 					}
 
@@ -113,8 +193,20 @@ namespace LMP3D
 				{
 					if ( ntf )
 					{
-						faces.push_back( FaceArray{ ntf } );
+						faces.push_back( ntf );
 						ntf = 0u;
+					}
+
+					if ( ident == "usemtl" )
+					{
+						stream >> mtlname;
+						MaterialPtr material = new Material;
+						materials.insert( std::make_pair( mtlname, material ) );
+					}
+
+					if ( !mtlname.empty() )
+					{
+						submeshesMaterials.push_back( materials.find( mtlname )->second );
 					}
 				}
 				else if ( ident == "mtllib" )
@@ -125,18 +217,18 @@ namespace LMP3D
 
 			if ( ntf )
 			{
-				faces.push_back( FaceArray{ ntf } );
+				faces.push_back( ntf );
 			}
 
 			file.clear();
 			file.seekg( 0, std::ios::beg );
 
-			Vector3Array allvtx{ nv };
-			Vector2Array alltex{ nvt };
-			Vector3Array allnml{ nvn };
-			auto vtxit = allvtx.begin();
-			auto texit = alltex.begin();
-			auto nmlit = allnml.begin();
+			Vector3Array allvtx( nv );
+			Vector2Array alltex( nvt );
+			Vector3Array allnml( nvn );
+			Vector3Array::iterator vtxit = allvtx.begin();
+			Vector2Array::iterator texit = alltex.begin();
+			Vector3Array::iterator nmlit = allnml.begin();
 
 			std::cout << "    Vertex count: " << nv << std::endl;
 			std::cout << "    TexCoord count: " << nvt << std::endl;
@@ -146,7 +238,7 @@ namespace LMP3D
 			while ( std::getline( file, line ) )
 			{
 				trim( line );
-				std::stringstream stream{ line };
+				std::stringstream stream( line );
 				std::string ident;
 				stream >> ident;
 
@@ -170,22 +262,22 @@ namespace LMP3D
 			file.clear();
 			file.seekg( 0, std::ios::beg );
 
-			Vector3Array vertex{ nf * 3 };
-			Vector3Array normal{ nf * 3 };
-			Vector2Array texcoord{ nf * 3 };
+			Vector3Array vertex( nf * 3 );
+			Vector3Array normal( nf * 3 );
+			Vector2Array texcoord( nf * 3 );
 			vtxit = vertex.begin();
 			texit = texcoord.begin();
 			nmlit = normal.begin();
-			auto facesit = faces.end();
-			FaceArray::iterator idxit;
-			uint32_t idx{ 0u };
+			std::vector< uint16_t >::iterator facesit = faces.end();
 			std::vector< std::string > textures;
 			textures.reserve( faces.size() );
+			MeshPtr mesh = new Mesh;
+			uint32_t submeshIndex = 0u;
 
 			while ( std::getline( file, line ) )
 			{
 				trim( line );
-				std::stringstream stream{ line };
+				std::stringstream stream( line );
 				std::string ident;
 				stream >> ident;
 
@@ -197,11 +289,17 @@ namespace LMP3D
 					}
 					else
 					{
+						mesh->addSubmesh( submeshesMaterials[submeshIndex++]
+										  , Vector3Array( vertex.begin(), vtxit )
+										  , Vector3Array( normal.begin(), nmlit )
+										  , Vector2Array( texcoord.begin(), texit ) );
+						vtxit = vertex.begin();
+						nmlit = normal.begin();
+						texit = texcoord.begin();
 						++facesit;
 					}
 
-					idxit = facesit->begin();
-					std::cout << "    Group faces count: " << facesit->size() << std::endl;
+					std::cout << "    Group faces count: " << *facesit << std::endl;
 				}
 				else if ( ident == "usemtl" )
 				{
@@ -240,19 +338,20 @@ namespace LMP3D
 						nmlit->z = allnml[ivn].z;
 						++nmlit;
 					}
-
-					idxit->a = idx++;
-					idxit->b = idx++;
-					idxit->c = idx++;
-					++idxit;
 				}
 			}
 
-			auto ret = std::make_unique< TexturedMesh >();
-			ret->setData( std::move( vertex ), std::move( normal ), std::move( texcoord ), std::move( faces ) );
+			if ( vtxit != vertex.begin()
+				 && facesit != faces.end() )
+			{
+				mesh->addSubmesh( submeshesMaterials[submeshIndex++]
+								  , Vector3Array( vertex.begin(), vtxit )
+								  , Vector3Array( normal.begin(), nmlit )
+								  , Vector2Array( texcoord.begin(), texit ) );
+			}
 
-			LoadMtlFile( mtlfile, *ret, textures );
-			return std::move( ret );
+			LoadMtlFile( getPath( fileName ) + PATH_SEPARATOR + mtlfile, *mesh, materials );
+			return Object( mesh );
 		}
 	}
 }
