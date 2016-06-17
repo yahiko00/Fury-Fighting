@@ -15,8 +15,8 @@ int main( int argc, char ** argv )
 {
 	LMP3D::Init();
 	LMP3D::Windows::Window window;
-	window.setName( "Fury Fighting" );
-	window.setSize( 640, 480 );
+	window.setName("Fury Fighting");
+	window.setSize(640, 480);
 
 	glClearColor( 0.5, 0.5, 0.5, 0 );
 

@@ -14,7 +14,7 @@ namespace LMP3D
 
 		void Window::setName( const char *name )
 		{
-			SDL_WM_SetCaption( "Fury Fighting", nullptr );
+			SDL_WM_SetCaption(name, nullptr );
 		}
 
 		void Window::setSize( int w, int h )

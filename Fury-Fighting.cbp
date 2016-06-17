@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Linux">
-				<Option output="Bin/opengl" prefix_auto="1" extension_auto="1" />
+				<Option output="Bin/Fury" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="Bin/" />
 				<Option object_output="0bj/" />
 				<Option type="1" />
@@ -32,6 +32,7 @@
 		<Compiler>
 			<Add option="-fexpensive-optimizations" />
 			<Add option="-Os" />
+			<Add option="-std=c++11" />
 		</Compiler>
 		<Linker>
 			<Add option="-s" />
