@@ -6,6 +6,7 @@
 namespace LMP3D
 {
 #if defined( _WIN32 )
+
 	static char const PATH_SEPARATOR = '\\';
 
 #else

@@ -9,7 +9,7 @@ namespace LMP3D
 {
 	namespace Graphics
 	{
-		Object LoadObjFile( std::string const & fileName, MaterialMap materials );
+		Object LoadObjFile( std::string const & fileName, MaterialMap & materials );
 	}
 }
 

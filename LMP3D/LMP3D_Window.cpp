@@ -19,6 +19,8 @@ namespace LMP3D
 		}
 
 		Window::Window()
+			: time_a( 0u )
+			, time_b( 0u )
 		{
 		}
 
@@ -28,7 +30,7 @@ namespace LMP3D
 
 		void Window::setName( const char *name )
 		{
-			SDL_WM_SetCaption( name, nullptr );
+			SDL_WM_SetCaption( name, NULL );
 		}
 
 		void Window::setSize( int w, int h )
