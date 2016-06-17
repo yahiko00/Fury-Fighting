@@ -2,7 +2,7 @@
 
 namespace LMP3D
 {
-	static SDL_Joystick *joystick = nullptr;
+	static SDL_Joystick *joystick = NULL;
 
 	void Init()
 	{
@@ -12,7 +12,7 @@ namespace LMP3D
 		SDL_JoystickEventState( SDL_ENABLE );
 		joystick = SDL_JoystickOpen( 0 );
 
-		SDL_WM_SetIcon( nullptr, nullptr );
+		SDL_WM_SetIcon( NULL, NULL );
 	}
 
 	void Close()

@@ -1,8 +1,7 @@
-#pragma once
+#ifndef ___LMP3D_Graphics_Mesh_H___
+#define ___LMP3D_Graphics_Mesh_H___
 
-#include "IndexBuffer.h"
-#include "NormalBuffer.h"
-#include "VertexBuffer.h"
+#include "Common.h"
 
 namespace LMP3D
 {
@@ -12,14 +11,16 @@ namespace LMP3D
 		{
 		public:
 			Mesh();
-			~Mesh()noexcept;
+			~Mesh()throw();
 
-			virtual bool draw()const = 0;
+			void addSubmesh( MaterialPtr material, Vector3Array const & vtx, Vector3Array const & nml, Vector2Array const & tex );
+
+			void draw()const;
 
 		protected:
-			VertexBuffer m_vertex;
-			NormalBuffer m_normal;
-			std::vector< IndexBuffer > m_indices;
+			SubmeshArray m_submeshes;
 		};
 	}
 }
+
+#endif

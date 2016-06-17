@@ -2,10 +2,22 @@
 
 #include <SDL/SDL.h>
 
+#include <cstring>
+
 namespace LMP3D
 {
 	namespace Windows
 	{
+		Event::Event()
+			: sourisx( 0 )
+			, sourisy( 0 )
+			, quit( 0 )
+			, clikdroit( 0 )
+			, clikgauche( 0 )
+		{
+			std::memset( touche, 0, sizeof( touche ) );
+		}
+
 		Window::Window()
 		{
 		}
@@ -16,7 +28,7 @@ namespace LMP3D
 
 		void Window::setName( const char *name )
 		{
-			SDL_WM_SetCaption(name, nullptr );
+			SDL_WM_SetCaption( name, nullptr );
 		}
 
 		void Window::setSize( int w, int h )

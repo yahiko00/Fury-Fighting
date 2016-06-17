@@ -1,5 +1,5 @@
-#ifndef ___LMP3D_Window___
-#define ___LMP3D_Window___
+#ifndef ___LMP3D_Window_H___
+#define ___LMP3D_Window_H___
 
 namespace LMP3D
 {
@@ -7,11 +7,13 @@ namespace LMP3D
 	{
 		struct Event
 		{
-			int sourisx{ 0 };
-			int sourisy{ 0 };
-			char quit{ 0 };
-			char clikdroit{ 0 };
-			char clikgauche{ 0 };
+			Event();
+
+			int sourisx;
+			int sourisy;
+			char quit;
+			char clikdroit;
+			char clikgauche;
 			char touche[350];
 		};
 

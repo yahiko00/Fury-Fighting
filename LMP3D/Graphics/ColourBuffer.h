@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ___LMP3D_Graphics_ColourBuffer_H___
+#define ___LMP3D_Graphics_ColourBuffer_H___
 
 #include "Common.h"
 
@@ -9,24 +10,25 @@ namespace LMP3D
 		class ColourBuffer
 		{
 		public:
-			explicit inline ColourBuffer()
-				: m_data{}
+			explicit inline ColourBuffer( ColourArray const & data )
+				: m_data( data )
 			{
 			}
 
-			inline ~ColourBuffer()noexcept
+			inline ~ColourBuffer()throw()
 			{
-			}
-
-			inline void setData( ColourArray && data )
-			{
-				m_data = std::move( data );
 			}
 
 			inline bool bind()const
 			{
-				glColorPointer( 4, GL_FLOAT, 0, m_data.data() );
+				glEnableClientState( GL_COLOR_ARRAY );
+				glColorPointer( 4, GL_FLOAT, 0, &m_data[0] );
 				return checkGlError( "glColorPointer" );
+			}
+
+			inline void unbind()const
+			{
+				glDisableClientState( GL_COLOR_ARRAY );
 			}
 
 			inline GLsizei getCount()const
@@ -39,3 +41,5 @@ namespace LMP3D
 		};
 	}
 }
+
+#endif

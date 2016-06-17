@@ -1,5 +1,5 @@
-#ifndef ___LMP3D_WINDOWS___
-#define ___LMP3D_WINDOWS___
+#ifndef ___LMP3D_Windows_H___
+#define ___LMP3D_Windows_H___
 
 #include "LMP3D.h"
 
