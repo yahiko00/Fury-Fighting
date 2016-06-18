@@ -31,7 +31,7 @@ namespace LMP3D
 				objMesh.m_mesh = *mshit;
 				objMesh.m_object = object;
 
-				if ( ( *mtlit )->isOpaque() )
+				if ( objMesh.m_material->isOpaque() )
 				{
 					m_opaqueObjects.push_back( objMesh );
 				}

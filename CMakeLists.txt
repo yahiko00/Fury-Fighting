@@ -64,7 +64,7 @@ if( OPENGL_FOUND AND SDL_FOUND )
 	add_subdirectory( LMP3D )
 
 	include_directories(
-		${CMAKE_SOURCE_DIR}/Src
+		${CMAKE_SOURCE_DIR}
 	)
 
 	set( BASE_LIBRARIES

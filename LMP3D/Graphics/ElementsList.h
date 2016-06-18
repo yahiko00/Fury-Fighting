@@ -13,6 +13,8 @@ namespace LMP3D
 		private:
 			typedef T * ElementPtr;
 			typedef std::map< std::string, ElementPtr > ElementMap;
+			typedef typename ElementMap::iterator Iterator;
+			typedef typename ElementMap::const_iterator ConstIterator;
 
 		public:
 			ElementsList()
@@ -21,7 +23,7 @@ namespace LMP3D
 
 			~ElementsList()throw()
 			{
-				for ( ElementMap::iterator it = m_elements.begin(); it != m_elements.end(); ++it )
+				for ( Iterator it = m_elements.begin(); it != m_elements.end(); ++it )
 				{
 					delete it->second;
 				}
@@ -29,7 +31,7 @@ namespace LMP3D
 
 			ElementPtr addElement( std::string const & name )
 			{
-				ElementMap::const_iterator it = m_elements.find( name );
+				ConstIterator it = m_elements.find( name );
 
 				if ( m_elements.find( name ) == m_elements.end() )
 				{
@@ -42,7 +44,7 @@ namespace LMP3D
 			ElementPtr getElement( std::string const & name )const
 			{
 				ElementPtr ret = NULL;
-				ElementMap::const_iterator it = m_elements.find( name );
+				ConstIterator it = m_elements.find( name );
 
 				if ( it != m_elements.end() )
 				{

@@ -5,6 +5,18 @@
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
+#include <cstdio>  /* defines FILENAME_MAX */
+#include <cstring>
+
+#include "StringUtils.h"
+
+#ifdef WINDOWS
+#	include <direct.h>
+#	define GetCurrentDir _getcwd
+#else
+#	include <unistd.h>
+#	define GetCurrentDir getcwd
+#endif
 
 namespace LMP3D
 {
@@ -47,6 +59,22 @@ namespace LMP3D
 
 			return ret;
 		}
+	}
+
+	inline std::string GetCurrentDirectory()
+	{
+		char currentPath[FILENAME_MAX];
+		memset( currentPath, 0, sizeof( currentPath ) );
+		GetCurrentDir( currentPath, sizeof( currentPath ) );
+		std::string current = currentPath;
+
+		if ( current.empty() )
+		{
+			current = ".";
+		}
+
+		current += PATH_SEPARATOR;
+		return current;
 	}
 }
 

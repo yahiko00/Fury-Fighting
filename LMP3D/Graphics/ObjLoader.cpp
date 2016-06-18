@@ -25,7 +25,7 @@ namespace LMP3D
 
 			if ( !ret )
 			{
-				Image img = LMP3D::Platform::LoadImage( fileName );
+				Image img = LMP3D::Platform::LoadImage( GetCurrentDirectory() + fileName );
 
 				if ( !img.m_data.empty() )
 				{
@@ -39,7 +39,14 @@ namespace LMP3D
 
 		void LoadMtlFile( std::string const & fileName, Scene & scene )
 		{
-			std::ifstream file( fileName.c_str() );
+			std::ifstream file( ( GetCurrentDirectory() + fileName ).c_str() );
+
+			if ( !file.is_open() )
+			{
+				std::cerr << "Failed to open the file " << GetCurrentDirectory() << fileName << std::endl;
+				return;
+			}
+
 			std::string line;
 			MaterialPtr select = NULL;
 
@@ -152,6 +159,7 @@ namespace LMP3D
 				else if ( ident == "mtllib" )
 				{
 					mtlfile = line.substr( line.find_first_of( " " ) + 1 );
+					trim( mtlfile );
 				}
 			}
 
@@ -271,6 +279,7 @@ namespace LMP3D
 					}
 
 					stream >> mtlname;
+					trim( mtlname );
 				}
 				else if ( ident == "f" )
 				{

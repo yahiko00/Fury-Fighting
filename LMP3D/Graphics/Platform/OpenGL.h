@@ -18,11 +18,14 @@
 #endif
 
 #include <GL/gl.h>
-#include <GL/GLU.h>
+#include <GL/glu.h>
 
 #define GL_BGR 0x80E0
 #define GL_BGRA 0x80E1
-#define GL_INVALID_INDEX 0xFFFFFFFF
+
+#if !defined( GL_INVALID_INDEX )
+#	define GL_INVALID_INDEX 0xFFFFFFFF
+#endif
 
 namespace LMP3D
 {

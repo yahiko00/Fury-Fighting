@@ -53,7 +53,7 @@ namespace LMP3D
 
 	void trim_right( std::string & text )
 	{
-		size_t index = text.find_last_not_of( " \t" );
+		size_t index = text.find_last_not_of( " \t\r" );
 
 		if ( index != std::string::npos )
 		{
