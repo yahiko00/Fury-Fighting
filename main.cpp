@@ -10,8 +10,8 @@
 
 namespace
 {
-	static int const WINDOW_WIDTH = 640;
-	static int const WINDOW_HEIGHT = 480;
+	static int const WINDOW_WIDTH = 1280;
+	static int const WINDOW_HEIGHT = 1024;
 }
 
 void game( LMP3D::Windows::Window &window );
@@ -45,7 +45,7 @@ void game( LMP3D::Windows::Window &window )
 	LMP3D::Graphics::MaterialMap materials;
 	LMP3D::Graphics::Object object = LMP3D::Graphics::LoadObjFile( "DATA/lightning.obj", materials );
 
-	camera.translate( -50.0f, 0.0f, 0.0f );
+	camera.translate( 0.0f, 30.0f, 50.0f );
 
 	while ( !window.getEvent().quit )
 	{

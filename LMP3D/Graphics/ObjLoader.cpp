@@ -144,7 +144,7 @@ namespace LMP3D
 			}
 		}
 
-		Object LoadObjFile( std::string const & fileName, MaterialMap materials )
+		Object LoadObjFile( std::string const & fileName, MaterialMap & materials )
 		{
 			std::ifstream file( fileName.c_str() );
 			std::string line;
@@ -156,8 +156,6 @@ namespace LMP3D
 			uint16_t ntf = 0u;
 			uint16_t ng = 0u;
 			std::vector< uint16_t > faces;
-			MaterialArray submeshesMaterials;
-			std::string mtlname;
 
 			while ( std::getline( file, line ) )
 			{
@@ -191,22 +189,18 @@ namespace LMP3D
 				}
 				else if ( ident == "g" || ident == "usemtl" )
 				{
+					if ( ident == "usemtl" )
+					{
+						std::string name;
+						stream >> name;
+						MaterialPtr material = new Material;
+						materials.insert( std::make_pair( name, material ) );
+					}
+
 					if ( ntf )
 					{
 						faces.push_back( ntf );
 						ntf = 0u;
-					}
-
-					if ( ident == "usemtl" )
-					{
-						stream >> mtlname;
-						MaterialPtr material = new Material;
-						materials.insert( std::make_pair( mtlname, material ) );
-					}
-
-					if ( !mtlname.empty() )
-					{
-						submeshesMaterials.push_back( materials.find( mtlname )->second );
 					}
 				}
 				else if ( ident == "mtllib" )
@@ -269,10 +263,9 @@ namespace LMP3D
 			texit = texcoord.begin();
 			nmlit = normal.begin();
 			std::vector< uint16_t >::iterator facesit = faces.end();
-			std::vector< std::string > textures;
-			textures.reserve( faces.size() );
 			MeshPtr mesh = new Mesh;
-			uint32_t submeshIndex = 0u;
+			uint32_t submeshMtlIndex = 0u;
+			std::string mtlname;
 
 			while ( std::getline( file, line ) )
 			{
@@ -289,7 +282,7 @@ namespace LMP3D
 					}
 					else
 					{
-						mesh->addSubmesh( submeshesMaterials[submeshIndex++]
+						mesh->addSubmesh( materials[mtlname]
 										  , Vector3Array( vertex.begin(), vtxit )
 										  , Vector3Array( normal.begin(), nmlit )
 										  , Vector2Array( texcoord.begin(), texit ) );
@@ -303,9 +296,19 @@ namespace LMP3D
 				}
 				else if ( ident == "usemtl" )
 				{
-					std::string name;
-					stream >> name;
-					textures.push_back( name );
+					if ( vertex.begin() != vtxit )
+					{
+						mesh->addSubmesh( materials[mtlname]
+										  , Vector3Array( vertex.begin(), vtxit )
+										  , Vector3Array( normal.begin(), nmlit )
+										  , Vector2Array( texcoord.begin(), texit ) );
+						vtxit = vertex.begin();
+						nmlit = normal.begin();
+						texit = texcoord.begin();
+						++facesit;
+					}
+
+					stream >> mtlname;
 				}
 				else if ( ident == "f" )
 				{
@@ -317,26 +320,20 @@ namespace LMP3D
 						auto index1 = face.find( '/' );
 						std::string component = face.substr( 0, index1 );
 						uint32_t iv = std::stoul( component ) - 1;
-						vtxit->x = allvtx[iv].x;
-						vtxit->y = allvtx[iv].y;
-						vtxit->z = allvtx[iv].z;
-						++vtxit;
+						*vtxit++ = allvtx[iv];
 
 						++index1;
 						auto index2 = face.find( '/', index1 );
 						component = face.substr( index1, index2 - index1 );
 						uint32_t ivt = std::stoul( component ) - 1;
 						texit->x = alltex[ivt].x;
-						texit->y = alltex[ivt].y;
+						texit->y = 1.0 - alltex[ivt].y;
 						++texit;
 
 						++index2;
 						component = face.substr( index2 );
 						uint32_t ivn = std::stoul( component ) - 1;
-						nmlit->x = allnml[ivn].x;
-						nmlit->y = allnml[ivn].y;
-						nmlit->z = allnml[ivn].z;
-						++nmlit;
+						*nmlit++ = allnml[ivn];
 					}
 				}
 			}
@@ -344,7 +341,7 @@ namespace LMP3D
 			if ( vtxit != vertex.begin()
 				 && facesit != faces.end() )
 			{
-				mesh->addSubmesh( submeshesMaterials[submeshIndex++]
+				mesh->addSubmesh( materials[mtlname]
 								  , Vector3Array( vertex.begin(), vtxit )
 								  , Vector3Array( normal.begin(), nmlit )
 								  , Vector2Array( texcoord.begin(), texit ) );

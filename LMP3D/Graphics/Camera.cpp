@@ -20,7 +20,7 @@ namespace LMP3D
 		{
 			glPushMatrix();
 			gluLookAt( m_position.x, m_position.y, m_position.z,
-					   m_lookAt.x, m_lookAt.y, m_lookAt.z,
+					   m_position.x + m_lookAt.x, m_position.y + m_lookAt.y, m_position.z + m_lookAt.z,
 					   m_up.x, m_up.y, m_up.z );
 			return checkGlError( "gluLookAt" );
 		}
