@@ -1,93 +1,41 @@
 #include "ObjLoader.h"
 
+#include "Material.h"
 #include "Mesh.h"
 #include "Object.h"
-#include "Material.h"
+#include "Scene.h"
 #include "Texture.h"
 
 #include "LMP3D/StringUtils.h"
 
+#include "LMP3D/Platform/SDL.h"
+
 #include <cstdlib>
-#include <string>
 #include <fstream>
 #include <sstream>
-#include <iostream>
-#include <map>
-
-#include <SDL/SDL_image.h>
 
 namespace LMP3D
 {
 	namespace Graphics
 	{
-		template< typename T >
-		struct pointer
-		{
-			typedef void( *dtorFunc )( T * );
-
-			inline pointer( T * pointer, dtorFunc dtor )
-				: m_pointer( pointer )
-				, m_dtor( dtor )
-			{
-			}
-
-			inline ~pointer()
-			{
-				( *m_dtor )( m_pointer );
-			}
-
-			inline T * operator->()
-			{
-				return m_pointer;
-			}
-
-			inline operator T*()
-			{
-				return m_pointer;
-			}
-
-		private:
-			T * m_pointer;
-			dtorFunc m_dtor;
-		};
-
 		TexturePtr LoadTexture( std::string const & fileName )
 		{
-			pointer< SDL_Surface > image( IMG_Load( fileName.c_str() ), SDL_FreeSurface );
+			Image img = LMP3D::Platform::LoadImage( fileName );
 			TexturePtr ret = NULL;
 
-			if ( image )
+			if ( !img.m_data.empty() )
 			{
-				int format = GL_BGR;
-
-				if ( image->format->BytesPerPixel == 3 )
-				{
-					format = GL_RGB;
-				}
-				else if ( image->format->BytesPerPixel == 4 )
-				{
-					if ( image->format->Amask > image->format->Rmask )
-					{
-						format = GL_BGRA;
-					}
-					else
-					{
-						format = GL_RGBA;
-					}
-				}
-
-				uint8_t * data = reinterpret_cast< uint8_t * >( image->pixels );
-				ret = new Texture( ByteArray( data, data + image->pitch * image->h ), Size( image->w, image->h ), format );
+				ret = new Texture( img );
 			}
 
 			return ret;
 		}
 
-		void LoadMtlFile( std::string const & fileName, Mesh & mesh, MaterialMap & materials )
+		void LoadMtlFile( std::string const & fileName, MaterialsList & materials )
 		{
 			std::ifstream file( fileName.c_str() );
 			std::string line;
-			MaterialMap::iterator select = materials.end();
+			MaterialPtr select = NULL;
 
 			while ( std::getline( file, line ) )
 			{
@@ -100,51 +48,51 @@ namespace LMP3D
 				{
 					std::string name;
 					stream >> name;
-					select = materials.find( name );
+					select = materials.getElement( name );
 				}
-				else if ( select != materials.end() )
+				else if ( select )
 				{
 					if ( ident == "Ka" )
 					{
 						Colour3 value;
 						stream >> value.r >> value.g >> value.b;
-						select->second->setAmbient( value );
+						select->setAmbient( value );
 					}
 					else if ( ident == "Kd" )
 					{
 						Colour3 value;
 						stream >> value.r >> value.g >> value.b;
-						select->second->setDiffuse( value );
+						select->setDiffuse( value );
 					}
 					else if ( ident == "Ks" )
 					{
 						Colour3 value;
 						stream >> value.r >> value.g >> value.b;
-						select->second->setSpecular( value );
+						select->setSpecular( value );
 					}
 					else if ( ident == "Ns" )
 					{
 						float value;
 						stream >> value;
-						select->second->setExponent( value );
+						select->setExponent( value );
 					}
 					else if ( ident == "d" )
 					{
 						float value;
 						stream >> value;
-						select->second->setOpacity( value );
+						select->setOpacity( value );
 					}
 					else if ( ident == "map_Kd" )
 					{
 						std::string path;
 						stream >> path;
-						select->second->setTexture( LoadTexture( getPath( fileName ) + PATH_SEPARATOR + path ) );
+						select->setTexture( LoadTexture( getPath( fileName ) + PATH_SEPARATOR + path ) );
 					}
 				}
 			}
 		}
 
-		Object LoadObjFile( std::string const & fileName, MaterialMap & materials )
+		void LoadObjFile( std::string const & fileName, Scene & scene )
 		{
 			std::ifstream file( fileName.c_str() );
 			std::string line;
@@ -193,8 +141,7 @@ namespace LMP3D
 					{
 						std::string name;
 						stream >> name;
-						MaterialPtr material = new Material;
-						materials.insert( std::make_pair( name, material ) );
+						scene.getMaterials().addElement( name );
 					}
 
 					if ( ntf )
@@ -263,9 +210,12 @@ namespace LMP3D
 			texit = texcoord.begin();
 			nmlit = normal.begin();
 			std::vector< uint16_t >::iterator facesit = faces.end();
-			MeshPtr mesh = new Mesh;
 			uint32_t submeshMtlIndex = 0u;
 			std::string mtlname;
+			MeshArray meshes;
+			MaterialArray materials;
+			meshes.reserve( faces.size() );
+			materials.reserve( faces.size() );
 
 			while ( std::getline( file, line ) )
 			{
@@ -282,10 +232,15 @@ namespace LMP3D
 					}
 					else
 					{
-						mesh->addSubmesh( materials[mtlname]
-										  , Vector3Array( vertex.begin(), vtxit )
-										  , Vector3Array( normal.begin(), nmlit )
-										  , Vector2Array( texcoord.begin(), texit ) );
+						std::stringstream name;
+						name << getFileName( fileName ) << "_" << ( meshes.size() + 1 );
+						scene.getMeshes().addElement( name.str() );
+						MeshPtr mesh = scene.getMeshes().getElement( name.str() );
+						mesh->setData( Vector3Array( vertex.begin(), vtxit )
+									   , Vector3Array( normal.begin(), nmlit )
+									   , Vector2Array( texcoord.begin(), texit ) );
+						materials.push_back( scene.getMaterials().getElement( mtlname ) );
+						meshes.push_back( mesh );
 						vtxit = vertex.begin();
 						nmlit = normal.begin();
 						texit = texcoord.begin();
@@ -298,10 +253,15 @@ namespace LMP3D
 				{
 					if ( vertex.begin() != vtxit )
 					{
-						mesh->addSubmesh( materials[mtlname]
-										  , Vector3Array( vertex.begin(), vtxit )
-										  , Vector3Array( normal.begin(), nmlit )
-										  , Vector2Array( texcoord.begin(), texit ) );
+						std::stringstream name;
+						name << getFileName( fileName ) << "_" << ( meshes.size() + 1 );
+						scene.getMeshes().addElement( name.str() );
+						MeshPtr mesh = scene.getMeshes().getElement( name.str() );
+						mesh->setData( Vector3Array( vertex.begin(), vtxit )
+									   , Vector3Array( normal.begin(), nmlit )
+									   , Vector2Array( texcoord.begin(), texit ) );
+						materials.push_back( scene.getMaterials().getElement( mtlname ) );
+						meshes.push_back( mesh );
 						vtxit = vertex.begin();
 						nmlit = normal.begin();
 						texit = texcoord.begin();
@@ -319,20 +279,20 @@ namespace LMP3D
 
 						size_t index1 = face.find( '/' );
 						std::string component = face.substr( 0, index1 );
-						uint32_t iv = std::stoul( component ) - 1;
+						uint32_t iv = atoi( component.c_str() ) - 1;
 						*vtxit++ = allvtx[iv];
 
 						++index1;
 						size_t index2 = face.find( '/', index1 );
 						component = face.substr( index1, index2 - index1 );
-						uint32_t ivt = std::stoul( component ) - 1;
+						uint32_t ivt = atoi( component.c_str() ) - 1;
 						texit->x = alltex[ivt].x;
 						texit->y = 1.0f - alltex[ivt].y;
 						++texit;
 
 						++index2;
 						component = face.substr( index2 );
-						uint32_t ivn = std::stoul( component ) - 1;
+						uint32_t ivn = atoi( component.c_str() ) - 1;
 						*nmlit++ = allnml[ivn];
 					}
 				}
@@ -341,14 +301,19 @@ namespace LMP3D
 			if ( vtxit != vertex.begin()
 				 && facesit != faces.end() )
 			{
-				mesh->addSubmesh( materials[mtlname]
-								  , Vector3Array( vertex.begin(), vtxit )
-								  , Vector3Array( normal.begin(), nmlit )
-								  , Vector2Array( texcoord.begin(), texit ) );
+				std::stringstream name;
+				name << getFileName( fileName ) << "_" << ( meshes.size() + 1 );
+				scene.getMeshes().addElement( name.str() );
+				MeshPtr mesh = scene.getMeshes().getElement( name.str() );
+				mesh->setData( Vector3Array( vertex.begin(), vtxit )
+							   , Vector3Array( normal.begin(), nmlit )
+							   , Vector2Array( texcoord.begin(), texit ) );
+				materials.push_back( scene.getMaterials().getElement( mtlname ) );
+				meshes.push_back( mesh );
 			}
 
-			LoadMtlFile( getPath( fileName ) + PATH_SEPARATOR + mtlfile, *mesh, materials );
-			return Object( mesh );
+			LoadMtlFile( getPath( fileName ) + PATH_SEPARATOR + mtlfile, scene.getMaterials() );
+			scene.addObject( Object( meshes, materials ) );
 		}
 	}
 }

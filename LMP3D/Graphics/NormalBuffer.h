@@ -10,7 +10,7 @@ namespace LMP3D
 		class NormalBuffer
 		{
 		public:
-			explicit inline NormalBuffer( Vector3Array const & data )
+			explicit inline NormalBuffer( Vector3Array const & data = Vector3Array() )
 				: m_data( data )
 			{
 			}
@@ -19,25 +19,12 @@ namespace LMP3D
 			{
 			}
 
-			inline bool bind()const
-			{
-				if ( getCount() )
-				{
-					glEnableClientState( GL_NORMAL_ARRAY );
-					glNormalPointer( GL_FLOAT, 0, &m_data[0] );
-				}
+			bool bind()const;
+			void unbind()const;
 
-				return checkGlError( "glNormalPointer" );
-			}
-
-			inline void unbind()const
+			inline int getCount()const
 			{
-				glDisableClientState( GL_NORMAL_ARRAY );
-			}
-
-			inline GLsizei getCount()const
-			{
-				return static_cast< GLsizei >( m_data.size() );
+				return int( m_data.size() );
 			}
 
 		private:

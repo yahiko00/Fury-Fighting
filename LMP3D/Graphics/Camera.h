@@ -13,8 +13,7 @@ namespace LMP3D
 			Camera();
 			~Camera();
 
-			bool bind()const;
-			void unbind()const;
+			bool apply()const;
 
 			void rotate( float angle, float x, float y, float z )
 			{

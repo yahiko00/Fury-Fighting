@@ -10,7 +10,7 @@ namespace LMP3D
 		class ColourBuffer
 		{
 		public:
-			explicit inline ColourBuffer( ColourArray const & data )
+			explicit inline ColourBuffer( ColourArray const & data = ColourArray() )
 				: m_data( data )
 			{
 			}
@@ -19,21 +19,12 @@ namespace LMP3D
 			{
 			}
 
-			inline bool bind()const
-			{
-				glEnableClientState( GL_COLOR_ARRAY );
-				glColorPointer( 4, GL_FLOAT, 0, &m_data[0] );
-				return checkGlError( "glColorPointer" );
-			}
+			bool bind()const;
+			void unbind()const;
 
-			inline void unbind()const
+			inline int getCount()const
 			{
-				glDisableClientState( GL_COLOR_ARRAY );
-			}
-
-			inline GLsizei getCount()const
-			{
-				return static_cast< GLsizei >( m_data.size() );
+				return int( m_data.size() );
 			}
 
 		private:

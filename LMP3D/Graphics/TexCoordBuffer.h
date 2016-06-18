@@ -10,7 +10,7 @@ namespace LMP3D
 		class TexCoordBuffer
 		{
 		public:
-			explicit inline TexCoordBuffer( Vector2Array const & data )
+			explicit inline TexCoordBuffer( Vector2Array const & data = Vector2Array() )
 				: m_data( data )
 			{
 			}
@@ -19,25 +19,12 @@ namespace LMP3D
 			{
 			}
 
-			inline bool bind()const
-			{
-				if ( getCount() )
-				{
-					glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-					glTexCoordPointer( 2, GL_FLOAT, 0, &m_data[0] );
-				}
+			bool bind()const;
+			void unbind()const;
 
-				return checkGlError( "glTexCoordPointer" );
-			}
-
-			inline void unbind()const
+			inline int getCount()const
 			{
-				glDisableClientState( GL_TEXTURE_COORD_ARRAY );
-			}
-
-			inline GLsizei getCount()const
-			{
-				return static_cast< GLsizei >( m_data.size() );
+				return int( m_data.size() );
 			}
 
 		private:

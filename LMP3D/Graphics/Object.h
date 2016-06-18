@@ -10,10 +10,10 @@ namespace LMP3D
 		class Object
 		{
 		public:
-			Object( MeshPtr mesh );
+			explicit Object( MeshArray const & meshes, MaterialArray const & materials );
 			~Object();
 
-			void draw();
+			void draw()const;
 
 			void rotate( float angle, float x, float y, float z )
 			{
@@ -40,7 +40,8 @@ namespace LMP3D
 			float m_angle;
 			Vector3 m_axis;
 			Vector3 m_position;
-			MeshPtr m_mesh;
+			MeshArray m_meshes;
+			MaterialArray m_materials;
 		};
 	}
 }

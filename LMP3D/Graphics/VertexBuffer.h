@@ -10,7 +10,7 @@ namespace LMP3D
 		class VertexBuffer
 		{
 		public:
-			explicit inline VertexBuffer( Vector3Array const & data )
+			explicit inline VertexBuffer( Vector3Array const & data = Vector3Array() )
 				: m_data( data )
 			{
 			}
@@ -19,21 +19,12 @@ namespace LMP3D
 			{
 			}
 
-			inline bool bind()const
-			{
-				glEnableClientState( GL_VERTEX_ARRAY );
-				glVertexPointer( 3, GL_FLOAT, 0, &m_data[0] );
-				return checkGlError( "glVertexPointer" );
-			}
+			bool bind()const;
+			void unbind()const;
 
-			inline void unbind()const
+			inline int getCount()const
 			{
-				glDisableClientState( GL_VERTEX_ARRAY );
-			}
-
-			inline GLsizei getCount()const
-			{
-				return static_cast< GLsizei >( m_data.size() );
+				return int( m_data.size() );
 			}
 
 		private:

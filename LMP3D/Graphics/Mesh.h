@@ -1,7 +1,10 @@
 #ifndef ___LMP3D_Graphics_Mesh_H___
 #define ___LMP3D_Graphics_Mesh_H___
 
-#include "Common.h"
+#include "NormalBuffer.h"
+#include "TexCoordBuffer.h"
+#include "VertexBuffer.h"
+#include "Material.h"
 
 namespace LMP3D
 {
@@ -13,12 +16,13 @@ namespace LMP3D
 			Mesh();
 			~Mesh()throw();
 
-			void addSubmesh( MaterialPtr material, Vector3Array const & vtx, Vector3Array const & nml, Vector2Array const & tex );
-
+			void setData( Vector3Array const & vtx, Vector3Array const & nml, Vector2Array const & tex = Vector2Array() );
 			void draw()const;
 
-		protected:
-			SubmeshArray m_submeshes;
+		private:
+			VertexBuffer m_vertex;
+			NormalBuffer m_normal;
+			TexCoordBuffer m_texcoord;
 		};
 	}
 }

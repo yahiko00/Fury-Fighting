@@ -10,7 +10,7 @@ namespace LMP3D
 		class Viewport
 		{
 		public:
-			Viewport( Size const & size );
+			explicit Viewport( Size const & size );
 			~Viewport();
 
 			void resize( int x, int y );
