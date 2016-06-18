@@ -45,7 +45,7 @@ namespace LMP3D
 
 	void trim_left( std::string & text )
 	{
-		auto index = text.find_first_not_of( " \t" );
+		size_t index = text.find_first_not_of( " \t" );
 
 		if ( index != std::string::npos )
 		{
@@ -55,7 +55,7 @@ namespace LMP3D
 
 	void trim_right( std::string & text )
 	{
-		auto index = text.find_last_not_of( " \t" );
+		size_t index = text.find_last_not_of( " \t" );
 
 		if ( index != std::string::npos )
 		{
