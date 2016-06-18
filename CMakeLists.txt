@@ -46,13 +46,12 @@ endmacro()
 
 # Look for needed libraries
 find_package( OpenGL )
-find_package( GLEW )
 
 set( SDL_BUILDING_LIBRARY ON )
 find_package( SDL )
 find_package( SDL_image )
 
-if( OPENGL_FOUND AND GLEW_FOUND AND SDL_FOUND )
+if( OPENGL_FOUND AND SDL_FOUND )
 	add_definitions( "-DUSE_GLFW -D_CRT_SECURE_NO_WARNINGS" )
 
 	include_directories(
@@ -102,9 +101,6 @@ if( OPENGL_FOUND AND GLEW_FOUND AND SDL_FOUND )
 else()
 	if ( NOT OPENGL_FOUND )
 		message( SEND_ERROR "OpenGL library not found" )
-	endif ()
-	if ( NOT GLEW_FOUND )
-		message( SEND_ERROR "GLEW library not found" )
 	endif ()
 	if ( NOT SDL_FOUND )
 		message( SEND_ERROR "SDL library not found" )

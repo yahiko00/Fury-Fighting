@@ -1,61 +1,43 @@
 #include "Texture.h"
 
-#include <GL/glew.h>
-
-#include <cassert>
+#include "Platform/OpenGL.h"
 
 namespace LMP3D
 {
 	namespace Graphics
 	{
-		namespace
+		Texture::Texture( Image const & image )
+			: m_format( image.m_format )
 		{
-			int GetInternal( uint32_t format )
-			{
-				switch ( format )
-				{
-				case GL_RGB:
-				case GL_BGR:
-					return 3;
-
-				case GL_RGBA:
-				case GL_BGRA:
-					return 4;
-
-				default:
-					assert( false && "Unexpected texture format" );
-					return 3;
-				}
-			}
-		}
-
-		Texture::Texture( ByteArray const & data, Size const & size, uint32_t format )
-			: m_size( size )
-			, m_format( format )
-			, m_internal( GetInternal( format ) )
-		{
-			glGenTextures( 1, &m_id );
-			glBindTexture( GL_TEXTURE_2D, m_id );
-			glTexImage2D( GL_TEXTURE_2D, 0, m_internal, m_size.x, m_size.y, 0, m_format, GL_UNSIGNED_BYTE, &data[0] );
-			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-			glBindTexture( GL_TEXTURE_2D, 0 );
+			m_id = Platform::CreateTexture();
+			Platform::BindTexture( m_id );
+			Platform::InitialiseTexture( image.m_size, image.m_format, image.m_data );
+			Platform::UnbindTexture();
 		}
 
 		Texture::~Texture()throw()
 		{
-			glDeleteTextures( 1, &m_id );
+			Platform::DeleteTexture( m_id );
 		}
 
 		bool Texture::bind()const
 		{
-			glBindTexture( GL_TEXTURE_2D, m_id );
-			return checkGlError( "glBindTexture" );
+			if ( m_format == RGBA || m_format == BGRA )
+			{
+				Platform::EnableBlending();
+			}
+
+			return Platform::BindTexture( m_id );
 		}
 
 		void Texture::unbind()const
 		{
-			glBindTexture( GL_TEXTURE_2D, 0 );
+			Platform::UnbindTexture();
+
+			if ( m_format == RGBA || m_format == BGRA )
+			{
+				Platform::DisableBlending();
+			}
 		}
 	}
 }

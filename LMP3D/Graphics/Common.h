@@ -1,24 +1,15 @@
 #ifndef ___LMP3D_Graphics_Common_H___
 #define ___LMP3D_Graphics_Common_H___
 
-#include <vector>
-#include <memory>
-#include <string>
 #include <cassert>
+#include <iostream>
 #include <map>
+#include <memory>
 
-#include <GL/glew.h>
+#include "LMP3D/Common.h"
 
 namespace LMP3D
 {
-	typedef unsigned long uint32_t;
-	typedef unsigned short uint16_t;
-	typedef unsigned char uint8_t;
-
-	typedef long int32_t;
-	typedef short int16_t;
-	typedef char int8_t;
-
 	namespace Graphics
 	{
 		struct Colour3
@@ -77,18 +68,6 @@ namespace LMP3D
 			}
 		};
 
-		struct Size
-		{
-			int x;
-			int y;
-
-			Size( int x = 0, int y = 0 )
-				: x( x )
-				, y( y )
-			{
-			}
-		};
-
 		typedef std::vector< Vector2 > Vector2Array;
 		typedef std::vector< Vector3 > Vector3Array;
 		typedef std::vector< Colour4 > ColourArray;
@@ -106,27 +85,17 @@ namespace LMP3D
 		typedef std::map< std::string, MaterialPtr > MaterialMap;
 
 		class Mesh;
-		class Submesh;
-		typedef Submesh * SubmeshPtr;
 		typedef Mesh * MeshPtr;
-		typedef std::vector< SubmeshPtr > SubmeshArray;
+		typedef std::vector< MeshPtr > MeshArray;
 
+		class Scene;
 		class Camera;
 		class Object;
+		typedef std::vector< Object > ObjectArray;
 
-		typedef std::vector< std::string > StringArray;
-		typedef std::vector< uint8_t > ByteArray;
-
-#if defined( NDEBUG )
-
-#	define checkGlError( Name ) true
-
-#else
-
-#	define checkGlError( Name ) glCheckError( #Name )
-		bool glCheckError( char const * const p_name );
-
-#endif
+		template< typename T > class ElementsList;
+		typedef ElementsList< Material > MaterialsList;
+		typedef ElementsList< Mesh > MeshesList;
 	}
 }
 

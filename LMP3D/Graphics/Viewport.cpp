@@ -1,6 +1,6 @@
 #include "Viewport.h"
 
-#include <GL/glew.h>
+#include "Platform/OpenGL.h"
 
 namespace LMP3D
 {
@@ -28,22 +28,14 @@ namespace LMP3D
 
 		void Viewport::perspective()
 		{
-			glViewport( 0, 0, m_size.x, m_size.y );
-			glEnable( GL_DEPTH_TEST );
-			glMatrixMode( GL_PROJECTION );
-			glLoadIdentity();
-			gluPerspective( m_angle, m_ratio, m_near, m_far );
-			glMatrixMode( GL_MODELVIEW );
+			Platform::Viewport( m_size );
+			Platform::Perspective( m_angle, m_ratio, m_near, m_far );
 		}
 
 		void Viewport::ortho()
 		{
-			glViewport( 0, 0, m_size.x, m_size.y );
-			glDisable( GL_DEPTH_TEST );
-			glMatrixMode( GL_PROJECTION );
-			glLoadIdentity();
-			glOrtho( -1, 1, -1, 1, -1, 1 );
-			glMatrixMode( GL_MODELVIEW );
+			Platform::Viewport( m_size );
+			Platform::Ortho( -1, 1, -1, 1, -1, 1 );
 		}
 	}
 }

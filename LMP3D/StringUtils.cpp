@@ -21,26 +21,24 @@ namespace LMP3D
 		replace( text, find, replacement );
 	}
 
-	void replace( std::string & text, std::string const & toReplace, std::string const & replacement )
+	void replace( std::string & input, std::string const & toReplace, std::string const & replacement )
 	{
-		std::string temp;
-		std::string ret;
+		std::string temp( input );
 		std::size_t currentPos = 0;
 		std::size_t pos = 0;
+		input.clear();
 
-		while ( ( pos = text.find( toReplace, currentPos ) ) != std::string::npos )
+		while ( ( pos = temp.find( toReplace, currentPos ) ) != std::string::npos )
 		{
-			ret.append( text.substr( currentPos, pos - currentPos ) );
-			ret.append( replacement );
+			input.append( temp.substr( currentPos, pos - currentPos ) );
+			input.append( replacement );
 			currentPos = pos + toReplace.size();
 		}
 
-		if ( currentPos != text.size() )
+		if ( currentPos != temp.size() )
 		{
-			ret.append( text.substr( currentPos, pos - currentPos ) );
+			input.append( temp.substr( currentPos, pos - currentPos ) );
 		}
-
-		text = ret;
 	}
 
 	void trim_left( std::string & text )
@@ -69,11 +67,19 @@ namespace LMP3D
 		trim_right( text );
 	}
 
-	std::string getPath( std::string const & fileName )
+	std::string getPath( std::string const & filePath )
 	{
-		std::string normalised( fileName );
+		std::string normalised( filePath );
 		replace( normalised, '/', PATH_SEPARATOR );
 		replace( normalised, '\\', PATH_SEPARATOR );
 		return normalised.substr( 0, normalised.find_last_of( PATH_SEPARATOR ) );
+	}
+
+	std::string getFileName( std::string const & filePath )
+	{
+		std::string normalised( filePath );
+		replace( normalised, '/', PATH_SEPARATOR );
+		replace( normalised, '\\', PATH_SEPARATOR );
+		return normalised.substr( normalised.find_last_of( PATH_SEPARATOR ) + 1 );
 	}
 }

@@ -23,3 +23,5 @@ target_link_libraries( ${PROJECT_NAME}
 )
 
 parse_subdir_files( Graphics "Graphics" )
+parse_subdir_files( Platform "Platform" )
+parse_subdir_files( Graphics/Platform "Graphics\\\\Platform" )

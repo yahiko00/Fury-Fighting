@@ -2,7 +2,7 @@
 
 #include "Texture.h"
 
-#include <GL/glew.h>
+#include "Platform/OpenGL.h"
 
 namespace LMP3D
 {
@@ -22,12 +22,7 @@ namespace LMP3D
 
 		bool Material::bind()const
 		{
-			glMaterialfv( GL_FRONT, GL_AMBIENT, &m_ambient.r );
-			glMaterialfv( GL_FRONT, GL_AMBIENT, &m_diffuse.r );
-			glMaterialfv( GL_FRONT, GL_AMBIENT, &m_specular.r );
-			glMaterialfv( GL_FRONT, GL_AMBIENT, &m_emissive.r );
-			glMaterialf( GL_FRONT, GL_SHININESS, m_exponent );
-			bool ret = checkGlError( "glMaterial" );
+			bool ret = Platform::BindMaterial( m_ambient, m_diffuse, m_specular, m_emissive, m_exponent );
 
 			if ( ret && m_texture )
 			{

@@ -10,17 +10,20 @@ namespace LMP3D
 		class Texture
 		{
 		public:
-			Texture( ByteArray const & data, Size const & size, uint32_t format );
+			explicit Texture( Image const & image );
 			~Texture()throw();
 
 			bool bind()const;
 			void unbind()const;
 
-		protected:
-			GLuint m_id;
-			Size m_size;
-			uint32_t m_format;
-			int m_internal;
+			inline PixelFormat getFormat()const
+			{
+				return m_format;
+			}
+
+		private:
+			PixelFormat m_format;
+			unsigned int m_id;
 		};
 	}
 }

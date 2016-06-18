@@ -3,28 +3,44 @@
 #include "Material.h"
 #include "Mesh.h"
 
+#include "Platform/OpenGL.h"
+
 namespace LMP3D
 {
 	namespace Graphics
 	{
-		Object::Object( MeshPtr mesh )
-			: m_mesh( mesh )
+		Object::Object( MeshArray const & meshes, MaterialArray const & materials )
+			: m_meshes( meshes )
+			, m_materials( materials )
 			, m_angle( 0.0f )
 		{
+			assert( meshes.size() == materials.size() && "Meshes and materials sizes don't match" );
 		}
 
 		Object::~Object()
 		{
-			delete m_mesh;
 		}
 
-		void Object::draw()
+		void Object::draw()const
 		{
-			glPushMatrix();
-			glRotatef( m_angle, m_axis.x, m_axis.y, m_axis.z );
-			glTranslatef( m_position.x, m_position.y, m_position.z );
-			m_mesh->draw();
-			glPopMatrix();
+			Platform::PushMatrix();
+
+			if ( Platform::ApplyTransform( m_position, m_angle, m_axis ) )
+			{
+				MeshArray::const_iterator mshit = m_meshes.begin();
+				MaterialArray::const_iterator mtlit = m_materials.begin();
+
+				while ( mshit != m_meshes.end() )
+				{
+					( *mtlit )->bind();
+					( *mshit )->draw();
+					( *mtlit )->unbind();
+					++mtlit;
+					++mshit;
+				}
+			}
+
+			Platform::PopMatrix();
 		}
 	}
 }

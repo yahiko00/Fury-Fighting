@@ -10,8 +10,8 @@
 
 namespace
 {
-	static int const WINDOW_WIDTH = 1280;
-	static int const WINDOW_HEIGHT = 1024;
+	static int const WINDOW_WIDTH = 1024;
+	static int const WINDOW_HEIGHT = 768;
 }
 
 void game( LMP3D::Windows::Window &window );
@@ -40,12 +40,11 @@ int main( int argc, char ** argv )
 
 void game( LMP3D::Windows::Window &window )
 {
-	LMP3D::Graphics::Viewport viewport( LMP3D::Graphics::Size( WINDOW_WIDTH, WINDOW_HEIGHT ) );
-	LMP3D::Graphics::Camera camera;
-	LMP3D::Graphics::MaterialMap materials;
-	LMP3D::Graphics::Object object = LMP3D::Graphics::LoadObjFile( "DATA/lightning.obj", materials );
+	LMP3D::Graphics::Viewport viewport( LMP3D::Size( WINDOW_WIDTH, WINDOW_HEIGHT ) );
+	LMP3D::Graphics::Scene scene;
+	LMP3D::Graphics::LoadObjFile( "DATA/lightning.obj", scene );
 
-	camera.translate( 0.0f, 30.0f, 50.0f );
+	scene.getCamera().translate( 0.0f, 30.0f, 50.0f );
 
 	while ( !window.getEvent().quit )
 	{
@@ -53,18 +52,11 @@ void game( LMP3D::Windows::Window &window )
 
 		window.pollEvent();
 		viewport.perspective();
-		camera.bind();
-		object.draw();
-		camera.unbind();
+		scene.draw();
 
 		glFlush();
 		SDL_GL_SwapBuffers();
 
 		window.fps( 30 );
-	}
-
-	for ( LMP3D::Graphics::MaterialMap::iterator it = materials.begin(); it != materials.end(); ++it )
-	{
-		delete it->second;
 	}
 }

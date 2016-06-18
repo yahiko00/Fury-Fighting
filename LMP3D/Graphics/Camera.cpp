@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-#include <GL/glew.h>
+#include "Platform/OpenGL.h"
 
 namespace LMP3D
 {
@@ -16,18 +16,9 @@ namespace LMP3D
 		{
 		}
 
-		bool Camera::bind()const
+		bool Camera::apply()const
 		{
-			glPushMatrix();
-			gluLookAt( m_position.x, m_position.y, m_position.z,
-					   m_position.x + m_lookAt.x, m_position.y + m_lookAt.y, m_position.z + m_lookAt.z,
-					   m_up.x, m_up.y, m_up.z );
-			return checkGlError( "gluLookAt" );
-		}
-
-		void Camera::unbind()const
-		{
-			glPopMatrix();
+			return Platform::LookAt( m_position, m_lookAt, m_up );
 		}
 
 		//void MNS_camera_vue_sub( Camera *camera, Vector3 *a, float v, int *touche )

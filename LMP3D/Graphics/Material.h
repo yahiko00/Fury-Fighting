@@ -79,7 +79,7 @@ namespace LMP3D
 				m_emissive.a = opacity;
 			}
 
-		protected:
+		private:
 			Colour4 m_ambient;
 			Colour4 m_diffuse;
 			Colour4 m_specular;
