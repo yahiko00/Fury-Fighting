@@ -15,6 +15,21 @@ namespace LMP3D
 
 			void draw()const;
 
+			Vector3 const & getPosition()const
+			{
+				return m_position;
+			}
+
+			float getAngle()const
+			{
+				return m_angle;
+			}
+
+			Vector3 const & getAxis()const
+			{
+				return m_axis;
+			}
+
 			void rotate( float angle, float x, float y, float z )
 			{
 			}

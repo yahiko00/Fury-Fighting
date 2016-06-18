@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-#include "Platform/OpenGL.h"
+#include "Platform.h"
 
 namespace LMP3D
 {

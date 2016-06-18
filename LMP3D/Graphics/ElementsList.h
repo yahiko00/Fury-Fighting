@@ -27,12 +27,16 @@ namespace LMP3D
 				}
 			}
 
-			void addElement( std::string const & name )
+			ElementPtr addElement( std::string const & name )
 			{
+				ElementMap::const_iterator it = m_elements.find( name );
+
 				if ( m_elements.find( name ) == m_elements.end() )
 				{
-					m_elements.insert( std::make_pair( name, new T ) );
+					it = m_elements.insert( std::make_pair( name, new T ) ).first;
 				}
+
+				return it->second;
 			}
 
 			ElementPtr getElement( std::string const & name )const

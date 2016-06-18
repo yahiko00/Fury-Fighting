@@ -5,6 +5,7 @@
 #include "Mesh.h"
 #include "ElementsList.h"
 #include "Camera.h"
+#include "Texture.h"
 
 namespace LMP3D
 {
@@ -18,7 +19,7 @@ namespace LMP3D
 
 			void draw()const;
 
-			void addObject( Object const & object );
+			void addObject( MeshArray const & meshes, MaterialArray const & materials );
 
 			inline Camera & getCamera()
 			{
@@ -50,10 +51,32 @@ namespace LMP3D
 				return m_meshes;
 			}
 
+			inline TexturesList & getTextures()
+			{
+				return m_textures;
+			}
+
+			inline TexturesList const & getTextures()const
+			{
+				return m_textures;
+			}
+
+		private:
+			struct ObjectMesh
+			{
+				MeshPtr m_mesh;
+				MaterialPtr m_material;
+				ObjectPtr m_object;
+			};
+			typedef std::vector< ObjectMesh > ObjectMeshArray;
+
 		private:
 			MaterialsList m_materials;
 			MeshesList m_meshes;
-			ObjectArray m_objects;
+			TexturesList m_textures;
+			ObjectList m_objects;
+			ObjectMeshArray m_opaqueObjects;
+			ObjectMeshArray m_transparentObjects;
 			Camera m_camera;
 		};
 	}

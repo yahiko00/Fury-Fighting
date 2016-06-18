@@ -23,7 +23,7 @@ namespace LMP3D
 	void trim_right( std::string & text );
 	void trim( std::string & text );
 	std::string getPath( std::string const & filePath );
-	std::string getFileName( std::string const & filePath );
+	std::string getFileName( std::string const & filePath, bool withExtension = false );
 }
 
 #endif

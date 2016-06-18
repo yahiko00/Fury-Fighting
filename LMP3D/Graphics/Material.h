@@ -1,7 +1,7 @@
 #ifndef ___LMP3D_Graphics_Material_H___
 #define ___LMP3D_Graphics_Material_H___
 
-#include "Common.h"
+#include "Texture.h"
 
 namespace LMP3D
 {
@@ -77,6 +77,11 @@ namespace LMP3D
 				m_diffuse.a = opacity;
 				m_specular.a = opacity;
 				m_emissive.a = opacity;
+			}
+
+			inline bool isOpaque()const
+			{
+				return m_ambient.a >= 1.0 && ( !m_texture || m_texture->getFormat() == RGB || m_texture->getFormat() == BGR );
 			}
 
 		private:

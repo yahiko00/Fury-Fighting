@@ -1,6 +1,6 @@
 #include "Viewport.h"
 
-#include "Platform/OpenGL.h"
+#include "Platform.h"
 
 namespace LMP3D
 {

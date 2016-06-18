@@ -17,7 +17,7 @@
 
 #endif
 
-#include <GL/GL.h>
+#include <GL/gl.h>
 #include <GL/GLU.h>
 
 #define GL_BGR 0x80E0
