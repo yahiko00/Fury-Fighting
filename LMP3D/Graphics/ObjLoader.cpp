@@ -317,17 +317,17 @@ namespace LMP3D
 						std::string face;
 						stream >> face;
 
-						auto index1 = face.find( '/' );
+						size_t index1 = face.find( '/' );
 						std::string component = face.substr( 0, index1 );
 						uint32_t iv = std::stoul( component ) - 1;
 						*vtxit++ = allvtx[iv];
 
 						++index1;
-						auto index2 = face.find( '/', index1 );
+						size_t index2 = face.find( '/', index1 );
 						component = face.substr( index1, index2 - index1 );
 						uint32_t ivt = std::stoul( component ) - 1;
 						texit->x = alltex[ivt].x;
-						texit->y = 1.0 - alltex[ivt].y;
+						texit->y = 1.0f - alltex[ivt].y;
 						++texit;
 
 						++index2;
