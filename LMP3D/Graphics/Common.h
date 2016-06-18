@@ -5,6 +5,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <list>
 
 #include "LMP3D/Common.h"
 
@@ -91,11 +92,13 @@ namespace LMP3D
 		class Scene;
 		class Camera;
 		class Object;
-		typedef std::vector< Object > ObjectArray;
+		typedef Object * ObjectPtr;
+		typedef std::list< Object > ObjectList;
 
 		template< typename T > class ElementsList;
 		typedef ElementsList< Material > MaterialsList;
 		typedef ElementsList< Mesh > MeshesList;
+		typedef ElementsList< Texture > TexturesList;
 	}
 }
 

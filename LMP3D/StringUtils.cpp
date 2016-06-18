@@ -75,11 +75,18 @@ namespace LMP3D
 		return normalised.substr( 0, normalised.find_last_of( PATH_SEPARATOR ) );
 	}
 
-	std::string getFileName( std::string const & filePath )
+	std::string getFileName( std::string const & filePath, bool withExtension )
 	{
 		std::string normalised( filePath );
 		replace( normalised, '/', PATH_SEPARATOR );
 		replace( normalised, '\\', PATH_SEPARATOR );
-		return normalised.substr( normalised.find_last_of( PATH_SEPARATOR ) + 1 );
+		normalised = normalised.substr( normalised.find_last_of( PATH_SEPARATOR ) + 1 );
+
+		if ( !withExtension )
+		{
+			normalised = normalised.substr( 0, normalised.find_last_of( '.' ) );
+		}
+
+		return normalised;
 	}
 }

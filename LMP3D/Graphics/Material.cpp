@@ -2,7 +2,7 @@
 
 #include "Texture.h"
 
-#include "Platform/OpenGL.h"
+#include "Platform.h"
 
 namespace LMP3D
 {
@@ -17,7 +17,6 @@ namespace LMP3D
 
 		Material::~Material()throw()
 		{
-			delete m_texture;
 		}
 
 		bool Material::bind()const

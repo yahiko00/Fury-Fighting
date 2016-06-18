@@ -8,7 +8,7 @@
 
 #include "LMP3D/StringUtils.h"
 
-#include "LMP3D/Platform/SDL.h"
+#include "LMP3D/Platform.h"
 
 #include <cstdlib>
 #include <fstream>
@@ -18,20 +18,26 @@ namespace LMP3D
 {
 	namespace Graphics
 	{
-		TexturePtr LoadTexture( std::string const & fileName )
+		TexturePtr LoadTexture( std::string const & fileName, Scene & scene )
 		{
-			Image img = LMP3D::Platform::LoadImage( fileName );
-			TexturePtr ret = NULL;
+			std::string name = getFileName( fileName, true );
+			TexturePtr ret = scene.getTextures().getElement( name );
 
-			if ( !img.m_data.empty() )
+			if ( !ret )
 			{
-				ret = new Texture( img );
+				Image img = LMP3D::Platform::LoadImage( fileName );
+
+				if ( !img.m_data.empty() )
+				{
+					ret = scene.getTextures().addElement( name );
+					ret->setImage( img );
+				}
 			}
 
 			return ret;
 		}
 
-		void LoadMtlFile( std::string const & fileName, MaterialsList & materials )
+		void LoadMtlFile( std::string const & fileName, Scene & scene )
 		{
 			std::ifstream file( fileName.c_str() );
 			std::string line;
@@ -48,7 +54,7 @@ namespace LMP3D
 				{
 					std::string name;
 					stream >> name;
-					select = materials.getElement( name );
+					select = scene.getMaterials().addElement( name );
 				}
 				else if ( select )
 				{
@@ -86,7 +92,7 @@ namespace LMP3D
 					{
 						std::string path;
 						stream >> path;
-						select->setTexture( LoadTexture( getPath( fileName ) + PATH_SEPARATOR + path ) );
+						select->setTexture( LoadTexture( getPath( fileName ) + PATH_SEPARATOR + path, scene ) );
 					}
 				}
 			}
@@ -137,13 +143,6 @@ namespace LMP3D
 				}
 				else if ( ident == "g" || ident == "usemtl" )
 				{
-					if ( ident == "usemtl" )
-					{
-						std::string name;
-						stream >> name;
-						scene.getMaterials().addElement( name );
-					}
-
 					if ( ntf )
 					{
 						faces.push_back( ntf );
@@ -159,6 +158,11 @@ namespace LMP3D
 			if ( ntf )
 			{
 				faces.push_back( ntf );
+			}
+
+			if ( !mtlfile.empty() )
+			{
+				LoadMtlFile( getPath( fileName ) + PATH_SEPARATOR + mtlfile, scene );
 			}
 
 			file.clear();
@@ -234,8 +238,7 @@ namespace LMP3D
 					{
 						std::stringstream name;
 						name << getFileName( fileName ) << "_" << ( meshes.size() + 1 );
-						scene.getMeshes().addElement( name.str() );
-						MeshPtr mesh = scene.getMeshes().getElement( name.str() );
+						MeshPtr mesh = scene.getMeshes().addElement( name.str() );
 						mesh->setData( Vector3Array( vertex.begin(), vtxit )
 									   , Vector3Array( normal.begin(), nmlit )
 									   , Vector2Array( texcoord.begin(), texit ) );
@@ -255,8 +258,7 @@ namespace LMP3D
 					{
 						std::stringstream name;
 						name << getFileName( fileName ) << "_" << ( meshes.size() + 1 );
-						scene.getMeshes().addElement( name.str() );
-						MeshPtr mesh = scene.getMeshes().getElement( name.str() );
+						MeshPtr mesh = scene.getMeshes().addElement( name.str() );
 						mesh->setData( Vector3Array( vertex.begin(), vtxit )
 									   , Vector3Array( normal.begin(), nmlit )
 									   , Vector2Array( texcoord.begin(), texit ) );
@@ -303,8 +305,7 @@ namespace LMP3D
 			{
 				std::stringstream name;
 				name << getFileName( fileName ) << "_" << ( meshes.size() + 1 );
-				scene.getMeshes().addElement( name.str() );
-				MeshPtr mesh = scene.getMeshes().getElement( name.str() );
+				MeshPtr mesh = scene.getMeshes().addElement( name.str() );
 				mesh->setData( Vector3Array( vertex.begin(), vtxit )
 							   , Vector3Array( normal.begin(), nmlit )
 							   , Vector2Array( texcoord.begin(), texit ) );
@@ -312,8 +313,7 @@ namespace LMP3D
 				meshes.push_back( mesh );
 			}
 
-			LoadMtlFile( getPath( fileName ) + PATH_SEPARATOR + mtlfile, scene.getMaterials() );
-			scene.addObject( Object( meshes, materials ) );
+			scene.addObject( meshes, materials );
 		}
 	}
 }

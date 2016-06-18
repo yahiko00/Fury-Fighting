@@ -10,9 +10,10 @@ namespace LMP3D
 		class Texture
 		{
 		public:
-			explicit Texture( Image const & image );
+			explicit Texture();
 			~Texture()throw();
 
+			void setImage( Image const & image );
 			bool bind()const;
 			void unbind()const;
 
