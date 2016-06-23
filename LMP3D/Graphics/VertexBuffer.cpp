@@ -8,12 +8,12 @@ namespace LMP3D
 	{
 		bool VertexBuffer::bind()const
 		{
-			return Platform::BindVertexPointer( m_data );
+			return Platform::bindVertexPointer( m_data );
 		}
 
 		void VertexBuffer::unbind()const
 		{
-			Platform::UnbindVertexPointer();
+			Platform::unbindVertexPointer();
 		}
 	}
 }

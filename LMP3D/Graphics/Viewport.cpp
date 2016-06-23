@@ -28,14 +28,14 @@ namespace LMP3D
 
 		void Viewport::perspective()
 		{
-			Platform::Viewport( m_size );
-			Platform::Perspective( m_angle, m_ratio, m_near, m_far );
+			Platform::viewport( m_size );
+			Platform::perspective( m_angle, m_ratio, m_near, m_far );
 		}
 
 		void Viewport::ortho()
 		{
-			Platform::Viewport( m_size );
-			Platform::Ortho( -1, 1, -1, 1, -1, 1 );
+			Platform::viewport( m_size );
+			Platform::ortho( -1, 1, -1, 1, -1, 1 );
 		}
 	}
 }

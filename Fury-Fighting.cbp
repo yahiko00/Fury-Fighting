@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Linux">
-				<Option output="Bin/opengl" prefix_auto="1" extension_auto="1" />
+				<Option output="Bin/FuryFighting" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="Bin/" />
 				<Option object_output="0bj/" />
 				<Option type="1" />

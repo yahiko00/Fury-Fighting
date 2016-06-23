@@ -18,7 +18,7 @@ namespace LMP3D
 
 		bool Camera::apply()const
 		{
-			return Platform::LookAt( m_position, m_lookAt, m_up );
+			return Platform::lookAt( m_position, m_lookAt, m_up );
 		}
 
 		//void MNS_camera_vue_sub( Camera *camera, Vector3 *a, float v, int *touche )

@@ -8,12 +8,12 @@ namespace LMP3D
 	{
 		bool ColourBuffer::bind()const
 		{
-			return Platform::BindColourPointer( m_data );
+			return Platform::bindColourPointer( m_data );
 		}
 
 		void ColourBuffer::unbind()const
 		{
-			Platform::UnbindColourPointer();
+			Platform::unbindColourPointer();
 		}
 	}
 }

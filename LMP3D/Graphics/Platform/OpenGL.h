@@ -1,7 +1,6 @@
 #ifndef ___LMP3D_Platform_OpenGL_H___
 #define ___LMP3D_Platform_OpenGL_H___
 
-#include "LMP3D/Graphics/Vector.h"
 #include "LMP3D/Graphics/Quaternion.h"
 
 #if defined( _WIN32 )
@@ -19,11 +18,14 @@
 #endif
 
 #include <GL/gl.h>
-#include <GL/GLU.h>
+#include <GL/glu.h>
 
 #define GL_BGR 0x80E0
 #define GL_BGRA 0x80E1
-#define GL_INVALID_INDEX 0xFFFFFFFF
+
+#if !defined( GL_INVALID_INDEX )
+#	define GL_INVALID_INDEX 0xFFFFFFFF
+#endif
 
 namespace LMP3D
 {
@@ -37,10 +39,10 @@ namespace LMP3D
 
 #else
 
-#	define checkGlError( Name ) Platform::CheckError( #Name )
+#	define checkGlError( Name ) Platform::checkError( #Name )
 			static uint32_t const ErrorCount = 6;
 
-			inline bool CheckError( char const * const p_name )
+			inline bool checkError( char const * const p_name )
 			{
 				static char const * const Errors[ErrorCount] =
 				{
@@ -77,7 +79,7 @@ namespace LMP3D
 
 			namespace
 			{
-				GLint GetInternal( PixelFormat format )
+				GLint getInternal( PixelFormat format )
 				{
 					switch ( format )
 					{
@@ -95,7 +97,7 @@ namespace LMP3D
 					}
 				}
 
-				GLenum GetFormat( PixelFormat format )
+				GLenum getFormat( PixelFormat format )
 				{
 					switch ( format )
 					{
@@ -118,31 +120,41 @@ namespace LMP3D
 				}
 			}
 
-			inline bool BindVertexPointer( Vector3Array const & data )
+			inline bool initialise()
+			{
+				glClearColor( 0.5f, 0.5f, 0.5f, 0.0f );
+				glEnable( GL_CULL_FACE );
+				glEnable( GL_TEXTURE_2D );
+				glAlphaFunc( GL_GREATER, 0.0f );
+				glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+				return checkGlError( "glInitialise" );
+			}
+
+			inline bool bindVertexPointer( Vector3Array const & data )
 			{
 				glEnableClientState( GL_VERTEX_ARRAY );
 				glVertexPointer( 3, GL_FLOAT, 0, &data[0] );
 				return checkGlError( "glNormalPointer" );
 			}
 
-			inline void UnbindVertexPointer()
+			inline void unbindVertexPointer()
 			{
 				glDisableClientState( GL_VERTEX_ARRAY );
 			}
 
-			inline bool BindColourPointer( ColourArray const & data )
+			inline bool bindColourPointer( ColourArray const & data )
 			{
 				glEnableClientState( GL_COLOR_ARRAY );
 				glColorPointer( 4, GL_FLOAT, 0, &data[0] );
 				return checkGlError( "glColorPointer" );
 			}
 
-			inline void UnbindColourPointer()
+			inline void unbindColourPointer()
 			{
 				glDisableClientState( GL_COLOR_ARRAY );
 			}
 
-			inline bool BindNormalPointer( Vector3Array const & data )
+			inline bool bindNormalPointer( Vector3Array const & data )
 			{
 				if ( !data.empty() )
 				{
@@ -153,12 +165,12 @@ namespace LMP3D
 				return checkGlError( "glNormalPointer" );
 			}
 
-			inline void UnbindNormalPointer()
+			inline void unbindNormalPointer()
 			{
 				glDisableClientState( GL_NORMAL_ARRAY );
 			}
 
-			inline bool BindTexCoordPointer( Vector2Array const & data )
+			inline bool bindTexCoordPointer( Vector2Array const & data )
 			{
 				if ( !data.empty() )
 				{
@@ -169,12 +181,12 @@ namespace LMP3D
 				return checkGlError( "glNormalPointer" );
 			}
 
-			inline void UnbindTexCoordPointer()
+			inline void unbindTexCoordPointer()
 			{
 				glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 			}
 
-			inline bool BindMaterial( Colour4 const & ambient
+			inline bool bindMaterial( Colour4 const & ambient
 									  , Colour4 const & diffuse
 									  , Colour4 const & specular
 									  , Colour4 const & emissive
@@ -188,7 +200,7 @@ namespace LMP3D
 				return checkGlError( "glMaterial" );
 			}
 
-			inline bool LookAt( Vector3 const & position
+			inline bool lookAt( Vector3 const & position
 								, Vector3 const & lookAt
 								, Vector3 const & up )
 			{
@@ -200,17 +212,17 @@ namespace LMP3D
 				return checkGlError( "gluLookAt" );
 			}
 
-			inline void PushMatrix()
+			inline void pushMatrix()
 			{
 				glPushMatrix();
 			}
 
-			inline void PopMatrix()
+			inline void popMatrix()
 			{
 				glPopMatrix();
 			}
 
-			inline bool ApplyTransform( Vector3 const & position, Quaternion const & orientation )
+			inline bool applyTransform( Vector3 const & position, Quaternion const & orientation )
 			{
 				static float matrix[16];
 				orientation.toMatrix( matrix );
@@ -218,13 +230,13 @@ namespace LMP3D
 				return checkGlError( "glTransform" );
 			}
 
-			inline bool Viewport( Size const & size )
+			inline bool viewport( Size const & size )
 			{
 				glViewport( 0, 0, size.x, size.y );
 				return checkGlError( "glViewport" );
 			}
 
-			inline bool Perspective( float angle, float ratio, float near, float far )
+			inline bool perspective( float angle, float ratio, float near, float far )
 			{
 				glEnable( GL_DEPTH_TEST );
 				glMatrixMode( GL_PROJECTION );
@@ -233,7 +245,7 @@ namespace LMP3D
 				return checkGlError( "glPerspective" );
 			}
 
-			inline bool Ortho( float left, float right, float bottom, float top, float near, float far )
+			inline bool ortho( float left, float right, float bottom, float top, float near, float far )
 			{
 				glDisable( GL_DEPTH_TEST );
 				glMatrixMode( GL_PROJECTION );
@@ -242,55 +254,67 @@ namespace LMP3D
 				return checkGlError( "glOrtho" );
 			}
 
-			inline unsigned int CreateTexture()
+			inline unsigned int createTexture()
 			{
 				unsigned int ret = GL_INVALID_INDEX;
 				glGenTextures( 1, &ret );
 				return ret;
 			}
 
-			inline bool BindTexture( unsigned int id )
+			inline bool bindTexture( unsigned int id )
 			{
 				glBindTexture( GL_TEXTURE_2D, id );
 				return checkGlError( "glBindTexture" );
 			}
 
-			inline bool InitialiseTexture( Size const & size, PixelFormat format, ByteArray const & data )
+			inline bool initialiseTexture( Size const & size, PixelFormat format, ByteArray const & data )
 			{
-				glTexImage2D( GL_TEXTURE_2D, 0, GetInternal( format ), size.x, size.y, 0, GetFormat( format ), GL_UNSIGNED_BYTE, &data[0] );
+				glTexImage2D( GL_TEXTURE_2D, 0, getInternal( format ), size.x, size.y, 0, getFormat( format ), GL_UNSIGNED_BYTE, &data[0] );
 				glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 				glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 				return checkGlError( "glTexImage2D" );
 			}
 
-			inline void UnbindTexture()
+			inline void unbindTexture()
 			{
 				glBindTexture( GL_TEXTURE_2D, 0 );
 			}
 
-			inline void DeleteTexture( unsigned int id )
+			inline void deleteTexture( unsigned int id )
 			{
 				glDeleteTextures( 1, &id );
 			}
 
-			inline bool Draw( int count )
+			inline bool draw( int count )
 			{
 				glDrawArrays( GL_TRIANGLES, 0, count );
 				return checkGlError( "glDrawElements" );
 			}
 
-			inline bool EnableBlending()
+			inline bool enableBlending()
 			{
 				glEnable( GL_BLEND );
+				glDisable( GL_CULL_FACE );
 				glDepthMask( GL_FALSE );
 				return checkGlError( "glEnableBlend" );
 			}
 
-			inline bool DisableBlending()
+			inline bool disableBlending()
 			{
 				glDisable( GL_BLEND );
+				glEnable( GL_CULL_FACE );
 				glDepthMask( GL_TRUE );
 				return checkGlError( "glDisableBlend" );
+			}
+
+			inline void clearFrame()
+			{
+				glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+			}
+
+			inline void flushFrame()
+			{
+				glFlush();
 			}
 		}
 	}

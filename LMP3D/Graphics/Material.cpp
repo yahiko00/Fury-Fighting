@@ -21,7 +21,7 @@ namespace LMP3D
 
 		bool Material::bind()const
 		{
-			bool ret = Platform::BindMaterial( m_ambient, m_diffuse, m_specular, m_emissive, m_exponent );
+			bool ret = Platform::bindMaterial( m_ambient, m_diffuse, m_specular, m_emissive, m_exponent );
 
 			if ( ret && m_texture )
 			{

@@ -2,7 +2,6 @@
 #define ___LMP3D_Graphics_Object_H___
 
 #include "Quaternion.h"
-#include "Vector.h"
 
 namespace LMP3D
 {
@@ -11,10 +10,8 @@ namespace LMP3D
 		class Object
 		{
 		public:
-			explicit Object( std::string const & name, MeshArray const & meshes, MaterialArray const & materials );
+			Object( std::string const & name, MeshArray const & meshes, MaterialArray const & materials );
 			~Object();
-
-			void draw()const;
 
 			inline Vector3 const & getPosition()const
 			{

@@ -12,35 +12,35 @@ namespace LMP3D
 
 		Texture::~Texture()throw()
 		{
-			Platform::DeleteTexture( m_id );
+			Platform::deleteTexture( m_id );
 		}
 
 		void Texture::setImage( Image const & image )
 		{
 			m_format = image.m_format;
-			m_id = Platform::CreateTexture();
-			Platform::BindTexture( m_id );
-			Platform::InitialiseTexture( image.m_size, image.m_format, image.m_data );
-			Platform::UnbindTexture();
+			m_id = Platform::createTexture();
+			Platform::bindTexture( m_id );
+			Platform::initialiseTexture( image.m_size, image.m_format, image.m_data );
+			Platform::unbindTexture();
 		}
 
 		bool Texture::bind()const
 		{
 			if ( m_format == RGBA || m_format == BGRA )
 			{
-				Platform::EnableBlending();
+				Platform::enableBlending();
 			}
 
-			return Platform::BindTexture( m_id );
+			return Platform::bindTexture( m_id );
 		}
 
 		void Texture::unbind()const
 		{
-			Platform::UnbindTexture();
+			Platform::unbindTexture();
 
 			if ( m_format == RGBA || m_format == BGRA )
 			{
-				Platform::DisableBlending();
+				Platform::disableBlending();
 			}
 		}
 	}

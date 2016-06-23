@@ -26,7 +26,8 @@ namespace LMP3D
 			void setName( const char *name );
 			void setSize( int w, int h );
 			void pollEvent();
-			void fps( int fps );
+			void beginFrame();
+			void endFrame( int fps );
 
 			inline Event const & getEvent() const
 			{

@@ -25,7 +25,7 @@ namespace LMP3D
 		{
 			if ( m_vertex.bind() && m_normal.bind() && m_texcoord.bind() )
 			{
-				Platform::Draw( m_vertex.getCount() );
+				Platform::draw( m_vertex.getCount() );
 				m_vertex.unbind();
 				m_normal.unbind();
 				m_texcoord.unbind();

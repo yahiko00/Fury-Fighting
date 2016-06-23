@@ -31,7 +31,7 @@ namespace LMP3D
 				objMesh.m_mesh = *mshit;
 				objMesh.m_object = object;
 
-				if ( ( *mtlit )->isOpaque() )
+				if ( objMesh.m_material->isOpaque() )
 				{
 					m_opaqueObjects.push_back( objMesh );
 				}
@@ -53,30 +53,30 @@ namespace LMP3D
 			{
 				for ( ObjectMeshArray::const_iterator it = m_opaqueObjects.begin(); it != m_opaqueObjects.end(); ++it )
 				{
-					Platform::PushMatrix();
+					Platform::pushMatrix();
 
-					if ( Platform::ApplyTransform( it->m_object->getPosition(), it->m_object->getOrientation() ) )
+					if ( Platform::applyTransform( it->m_object->getPosition(), it->m_object->getOrientation() ) )
 					{
 						it->m_material->bind();
 						it->m_mesh->draw();
 						it->m_material->unbind();
 					}
 
-					Platform::PopMatrix();
+					Platform::popMatrix();
 				}
 
 				for ( ObjectMeshArray::const_iterator it = m_transparentObjects.begin(); it != m_transparentObjects.end(); ++it )
 				{
-					Platform::PushMatrix();
+					Platform::pushMatrix();
 
-					if ( Platform::ApplyTransform( it->m_object->getPosition(), it->m_object->getOrientation() ) )
+					if ( Platform::applyTransform( it->m_object->getPosition(), it->m_object->getOrientation() ) )
 					{
 						it->m_material->bind();
 						it->m_mesh->draw();
 						it->m_material->unbind();
 					}
 
-					Platform::PopMatrix();
+					Platform::popMatrix();
 				}
 			}
 		}

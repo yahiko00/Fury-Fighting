@@ -8,12 +8,12 @@ namespace LMP3D
 	{
 		bool NormalBuffer::bind()const
 		{
-			return Platform::BindNormalPointer( m_data );
+			return Platform::bindNormalPointer( m_data );
 		}
 
 		void NormalBuffer:: unbind()const
 		{
-			Platform::UnbindNormalPointer();
+			Platform::unbindNormalPointer();
 		}
 	}
 }

@@ -4,6 +4,8 @@
 
 #include <cstring>
 
+#include "Graphics/Platform/OpenGL.h"
+
 namespace LMP3D
 {
 	namespace Windows
@@ -124,8 +126,16 @@ namespace LMP3D
 			}
 		}
 
-		void Window::fps( int fps )
+		void Window::beginFrame()
 		{
+			Graphics::Platform::clearFrame();
+		}
+
+		void Window::endFrame( int fps )
+		{
+			Graphics::Platform::flushFrame();
+			SDL_GL_SwapBuffers();
+
 			int t = 0;
 			int slp = 1000 / fps;
 

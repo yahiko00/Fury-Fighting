@@ -8,12 +8,12 @@ namespace LMP3D
 	{
 		bool TexCoordBuffer::bind()const
 		{
-			return Platform::BindTexCoordPointer( m_data );
+			return Platform::bindTexCoordPointer( m_data );
 		}
 
 		void TexCoordBuffer::unbind()const
 		{
-			Platform::UnbindTexCoordPointer();
+			Platform::unbindTexCoordPointer();
 		}
 	}
 }
