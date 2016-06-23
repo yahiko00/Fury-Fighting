@@ -7,7 +7,7 @@ namespace LMP3D
 {
 	namespace Graphics
 	{
-		void LoadObjFile( std::string const & fileName, Scene & scene );
+		ObjectPtr LoadObjFile( std::string const & fileName, Graphics & graphics, Scene & scene );
 	}
 }
 

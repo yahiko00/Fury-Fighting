@@ -19,7 +19,7 @@ namespace LMP3D
 
 			void draw()const;
 
-			void addObject( MeshArray const & meshes, MaterialArray const & materials );
+			Object & addObject( std::string const & name, MeshArray const & meshes, MaterialArray const & materials );
 
 			inline Camera & getCamera()
 			{
@@ -31,34 +31,14 @@ namespace LMP3D
 				return m_camera;
 			}
 
-			inline MaterialsList & getMaterials()
+			inline ObjectList const & getObjects()const
 			{
-				return m_materials;
+				return m_objects;
 			}
 
-			inline MaterialsList const & getMaterials()const
+			inline ObjectList & getObjects()
 			{
-				return m_materials;
-			}
-
-			inline MeshesList & getMeshes()
-			{
-				return m_meshes;
-			}
-
-			inline MeshesList const & getMeshes()const
-			{
-				return m_meshes;
-			}
-
-			inline TexturesList & getTextures()
-			{
-				return m_textures;
-			}
-
-			inline TexturesList const & getTextures()const
-			{
-				return m_textures;
+				return m_objects;
 			}
 
 		private:
@@ -71,9 +51,6 @@ namespace LMP3D
 			typedef std::vector< ObjectMesh > ObjectMeshArray;
 
 		private:
-			MaterialsList m_materials;
-			MeshesList m_meshes;
-			TexturesList m_textures;
 			ObjectList m_objects;
 			ObjectMeshArray m_opaqueObjects;
 			ObjectMeshArray m_transparentObjects;

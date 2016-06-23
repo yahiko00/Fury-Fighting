@@ -16,9 +16,9 @@ namespace LMP3D
 		{
 		}
 
-		void Scene::addObject( MeshArray const & meshes, MaterialArray const & materials )
+		Object & Scene::addObject( std::string const & name, MeshArray const & meshes, MaterialArray const & materials )
 		{
-			m_objects.push_back( Object( meshes, materials ) );
+			m_objects.push_back( Object( name, meshes, materials ) );
 
 			ObjectPtr object = &m_objects.back();
 			MeshArray::const_iterator mshit = meshes.begin();
@@ -43,6 +43,8 @@ namespace LMP3D
 				++mshit;
 				++mtlit;
 			}
+
+			return m_objects.back();
 		}
 
 		void Scene::draw()const
@@ -53,7 +55,7 @@ namespace LMP3D
 				{
 					Platform::PushMatrix();
 
-					if ( Platform::ApplyTransform( it->m_object->getPosition(), it->m_object->getAngle(), it->m_object->getAxis() ) )
+					if ( Platform::ApplyTransform( it->m_object->getPosition(), it->m_object->getOrientation() ) )
 					{
 						it->m_material->bind();
 						it->m_mesh->draw();
@@ -67,7 +69,7 @@ namespace LMP3D
 				{
 					Platform::PushMatrix();
 
-					if ( Platform::ApplyTransform( it->m_object->getPosition(), it->m_object->getAngle(), it->m_object->getAxis() ) )
+					if ( Platform::ApplyTransform( it->m_object->getPosition(), it->m_object->getOrientation() ) )
 					{
 						it->m_material->bind();
 						it->m_mesh->draw();

@@ -1,7 +1,8 @@
 #ifndef ___LMP3D_Graphics_Object_H___
 #define ___LMP3D_Graphics_Object_H___
 
-#include "Common.h"
+#include "Quaternion.h"
+#include "Vector.h"
 
 namespace LMP3D
 {
@@ -10,50 +11,58 @@ namespace LMP3D
 		class Object
 		{
 		public:
-			explicit Object( MeshArray const & meshes, MaterialArray const & materials );
+			explicit Object( std::string const & name, MeshArray const & meshes, MaterialArray const & materials );
 			~Object();
 
 			void draw()const;
 
-			Vector3 const & getPosition()const
+			inline Vector3 const & getPosition()const
 			{
 				return m_position;
 			}
 
-			float getAngle()const
+			inline Quaternion const & getOrientation()const
 			{
-				return m_angle;
+				return m_orientation;
 			}
 
-			Vector3 const & getAxis()const
+			inline void setOrientation( Quaternion const & value )
 			{
-				return m_axis;
+				m_orientation = value;
 			}
 
-			void rotate( float angle, float x, float y, float z )
+			inline void moveTo( Vector3 const & value )
 			{
+				m_position = value;
 			}
 
-			inline void rotate( float angle, Vector3 const & axis )
+			inline void moveTo( float x, float y, float z )
 			{
-				rotate( angle, axis.x, axis.y, axis.z );
+				m_position.x = x;
+				m_position.y = y;
+				m_position.z = z;
 			}
 
-			void translate( float x, float y, float z )
+			inline void rotate( Quaternion const & value )
+			{
+				m_orientation *= value;
+			}
+
+			inline void translate( Vector3 const & value )
+			{
+				m_position += value;
+			}
+
+			inline void translate( float x, float y, float z )
 			{
 				m_position.x += x;
 				m_position.y += y;
 				m_position.z += z;
 			}
 
-			inline void translate( Vector3 const & value )
-			{
-				translate( value.x, value.y, value.z );
-			}
-
 		private:
-			float m_angle;
-			Vector3 m_axis;
+			std::string const m_name;
+			Quaternion m_orientation;
 			Vector3 m_position;
 			MeshArray m_meshes;
 			MaterialArray m_materials;

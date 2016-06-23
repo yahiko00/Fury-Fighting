@@ -25,7 +25,7 @@ namespace LMP3D
 
 			if ( ret && m_texture )
 			{
-				ret = m_texture->bind();
+				m_texture->bind();
 			}
 
 			return ret;
@@ -37,11 +37,6 @@ namespace LMP3D
 			{
 				m_texture->unbind();
 			}
-		}
-
-		void Material::setTexture( TexturePtr texture )
-		{
-			m_texture = texture;
 		}
 	}
 }

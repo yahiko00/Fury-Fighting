@@ -43,31 +43,9 @@ namespace LMP3D
 			}
 		};
 
-		struct Vector2
-		{
-			float x;
-			float y;
-
-			Vector2( float x = 0.0f, float y = 0.0f )
-				: x( x )
-				, y( y )
-			{
-			}
-		};
-
-		struct Vector3
-		{
-			float x;
-			float y;
-			float z;
-
-			Vector3( float x = 0.0f, float y = 0.0f, float z = 0.0f )
-				: x( x )
-				, y( y )
-				, z( z )
-			{
-			}
-		};
+		struct Vector2;
+		struct Vector3;
+		class Quaternion;
 
 		typedef std::vector< Vector2 > Vector2Array;
 		typedef std::vector< Vector3 > Vector3Array;
@@ -89,6 +67,7 @@ namespace LMP3D
 		typedef Mesh * MeshPtr;
 		typedef std::vector< MeshPtr > MeshArray;
 
+		class Graphics;
 		class Scene;
 		class Camera;
 		class Object;

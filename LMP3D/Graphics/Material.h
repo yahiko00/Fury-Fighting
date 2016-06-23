@@ -16,7 +16,10 @@ namespace LMP3D
 			bool bind()const;
 			void unbind()const;
 
-			void setTexture( TexturePtr texture );
+			inline void setTexture( TexturePtr texture )
+			{
+				m_texture = texture;
+			}
 
 			inline void setAmbient( float r, float g, float b )
 			{

@@ -1,7 +1,8 @@
 #ifndef ___LMP3D_Platform_OpenGL_H___
 #define ___LMP3D_Platform_OpenGL_H___
 
-#include "LMP3D/Graphics/Common.h"
+#include "LMP3D/Graphics/Vector.h"
+#include "LMP3D/Graphics/Quaternion.h"
 
 #if defined( _WIN32 )
 
@@ -209,10 +210,11 @@ namespace LMP3D
 				glPopMatrix();
 			}
 
-			inline bool ApplyTransform( Vector3 const & position, float angle, Vector3 const & axis )
+			inline bool ApplyTransform( Vector3 const & position, Quaternion const & orientation )
 			{
-				glRotatef( angle, axis.x, axis.y, axis.z );
-				glTranslatef( position.x, position.y, position.z );
+				static float matrix[16];
+				orientation.toMatrix( matrix );
+				glMultMatrixf( matrix );
 				return checkGlError( "glTransform" );
 			}
 
