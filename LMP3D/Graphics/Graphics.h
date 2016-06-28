@@ -5,22 +5,26 @@
 #include "Material.h"
 #include "Mesh.h"
 #include "Object.h"
-#include "ObjLoader.h"
 #include "Scene.h"
-#include "SmdLoader.h"
 #include "Texture.h"
 #include "Viewport.h"
 #include "ElementsList.h"
+#include "../Singleton.h"
 
 namespace LMP3D
 {
 	namespace Graphics
 	{
 		class Graphics
+			: public Singleton< Graphics >
 		{
-		public:
+		private:
 			Graphics();
 			~Graphics();
+
+		public:
+			static void initialise();
+			static void cleanup();
 
 			inline MaterialsList & getMaterials()
 			{

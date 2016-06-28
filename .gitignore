@@ -6,3 +6,4 @@ build
 FuryFighting
 opengl
 FuryFighting.exe
+*.o

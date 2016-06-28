@@ -11,6 +11,14 @@ namespace LMP3D
 {
 	namespace Graphics
 	{
+		struct ObjectMesh
+		{
+			MeshPtr m_mesh;
+			MaterialPtr m_material;
+			ObjectPtr m_object;
+		};
+		typedef std::vector< ObjectMesh > ObjectMeshArray;
+
 		class Scene
 		{
 		public:
@@ -19,7 +27,8 @@ namespace LMP3D
 
 			void draw()const;
 
-			Object & addObject( std::string const & name, MeshArray const & meshes, MaterialArray const & materials );
+			void addObject( ObjectPtr object );
+			void removeObject( ObjectPtr object );
 
 			inline Camera & getCamera()
 			{
@@ -31,27 +40,13 @@ namespace LMP3D
 				return m_camera;
 			}
 
-			inline ObjectList const & getObjects()const
-			{
-				return m_objects;
-			}
-
-			inline ObjectList & getObjects()
+			inline ObjectArray const & getObjects()const
 			{
 				return m_objects;
 			}
 
 		private:
-			struct ObjectMesh
-			{
-				MeshPtr m_mesh;
-				MaterialPtr m_material;
-				ObjectPtr m_object;
-			};
-			typedef std::vector< ObjectMesh > ObjectMeshArray;
-
-		private:
-			ObjectList m_objects;
+			ObjectArray m_objects;
 			ObjectMeshArray m_opaqueObjects;
 			ObjectMeshArray m_transparentObjects;
 			Camera m_camera;

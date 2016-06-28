@@ -5,6 +5,7 @@
 #include <cstring>
 
 #include "Graphics/Platform/OpenGL.h"
+#include "Graphics/Graphics.h"
 
 namespace LMP3D
 {
@@ -20,24 +21,19 @@ namespace LMP3D
 			std::memset( touche, 0, sizeof( touche ) );
 		}
 
-		Window::Window()
+		Window::Window( const char * name, int w, int h )
 			: time_a( 0u )
 			, time_b( 0u )
 		{
+			SDL_WM_SetCaption( name, NULL );
+			SDL_SetVideoMode( w, h, 24, SDL_OPENGL );
+
+			LMP3D::Graphics::Graphics::initialise();
 		}
 
 		Window::~Window()
 		{
-		}
-
-		void Window::setName( const char *name )
-		{
-			SDL_WM_SetCaption( name, NULL );
-		}
-
-		void Window::setSize( int w, int h )
-		{
-			SDL_SetVideoMode( w, h, 24, SDL_OPENGL );
+			LMP3D::Graphics::Graphics::cleanup();
 		}
 
 		void Window::pollEvent()

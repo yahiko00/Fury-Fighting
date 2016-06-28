@@ -4,7 +4,7 @@ namespace LMP3D
 {
 	static SDL_Joystick *joystick = NULL;
 
-	void Init()
+	void InitLMP3D()
 	{
 		SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK );
 
@@ -15,7 +15,7 @@ namespace LMP3D
 		SDL_WM_SetIcon( NULL, NULL );
 	}
 
-	void Close()
+	void CloseLMP3D()
 	{
 		SDL_JoystickClose( joystick );
 		SDL_Quit();

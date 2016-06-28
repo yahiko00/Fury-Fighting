@@ -1,8 +1,20 @@
-#include <cstdio>
+#include "SmdLoader.h"
+
+#include "Material.h"
+#include "Mesh.h"
+#include "Object.h"
+#include "Scene.h"
+#include "Texture.h"
+#include "Graphics.h"
+
+#include "../StringUtils.h"
+#include "../FileUtils.h"
+
+#include "../Platform.h"
+
 #include <cstdlib>
-#include <cmath>
-#include <cstring>
-#include <cstdint>
+#include <fstream>
+#include <sstream>
 
 namespace LMP3D
 {
@@ -13,8 +25,9 @@ namespace LMP3D
 		//void MNS_SMD_create_skeleton( MNS_Anim3D *anim, int n, short *bones );
 		//void MNS_rotatation( float rotx, float roty, float rotz, float *x, float *y, float *z );
 
-		//MNS_Model3D *MNS_load_3D_smd( char *nom_du_fichier )
-		//{
+		ObjectPtr loadSmdFile( std::string const & fileName )
+		{
+			ObjectPtr result = NULL;
 		//	FILE* fichier = NULL;
 		//	char chaine[TAILLE_MAX] = "";
 
@@ -219,8 +232,8 @@ namespace LMP3D
 
 		//	MNS_SMD_create_skeleton( &obj->defaut, obj->nbones, obj->bones );
 
-		//	return obj;
-		//}
+			return result;
+		}
 
 
 		//MNS_Anim3D *MNS_load_3D_anim( char *nom_du_fichier )

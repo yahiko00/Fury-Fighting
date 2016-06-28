@@ -65,38 +65,6 @@ namespace LMP3D
 				}
 			}
 
-			inline void toMatrix( float matrix[16] )const
-			{
-				float const qxx( x * x );
-				float const qyy( y * y );
-				float const qzz( z * z );
-				float const qxz( x * z );
-				float const qxy( x * y );
-				float const qyz( y * z );
-				float const qwx( w * x );
-				float const qwy( w * y );
-				float const qwz( w * z );
-				matrix[0] = 1 - 2 * ( qyy + qzz );
-				matrix[1] = 2 * ( qxy + qwz );
-				matrix[2] = 2 * ( qxz - qwy );
-				matrix[3] = 0;
-
-				matrix[4] = 2 * ( qxy - qwz );
-				matrix[5] = 1 - 2 * ( qxx + qzz );
-				matrix[6] = 2 * ( qyz + qwx );
-				matrix[7] = 0;
-
-				matrix[8] = 2 * ( qxz + qwy );
-				matrix[9] = 2 * ( qyz - qwx );
-				matrix[10] = 1 - 2 * ( qxx + qyy );
-				matrix[11] = 0;
-
-				matrix[12] = 0;
-				matrix[13] = 0;
-				matrix[14] = 0;
-				matrix[15] = 1;
-			}
-
 			inline float getMagnitude()const
 			{
 				return sqrt( x * x + y * y + z * z + w * w );

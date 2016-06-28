@@ -20,12 +20,19 @@
 			<Target title="Windows">
 				<Option output="Bin/FuryFighting" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="Bin/" />
-				<Option object_output="0bj/" />
+				<Option object_output="Obj/" />
 				<Option type="0" />
 				<Option compiler="gcc" />
+				<Compiler>
+					<Add directory="Z:/Libs/SDL-1.2.15/include" />
+					<Add directory="Z:/Libs/SDL_image-1.2.12/include" />
+					<Add directory="Z:/Libs/SDL-1.2.15/include/SDL" />
+				</Compiler>
 				<Linker>
 					<Add library="opengl32" />
 					<Add library="glu32" />
+					<Add directory="Z:/Libs/SDL-1.2.15/lib/x86" />
+					<Add directory="Z:/Libs/SDL_image-1.2.12/lib/x86" />
 				</Linker>
 			</Target>
 		</Build>
@@ -39,6 +46,8 @@
 			<Add library="SDL_image" />
 		</Linker>
 		<Unit filename="LMP3D/Common.h" />
+		<Unit filename="LMP3D/FileUtils.cpp" />
+		<Unit filename="LMP3D/FileUtils.h" />
 		<Unit filename="LMP3D/Graphics/Camera.cpp" />
 		<Unit filename="LMP3D/Graphics/Camera.h" />
 		<Unit filename="LMP3D/Graphics/ColourBuffer.cpp" />
@@ -82,6 +91,7 @@
 		<Unit filename="LMP3D/LMP3D_windows.h" />
 		<Unit filename="LMP3D/Platform.h" />
 		<Unit filename="LMP3D/Platform/SDL.h" />
+		<Unit filename="LMP3D/Singleton.h" />
 		<Unit filename="LMP3D/StringUtils.cpp" />
 		<Unit filename="LMP3D/StringUtils.h" />
 		<Unit filename="main.cpp" />

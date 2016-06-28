@@ -2,7 +2,6 @@
 #define __LMP3D_H___
 
 #include <SDL/SDL.h>
-#include <GL/glew.h>
 
 #include "LMP3D_windows.h"
 #include "LMP3D_Window.h"
@@ -10,8 +9,8 @@
 
 namespace LMP3D
 {
-	void Init();
-	void Close();
+	void InitLMP3D();
+	void CloseLMP3D();
 }
 
 #endif

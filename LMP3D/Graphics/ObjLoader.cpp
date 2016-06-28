@@ -7,9 +7,10 @@
 #include "Texture.h"
 #include "Graphics.h"
 
-#include "LMP3D/StringUtils.h"
+#include "../StringUtils.h"
+#include "../FileUtils.h"
 
-#include "LMP3D/Platform.h"
+#include "../Platform.h"
 
 #include <cstdlib>
 #include <fstream>
@@ -21,10 +22,10 @@ namespace LMP3D
 	{
 		namespace
 		{
-			inline TexturePtr loadTexture( std::string const & fileName, Graphics & graphics )
+			inline TexturePtr loadTexture( std::string const & fileName )
 			{
 				std::string name = getFileName( fileName, true );
-				TexturePtr ret = graphics.getTextures().getElement( name );
+				TexturePtr ret = Graphics::getSingleton()->getTextures().getElement( name );
 
 				if ( !ret )
 				{
@@ -32,7 +33,7 @@ namespace LMP3D
 
 					if ( !img.m_data.empty() )
 					{
-						ret = graphics.getTextures().addElement( name );
+						ret = Graphics::getSingleton()->getTextures().addElement( name );
 						ret->setImage( img );
 					}
 				}
@@ -45,18 +46,17 @@ namespace LMP3D
 									, Vector3Array const & vertex
 									, Vector3Array const & normal
 									, Vector2Array const & texcoord
-									, Graphics & graphics
 									, MeshArray & meshes
 									, MaterialArray & materials )
 			{
-				MeshPtr mesh = graphics.getMeshes().addElement( mshname );
+				MeshPtr mesh = Graphics::getSingleton()->getMeshes().addElement( mshname );
 				mesh->setData( vertex, normal, texcoord );
-				materials.push_back( graphics.getMaterials().getElement( mtlname ) );
+				materials.push_back( Graphics::getSingleton()->getMaterials().getElement( mtlname ) );
 				meshes.push_back( mesh );
 			}
 		}
 
-		void loadMtlFile( std::string const & fileName, Graphics & graphics )
+		void loadMtlFile( std::string const & fileName )
 		{
 			std::ifstream file( fileName.c_str() );
 
@@ -80,7 +80,7 @@ namespace LMP3D
 				{
 					std::string name;
 					stream >> name;
-					select = graphics.getMaterials().addElement( name );
+					select = Graphics::getSingleton()->getMaterials().addElement( name );
 				}
 				else if ( select )
 				{
@@ -118,13 +118,13 @@ namespace LMP3D
 					{
 						std::string path;
 						stream >> path;
-						select->setTexture( loadTexture( getPath( fileName ) + PATH_SEPARATOR + path, graphics ) );
+						select->setTexture( loadTexture( getFilePath( fileName ) + PATH_SEPARATOR + path ) );
 					}
 				}
 			}
 		}
 
-		ObjectPtr loadObjFile( std::string const & fileName, Graphics & graphics, Scene & scene )
+		ObjectPtr loadObjFile( std::string const & fileName )
 		{
 			std::string objectName = getFileName( fileName );
 			std::ifstream file( fileName.c_str() );
@@ -147,7 +147,7 @@ namespace LMP3D
 
 			while ( std::getline( file, line ) )
 			{
-				trim_left( line );
+				trimLeft( line );
 				std::stringstream stream( line );
 				std::string ident;
 				stream >> ident;
@@ -197,7 +197,7 @@ namespace LMP3D
 
 			if ( !mtlfile.empty() )
 			{
-				loadMtlFile( getPath( fileName ) + PATH_SEPARATOR + mtlfile, graphics );
+				loadMtlFile( getFilePath( fileName ) + PATH_SEPARATOR + mtlfile );
 			}
 
 			file.clear();
@@ -277,7 +277,7 @@ namespace LMP3D
 									, Vector3Array( vertex.begin(), vtxit )
 									, Vector3Array( normal.begin(), nmlit )
 									, Vector2Array( texcoord.begin(), texit )
-									, graphics, meshes, materials );
+									, meshes, materials );
 						vtxit = vertex.begin();
 						nmlit = normal.begin();
 						texit = texcoord.begin();
@@ -296,7 +296,7 @@ namespace LMP3D
 									, Vector3Array( vertex.begin(), vtxit )
 									, Vector3Array( normal.begin(), nmlit )
 									, Vector2Array( texcoord.begin(), texit )
-									, graphics, meshes, materials );
+									, meshes, materials );
 						vtxit = vertex.begin();
 						nmlit = normal.begin();
 						texit = texcoord.begin();
@@ -343,10 +343,10 @@ namespace LMP3D
 							, Vector3Array( vertex.begin(), vtxit )
 							, Vector3Array( normal.begin(), nmlit )
 							, Vector2Array( texcoord.begin(), texit )
-							, graphics, meshes, materials );
+							, meshes, materials );
 			}
 
-			return &scene.addObject( objectName, meshes, materials );
+			return new Object( meshes, materials );
 		}
 	}
 }

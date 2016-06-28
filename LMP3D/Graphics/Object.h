@@ -10,8 +10,12 @@ namespace LMP3D
 		class Object
 		{
 		public:
-			Object( std::string const & name, MeshArray const & meshes, MaterialArray const & materials );
+			Object( MeshArray const & meshes, MaterialArray const & materials );
 			~Object();
+
+			static ObjectPtr create( std::string const & filePath );
+
+			ObjectPtr clone()const;
 
 			inline Vector3 const & getPosition()const
 			{
@@ -57,8 +61,17 @@ namespace LMP3D
 				m_position.z += z;
 			}
 
+			inline MeshArray const & getMeshes()const
+			{
+				return m_meshes;
+			}
+
+			inline MaterialArray const & getMaterials()const
+			{
+				return m_materials;
+			}
+
 		private:
-			std::string const m_name;
 			Quaternion m_orientation;
 			Vector3 m_position;
 			MeshArray m_meshes;

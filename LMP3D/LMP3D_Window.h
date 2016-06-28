@@ -20,11 +20,9 @@ namespace LMP3D
 		class Window
 		{
 		public:
-			Window();
+			Window( const char * name, int w, int h );
 			~Window();
 
-			void setName( const char *name );
-			void setSize( int w, int h );
 			void pollEvent();
 			void beginFrame();
 			void endFrame( int fps );

@@ -7,7 +7,7 @@
 #include <memory>
 #include <list>
 
-#include "LMP3D/Common.h"
+#include "../Common.h"
 
 namespace LMP3D
 {
@@ -72,7 +72,7 @@ namespace LMP3D
 		class Camera;
 		class Object;
 		typedef Object * ObjectPtr;
-		typedef std::list< Object > ObjectList;
+		typedef std::vector< ObjectPtr > ObjectArray;
 
 		template< typename T > class ElementsList;
 		typedef ElementsList< Material > MaterialsList;

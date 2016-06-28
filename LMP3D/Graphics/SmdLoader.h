@@ -7,7 +7,7 @@ namespace LMP3D
 {
 	namespace Graphics
 	{
-		MeshPtr LoadSmdMesh( std::string const & fileName );
+		ObjectPtr loadSmdFile( std::string const & fileName );
 	}
 }
 

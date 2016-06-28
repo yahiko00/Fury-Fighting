@@ -1,7 +1,7 @@
 #ifndef ___LMP3D_Platform_OpenGL_H___
 #define ___LMP3D_Platform_OpenGL_H___
 
-#include "LMP3D/Graphics/Quaternion.h"
+#include "../Quaternion.h"
 
 #if defined( _WIN32 )
 
@@ -225,7 +225,35 @@ namespace LMP3D
 			inline bool applyTransform( Vector3 const & position, Quaternion const & orientation )
 			{
 				static float matrix[16];
-				orientation.toMatrix( matrix );
+
+				float const qxx( orientation.x * orientation.x );
+				float const qyy( orientation.y * orientation.y );
+				float const qzz( orientation.z * orientation.z );
+				float const qxz( orientation.x * orientation.z );
+				float const qxy( orientation.x * orientation.y );
+				float const qyz( orientation.y * orientation.z );
+				float const qwx( orientation.w * orientation.x );
+				float const qwy( orientation.w * orientation.y );
+				float const qwz( orientation.w * orientation.z );
+				matrix[0] = 1 - 2 * ( qyy + qzz );
+				matrix[1] = 2 * ( qxy + qwz );
+				matrix[2] = 2 * ( qxz - qwy );
+				matrix[3] = 0;
+
+				matrix[4] = 2 * ( qxy - qwz );
+				matrix[5] = 1 - 2 * ( qxx + qzz );
+				matrix[6] = 2 * ( qyz + qwx );
+				matrix[7] = 0;
+
+				matrix[8] = 2 * ( qxz + qwy );
+				matrix[9] = 2 * ( qyz - qwx );
+				matrix[10] = 1 - 2 * ( qxx + qyy );
+				matrix[11] = 0;
+
+				matrix[12] = position.x;
+				matrix[13] = position.y;
+				matrix[14] = position.z;
+				matrix[15] = 1;
 				glMultMatrixf( matrix );
 				return checkGlError( "glTransform" );
 			}

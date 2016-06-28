@@ -1,14 +1,13 @@
 #ifndef ___LMP3D_SDL_H___
 #define ___LMP3D_SDL_H___
 
-#include "LMP3D/Common.h"
+#include "../Common.h"
+#include "../StringUtils.h"
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <cstdio>  /* defines FILENAME_MAX */
 #include <cstring>
-
-#include "StringUtils.h"
 
 #ifdef _WIN32
 #	include <direct.h>

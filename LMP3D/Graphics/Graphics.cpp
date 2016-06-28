@@ -14,5 +14,16 @@ namespace LMP3D
 		Graphics::~Graphics()
 		{
 		}
+
+		void Graphics::initialise()
+		{
+			doGetSingleton() = new Graphics;
+		}
+
+		void Graphics::cleanup()
+		{
+			delete doGetSingleton();
+			doGetSingleton() = NULL;
+		}
 	}
 }

@@ -5,25 +5,35 @@
 
 namespace LMP3D
 {
-#if defined( _WIN32 )
-
-	static char const PATH_SEPARATOR = '\\';
-
-#else
-
-	static char const PATH_SEPARATOR = '/';
-
-#endif
-
-	void replace( std::string & text, char toReplace, char replacement );
-	void replace( std::string & text, std::string const & toReplace, char replacement );
-	void replace( std::string & text, char toReplace, std::string const & replacement );
 	void replace( std::string & text, std::string const & toReplace, std::string const & replacement );
-	void trim_left( std::string & text );
-	void trim_right( std::string & text );
-	void trim( std::string & text );
-	std::string getPath( std::string const & filePath );
-	std::string getFileName( std::string const & filePath, bool withExtension = false );
+	std::string & trimLeft( std::string & text );
+	std::string & trimRight( std::string & text );
+	std::string lowerCase( std::string const & text );
+	std::string upperCase( std::string const & text );
+
+	inline void replace( std::string & text, char toReplace, char replacement )
+	{
+		char find[2] = { toReplace, '\0' };
+		char replaced[2] = { replacement, '\0' };
+		replace( text, find, replaced );
+	}
+
+	inline void replace( std::string & text, std::string const & toReplace, char replacement )
+	{
+		char replaced[2] = { replacement, '\0' };
+		replace( text, toReplace, replaced );
+	}
+
+	inline void replace( std::string & text, char toReplace, std::string const & replacement )
+	{
+		char find[2] = { toReplace, '\0' };
+		replace( text, find, replacement );
+	}
+
+	inline std::string & trim( std::string & text )
+	{
+		return trimLeft( trimRight( text ) );
+	}
 }
 
 #endif
