@@ -229,7 +229,8 @@ namespace LMP3D
 				quat.z /= length;
 				quat.w /= length;
 			}
-		}	}
+		}
+	}
 }
 
 #endif
