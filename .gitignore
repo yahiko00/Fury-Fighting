@@ -1,4 +1,9 @@
 build
 *.a
+*.pdb
+*.dll
+*.lib
 FuryFighting
 opengl
+FuryFighting.exe
+*.o

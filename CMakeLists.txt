@@ -28,26 +28,43 @@ set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}" )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}" )
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}" )
+
+# Small macro to add subdirectory files to current target source and header files
+macro( parse_subdir_files _FOLDER _GROUP )
+	file( GLOB _FOLDER_HEADER_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.h
+		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.inl
+	)
+	file( GLOB _FOLDER_SOURCE_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.c
+		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.cpp
+	)
+	source_group( "Header Files\\${_GROUP}" FILES ${_FOLDER_HEADER_FILES} )
+	source_group( "Source Files\\${_GROUP}" FILES ${_FOLDER_SOURCE_FILES} )
+endmacro()
+
 # Look for needed libraries
 find_package( OpenGL )
-find_package( GLEW )
 
 set( SDL_BUILDING_LIBRARY ON )
 find_package( SDL )
 find_package( SDL_image )
 
-if( OPENGL_FOUND AND GLEW_FOUND AND SDL_FOUND )
+if( OPENGL_FOUND AND SDL_FOUND )
 	add_definitions( "-DUSE_GLFW -D_CRT_SECURE_NO_WARNINGS" )
 
 	include_directories(
 		${GLEW_INCLUDE_DIR}
 		${SDL_INCLUDE_DIR}
+		${SDL_INCLUDE_DIR}/SDL
+		${SDL_IMAGE_INCLUDE_DIR}
 	)
 
 	add_subdirectory( LMP3D )
 
 	include_directories(
-		${CMAKE_SOURCE_DIR}/Src
+		${CMAKE_SOURCE_DIR}
 	)
 
 	set( BASE_LIBRARIES
@@ -55,6 +72,7 @@ if( OPENGL_FOUND AND GLEW_FOUND AND SDL_FOUND )
 		${OPENGL_glu_LIBRARY}
 		${GLEW_LIBRARY}
 		${SDL_LIBRARY}
+		${SDL_IMAGE_LIBRARY}
 	)
 
 	file( GLOB ${PROJECT_NAME}_HEADER_FILES
@@ -78,12 +96,11 @@ if( OPENGL_FOUND AND GLEW_FOUND AND SDL_FOUND )
 
 	copy_dll( ${PROJECT_NAME} ${SDL_LIBRARY} Debug )
 	copy_dll( ${PROJECT_NAME} ${SDL_LIBRARY} Release )
+	copy_dll( ${PROJECT_NAME} ${SDL_IMAGE_LIBRARY} Debug )
+	copy_dll( ${PROJECT_NAME} ${SDL_IMAGE_LIBRARY} Release )
 else()
 	if ( NOT OPENGL_FOUND )
 		message( SEND_ERROR "OpenGL library not found" )
-	endif ()
-	if ( NOT GLEW_FOUND )
-		message( SEND_ERROR "GLEW library not found" )
 	endif ()
 	if ( NOT SDL_FOUND )
 		message( SEND_ERROR "SDL library not found" )

@@ -1,25 +1,39 @@
 #include "LMP3D_Window.h"
 
+#include <SDL/SDL.h>
+
+#include <cstring>
+
+#include "Graphics/Platform/OpenGL.h"
+#include "Graphics/Graphics.h"
+
 namespace LMP3D
 {
 	namespace Windows
 	{
-		Window::Window()
+		Event::Event()
+			: sourisx( 0 )
+			, sourisy( 0 )
+			, quit( 0 )
+			, clikdroit( 0 )
+			, clikgauche( 0 )
 		{
+			std::memset( touche, 0, sizeof( touche ) );
+		}
+
+		Window::Window( const char * name, int w, int h )
+			: time_a( 0u )
+			, time_b( 0u )
+		{
+			SDL_WM_SetCaption( name, NULL );
+			SDL_SetVideoMode( w, h, 24, SDL_OPENGL );
+
+			LMP3D::Graphics::Graphics::initialise();
 		}
 
 		Window::~Window()
 		{
-		}
-
-		void Window::setName( const char *name )
-		{
-			SDL_WM_SetCaption(name, nullptr );
-		}
-
-		void Window::setSize( int w, int h )
-		{
-			SDL_SetVideoMode( w, h, 24, SDL_OPENGL );
+			LMP3D::Graphics::Graphics::cleanup();
 		}
 
 		void Window::pollEvent()
@@ -108,8 +122,16 @@ namespace LMP3D
 			}
 		}
 
-		void Window::fps( int fps )
+		void Window::beginFrame()
 		{
+			Graphics::Platform::clearFrame();
+		}
+
+		void Window::endFrame( int fps )
+		{
+			Graphics::Platform::flushFrame();
+			SDL_GL_SwapBuffers();
+
 			int t = 0;
 			int slp = 1000 / fps;
 

@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Linux">
-				<Option output="Bin/Fury" prefix_auto="1" extension_auto="1" />
+				<Option output="Bin/FuryFighting" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="Bin/" />
 				<Option object_output="0bj/" />
 				<Option type="1" />
@@ -18,31 +18,82 @@
 				</Linker>
 			</Target>
 			<Target title="Windows">
-				<Option output="Bin/opengl" prefix_auto="1" extension_auto="1" />
+				<Option output="Bin/FuryFighting" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="Bin/" />
-				<Option object_output="0bj/" />
+				<Option object_output="Obj/" />
 				<Option type="0" />
 				<Option compiler="gcc" />
+				<Compiler>
+					<Add directory="Z:/Libs/SDL-1.2.15/include" />
+					<Add directory="Z:/Libs/SDL_image-1.2.12/include" />
+					<Add directory="Z:/Libs/SDL-1.2.15/include/SDL" />
+				</Compiler>
 				<Linker>
 					<Add library="opengl32" />
 					<Add library="glu32" />
+					<Add directory="Z:/Libs/SDL-1.2.15/lib/x86" />
+					<Add directory="Z:/Libs/SDL_image-1.2.12/lib/x86" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-fexpensive-optimizations" />
 			<Add option="-Os" />
-			<Add option="-std=c++11" />
 		</Compiler>
 		<Linker>
 			<Add option="-s" />
 			<Add library="SDL" />
 			<Add library="SDL_image" />
 		</Linker>
+		<Unit filename="LMP3D/Common.h" />
+		<Unit filename="LMP3D/FileUtils.cpp" />
+		<Unit filename="LMP3D/FileUtils.h" />
+		<Unit filename="LMP3D/Graphics/Camera.cpp" />
+		<Unit filename="LMP3D/Graphics/Camera.h" />
+		<Unit filename="LMP3D/Graphics/ColourBuffer.cpp" />
+		<Unit filename="LMP3D/Graphics/ColourBuffer.h" />
+		<Unit filename="LMP3D/Graphics/Common.cpp" />
+		<Unit filename="LMP3D/Graphics/Common.h" />
+		<Unit filename="LMP3D/Graphics/ElementsList.h" />
+		<Unit filename="LMP3D/Graphics/Graphics.cpp" />
+		<Unit filename="LMP3D/Graphics/Graphics.h" />
+		<Unit filename="LMP3D/Graphics/Material.cpp" />
+		<Unit filename="LMP3D/Graphics/Material.h" />
+		<Unit filename="LMP3D/Graphics/Mesh.cpp" />
+		<Unit filename="LMP3D/Graphics/Mesh.h" />
+		<Unit filename="LMP3D/Graphics/NormalBuffer.cpp" />
+		<Unit filename="LMP3D/Graphics/NormalBuffer.h" />
+		<Unit filename="LMP3D/Graphics/ObjLoader.cpp" />
+		<Unit filename="LMP3D/Graphics/ObjLoader.h" />
+		<Unit filename="LMP3D/Graphics/Object.cpp" />
+		<Unit filename="LMP3D/Graphics/Object.h" />
+		<Unit filename="LMP3D/Graphics/Platform.h" />
+		<Unit filename="LMP3D/Graphics/Platform/OpenGL.h" />
+		<Unit filename="LMP3D/Graphics/Quaternion.h" />
+		<Unit filename="LMP3D/Graphics/Scene.cpp" />
+		<Unit filename="LMP3D/Graphics/Scene.h" />
+		<Unit filename="LMP3D/Graphics/SmdLoader.cpp" />
+		<Unit filename="LMP3D/Graphics/SmdLoader.h" />
+		<Unit filename="LMP3D/Graphics/TexCoordBuffer.cpp" />
+		<Unit filename="LMP3D/Graphics/TexCoordBuffer.h" />
+		<Unit filename="LMP3D/Graphics/Texture.cpp" />
+		<Unit filename="LMP3D/Graphics/Texture.h" />
+		<Unit filename="LMP3D/Graphics/Vector.h" />
+		<Unit filename="LMP3D/Graphics/VertexBuffer.cpp" />
+		<Unit filename="LMP3D/Graphics/VertexBuffer.h" />
+		<Unit filename="LMP3D/Graphics/Viewport.cpp" />
+		<Unit filename="LMP3D/Graphics/Viewport.h" />
 		<Unit filename="LMP3D/LMP3D.cpp" />
 		<Unit filename="LMP3D/LMP3D.h" />
 		<Unit filename="LMP3D/LMP3D_Window.cpp" />
 		<Unit filename="LMP3D/LMP3D_Window.h" />
+		<Unit filename="LMP3D/LMP3D_windows.cpp" />
+		<Unit filename="LMP3D/LMP3D_windows.h" />
+		<Unit filename="LMP3D/Platform.h" />
+		<Unit filename="LMP3D/Platform/SDL.h" />
+		<Unit filename="LMP3D/Singleton.h" />
+		<Unit filename="LMP3D/StringUtils.cpp" />
+		<Unit filename="LMP3D/StringUtils.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

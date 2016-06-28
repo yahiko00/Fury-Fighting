@@ -1,49 +1,72 @@
 #include <SDL/SDL.h>
 
-#include <GL/glew.h>
-
 #ifdef _WIN32
 #	undef main
 #endif
 
 #include "LMP3D/LMP3D.h"
-#include "LMP3D/LMP3D_Window.h"
 
-void game( LMP3D::Windows::Window &window );
+using namespace LMP3D;
+
+namespace
+{
+	static int const WINDOW_WIDTH = 1024;
+	static int const WINDOW_HEIGHT = 768;
+}
+
+void game( Windows::Window &window );
 
 int main( int argc, char ** argv )
 {
-	LMP3D::Init();
-	LMP3D::Windows::Window window;
-	window.setName("Fury Fighting");
-	window.setSize(640, 480);
-
-	glClearColor( 0.5, 0.5, 0.5, 0 );
-
-	//glEnable( GL_CULL_FACE );
-
-	glEnable( GL_TEXTURE_2D );
-	glAlphaFunc( GL_GREATER, 0.0f );
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
-	game( window );
-
-	LMP3D::Close();
+	InitLMP3D();
+	{
+		// Scope to prevent the window from being destroyed after call to CloseLMP3D
+		Windows::Window window( "Fury Fighting", WINDOW_WIDTH, WINDOW_HEIGHT );
+		game( window );
+	}
+	CloseLMP3D();
 
 	return 0;
 }
 
-void game( LMP3D::Windows::Window &window )
+void game( Windows::Window &window )
 {
-	while( !window.getEvent().quit )
+	Graphics::Viewport viewport( Size( WINDOW_WIDTH, WINDOW_HEIGHT ) );
+	Graphics::Scene scene;
+	Graphics::ObjectPtr object = Graphics::Object::create( "DATA/lightning.obj" );
+	scene.addObject( object );
+
+	scene.getCamera().translate( 0.0f, 30.0f, 50.0f );
+	Graphics::Quaternion rotate( Graphics::Vector3( 0, 1, 0 ), Graphics::radians( 10.0f ) );
+	Graphics::Quaternion rotate2( Graphics::Vector3( 0, 1, 0 ), Graphics::radians( -10.0f ) );
+	size_t count = 0u;
+	Graphics::ObjectPtr clone = NULL;
+
+	while ( !window.getEvent().quit )
 	{
-		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
+		window.beginFrame();
+		object->rotate( rotate );
+		object->translate( 0, 0.5f, -1 );
 		window.pollEvent();
+		viewport.perspective();
+		scene.draw();
 
-		glFlush();
-		SDL_GL_SwapBuffers();
+		if ( count == 100 )
+		{
+			clone = object->clone();
+			scene.addObject( clone );
+			++count;
+		}
+		else if ( count < 100 )
+		{
+			++count;
+		}
+		else
+		{
+			clone->rotate( rotate2 );
+			clone->translate( -0.5f, 0, -1 );
+		}
 
-		window.fps( 30 );
+		window.endFrame( 30 );
 	}
 }
