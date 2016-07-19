@@ -1,7 +1,7 @@
 #ifndef ___LPM3D_Graphics_Viewport_H___
 #define ___LPM3D_Graphics_Viewport_H___
 
-#include "Common.h"
+#include "GraphicsCommon.h"
 
 namespace LMP3D
 {

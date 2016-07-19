@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <cstdio>
 
 namespace LMP3D
 {
@@ -64,21 +65,28 @@ namespace LMP3D
 	{
 		RGB,
 		BGR,
+		RGB565,
+		BGR565,
 		RGBA,
-		BGRA
+		BGRA,
+		ARGB1555,
+		ARGB4444,
 	}	PixelFormat;
 
-	struct Image
+	struct ImageData
 	{
-		Image()
-			: m_format( RGB )
-		{
-		}
-
-		PixelFormat m_format;
-		Size m_size;
-		ByteArray m_data;
+		PixelFormat format;
+		Size size;
+		ByteArray data;
 	};
+
+#if !defined( NDEBUG )
+#	define logDebug( format, ... ) printf( format, __VA_ARGS__ )
+#else
+#	define logDebug( format, ... )
+#endif
+#define	logInfo( format, ... ) printf( format, __VA_ARGS__ )
+#define	logError( format, ... ) printf( format, __VA_ARGS__ )
 }
 
 #endif

@@ -4,7 +4,8 @@
 
 #include <cstring>
 
-#include "Graphics/Platform/OpenGL.h"
+#include "Platform.h"
+#include "Graphics/Platform.h"
 #include "Graphics/Graphics.h"
 
 namespace LMP3D
@@ -22,18 +23,16 @@ namespace LMP3D
 		}
 
 		Window::Window( const char * name, int w, int h )
-			: time_a( 0u )
-			, time_b( 0u )
+			: savedTime( 0u )
 		{
-			SDL_WM_SetCaption( name, NULL );
-			SDL_SetVideoMode( w, h, 24, SDL_OPENGL );
-
-			LMP3D::Graphics::Graphics::initialise();
+			Platform::initialiseWindow( name, w, h );
+			Graphics::Platform::initialiseWindow();
 		}
 
 		Window::~Window()
 		{
-			LMP3D::Graphics::Graphics::cleanup();
+			Graphics::Platform::cleanupWindow();
+			Platform::cleanupWindow();
 		}
 
 		void Window::pollEvent()
@@ -130,26 +129,7 @@ namespace LMP3D
 		void Window::endFrame( int fps )
 		{
 			Graphics::Platform::flushFrame();
-			SDL_GL_SwapBuffers();
-
-			int t = 0;
-			int slp = 1000 / fps;
-
-			time_a = SDL_GetTicks();
-			t = time_a - time_b;
-
-			if ( t <= 0 )
-			{
-				t = 0;
-			}
-
-			if ( t >= slp )
-			{
-				t = slp - 1;
-			}
-
-			SDL_Delay( slp - t );
-			time_b = SDL_GetTicks();
+			Platform::endFrame( fps, savedTime );
 		}
 	}
 }

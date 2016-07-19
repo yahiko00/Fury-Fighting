@@ -1,7 +1,7 @@
 #ifndef ___LMP3D_Graphics_Vector_H___
 #define ___LMP3D_Graphics_Vector_H___
 
-#include "Common.h"
+#include "GraphicsCommon.h"
 
 #include <cmath>
 
@@ -113,6 +113,14 @@ namespace LMP3D
 				x += rhs.x;
 				y += rhs.y;
 				z += rhs.z;
+				return *this;
+			}
+
+			inline Vector3 & operator*=( Vector3 const & rhs )
+			{
+				x *= rhs.x;
+				y *= rhs.y;
+				z *= rhs.z;
 				return *this;
 			}
 

@@ -1,6 +1,8 @@
 #ifndef ___LMP3D_Window_H___
 #define ___LMP3D_Window_H___
 
+#include "Common.h"
+
 namespace LMP3D
 {
 	namespace Windows
@@ -34,8 +36,7 @@ namespace LMP3D
 
 		private:
 			Event event;
-			unsigned int time_a;
-			unsigned int time_b;
+			unsigned int savedTime;
 		};
 	}
 }

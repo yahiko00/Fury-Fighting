@@ -25,7 +25,7 @@ namespace LMP3D
 		//void MNS_SMD_create_skeleton( MNS_Anim3D *anim, int n, short *bones );
 		//void MNS_rotatation( float rotx, float roty, float rotz, float *x, float *y, float *z );
 
-		ObjectPtr loadSmdFile( std::string const & fileName )
+		ObjectPtr loadSmdFile( std::string const & fileName, Scene & scene )
 		{
 			ObjectPtr result = NULL;
 		//	FILE* fichier = NULL;

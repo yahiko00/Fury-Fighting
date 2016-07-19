@@ -3,7 +3,9 @@ build
 *.pdb
 *.dll
 *.lib
+*.o
+*.ilk
+FuryFighting.exe
 FuryFighting
 opengl
-FuryFighting.exe
-*.o
+Data (copie)

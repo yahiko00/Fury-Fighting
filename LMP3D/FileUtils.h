@@ -18,6 +18,8 @@ namespace LMP3D
 	std::string getFileExtension( std::string const & filePath );
 	std::string getFilePath( std::string const & filePath );
 	std::string getFileName( std::string const & filePath, bool withExtension = false );
+	std::string getCurrentDirectory();
+	std::string getDataDirectory();
 }
 
 #endif

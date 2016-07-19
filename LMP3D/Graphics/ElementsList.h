@@ -1,7 +1,7 @@
 #ifndef ___LMP3D_Graphics_ElementsList_H___
 #define ___LMP3D_Graphics_ElementsList_H___
 
-#include "Common.h"
+#include "GraphicsCommon.h"
 
 namespace LMP3D
 {

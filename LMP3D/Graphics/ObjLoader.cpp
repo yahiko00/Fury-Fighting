@@ -10,7 +10,7 @@
 #include "../StringUtils.h"
 #include "../FileUtils.h"
 
-#include "../Platform.h"
+#include "../LMP3D.h"
 
 #include <cstdlib>
 #include <fstream>
@@ -22,20 +22,15 @@ namespace LMP3D
 	{
 		namespace
 		{
-			inline TexturePtr loadTexture( std::string const & fileName )
+			inline TexturePtr loadTexture( std::string const & fileName, Scene & scene )
 			{
 				std::string name = getFileName( fileName, true );
-				TexturePtr ret = Graphics::getSingleton()->getTextures().getElement( name );
+				TexturePtr ret = scene.getTextures().getElement( name );
 
 				if ( !ret )
 				{
-					Image img = LMP3D::Platform::loadImage( fileName );
-
-					if ( !img.m_data.empty() )
-					{
-						ret = Graphics::getSingleton()->getTextures().addElement( name );
-						ret->setImage( img );
-					}
+					ret = scene.getTextures().addElement( name );
+					ret->load( fileName );
 				}
 
 				return ret;
@@ -47,25 +42,25 @@ namespace LMP3D
 									, Vector3Array const & normal
 									, Vector2Array const & texcoord
 									, MeshArray & meshes
-									, MaterialArray & materials )
+									, MaterialArray & materials
+									, Scene & scene )
 			{
-				MeshPtr mesh = Graphics::getSingleton()->getMeshes().addElement( mshname );
+				MeshPtr mesh = scene.getMeshes().addElement( mshname );
 				mesh->setData( vertex, normal, texcoord );
-				materials.push_back( Graphics::getSingleton()->getMaterials().getElement( mtlname ) );
+				materials.push_back( scene.getMaterials().getElement( mtlname ) );
 				meshes.push_back( mesh );
 			}
 		}
 
-		void loadMtlFile( std::string const & fileName )
+		void loadMtlFile( std::string const & fileName, Scene & scene )
 		{
 			std::ifstream file( fileName.c_str() );
 
 			if ( !file.is_open() )
 			{
-				std::cerr << "Failed to open the MTL file " << getCurrentDirectory() << fileName << std::endl;
+				logError( "Failed to open the MTL file %s%s\n", LMP3D::getCurrentDirectory().c_str(), fileName.c_str() );
 				return;
 			}
-
 			std::string line;
 			MaterialPtr select = NULL;
 
@@ -80,7 +75,7 @@ namespace LMP3D
 				{
 					std::string name;
 					stream >> name;
-					select = Graphics::getSingleton()->getMaterials().addElement( name );
+					select = scene.getMaterials().addElement( name );
 				}
 				else if ( select )
 				{
@@ -118,20 +113,20 @@ namespace LMP3D
 					{
 						std::string path;
 						stream >> path;
-						select->setTexture( loadTexture( getFilePath( fileName ) + PATH_SEPARATOR + path ) );
+						select->setTexture( loadTexture( getFilePath( fileName ) + PATH_SEPARATOR + path, scene ) );
 					}
 				}
 			}
 		}
 
-		ObjectPtr loadObjFile( std::string const & fileName )
+		ObjectPtr loadObjFile( std::string const & fileName, Scene & scene )
 		{
 			std::string objectName = getFileName( fileName );
 			std::ifstream file( fileName.c_str() );
 
 			if ( !file )
 			{
-				std::cerr << "Failed to open the OBJ file " << fileName << std::endl;
+				logError( "Failed to open the OBJ file %s\n", fileName.c_str() );
 				return NULL;
 			}
 
@@ -197,7 +192,7 @@ namespace LMP3D
 
 			if ( !mtlfile.empty() )
 			{
-				loadMtlFile( getFilePath( fileName ) + PATH_SEPARATOR + mtlfile );
+			  loadMtlFile( getFilePath( fileName ) + PATH_SEPARATOR + mtlfile, scene );
 			}
 
 			file.clear();
@@ -210,10 +205,10 @@ namespace LMP3D
 			Vector2Array::iterator texit = alltex.begin();
 			Vector3Array::iterator nmlit = allnml.begin();
 
-			std::cout << "    Vertex count: " << nv << std::endl;
-			std::cout << "    TexCoord count: " << nvt << std::endl;
-			std::cout << "    Normal count: " << nvn << std::endl;
-			std::cout << "    Group count: " << faces.size() << std::endl;
+			logDebug( "    Vertex count: %d\n", nv );
+			logDebug( "    TexCoord count: %d\n", nvt );
+			logDebug( "    Normal count: %d\n", nvn );
+			logDebug( "    Group count: %d\n", faces.size() );
 
 			while ( std::getline( file, line ) )
 			{
@@ -277,18 +272,22 @@ namespace LMP3D
 									, Vector3Array( vertex.begin(), vtxit )
 									, Vector3Array( normal.begin(), nmlit )
 									, Vector2Array( texcoord.begin(), texit )
-									, meshes, materials );
+									, meshes, materials, scene );
 						vtxit = vertex.begin();
 						nmlit = normal.begin();
 						texit = texcoord.begin();
 						++facesit;
 					}
 
-					std::cout << "    Group faces count: " << *facesit << std::endl;
+					logDebug( "    Group faces count: %d\n", *facesit );
 				}
 				else if ( ident == "usemtl" )
 				{
-					if ( vertex.begin() != vtxit )
+					if ( facesit == faces.end() )
+					{
+						facesit = faces.begin();
+					}
+					else if ( vertex.begin() != vtxit )
 					{
 						std::stringstream name;
 						name << objectName << "_" << ( meshes.size() + 1 );
@@ -296,7 +295,7 @@ namespace LMP3D
 									, Vector3Array( vertex.begin(), vtxit )
 									, Vector3Array( normal.begin(), nmlit )
 									, Vector2Array( texcoord.begin(), texit )
-									, meshes, materials );
+									, meshes, materials, scene );
 						vtxit = vertex.begin();
 						nmlit = normal.begin();
 						texit = texcoord.begin();
@@ -343,10 +342,10 @@ namespace LMP3D
 							, Vector3Array( vertex.begin(), vtxit )
 							, Vector3Array( normal.begin(), nmlit )
 							, Vector2Array( texcoord.begin(), texit )
-							, meshes, materials );
+							, meshes, materials, scene );
 			}
 
-			return new Object( meshes, materials );
+			return new Object( scene, meshes, materials );
 		}
 	}
 }

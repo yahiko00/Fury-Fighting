@@ -1,7 +1,7 @@
 #ifndef ___LMP3D_Graphics_Texture_H___
 #define ___LMP3D_Graphics_Texture_H___
 
-#include "Common.h"
+#include "GraphicsCommon.h"
 
 namespace LMP3D
 {
@@ -13,18 +13,16 @@ namespace LMP3D
 			explicit Texture();
 			~Texture()throw();
 
-			void setImage( Image const & image );
+			void load( std::string const fileName );
+
 			bool bind()const;
 			void unbind()const;
 
-			inline PixelFormat getFormat()const
-			{
-				return m_format;
-			}
+			PixelFormat getFormat()const;
 
 		private:
-			PixelFormat m_format;
-			unsigned int m_id;
+			ImageData * m_data;
+			TextureId * m_id;
 		};
 	}
 }

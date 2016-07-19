@@ -10,22 +10,10 @@ namespace LMP3D
 		class Object
 		{
 		public:
-			Object( MeshArray const & meshes, MaterialArray const & materials );
+			Object( Scene & scene, MeshArray const & meshes, MaterialArray const & materials );
 			~Object();
 
-			static ObjectPtr create( std::string const & filePath );
-
 			ObjectPtr clone()const;
-
-			inline Vector3 const & getPosition()const
-			{
-				return m_position;
-			}
-
-			inline Quaternion const & getOrientation()const
-			{
-				return m_orientation;
-			}
 
 			inline void setOrientation( Quaternion const & value )
 			{
@@ -44,9 +32,33 @@ namespace LMP3D
 				m_position.z = z;
 			}
 
+			inline void setScale( Vector3 const & value )
+			{
+				m_scale = value;
+			}
+
+			inline void setScale( float x, float y, float z )
+			{
+				m_scale.x = x;
+				m_scale.y = y;
+				m_scale.z = z;
+			}
+
 			inline void rotate( Quaternion const & value )
 			{
 				m_orientation *= value;
+			}
+
+			inline void scale( Vector3 const & value )
+			{
+				m_scale *= value;
+			}
+
+			inline void scale( float x, float y, float z )
+			{
+				m_scale.x *= x;
+				m_scale.y *= y;
+				m_scale.z *= z;
 			}
 
 			inline void translate( Vector3 const & value )
@@ -59,6 +71,21 @@ namespace LMP3D
 				m_position.x += x;
 				m_position.y += y;
 				m_position.z += z;
+			}
+
+			inline Vector3 const & getPosition()const
+			{
+				return m_position;
+			}
+
+			inline Quaternion const & getOrientation()const
+			{
+				return m_orientation;
+			}
+
+			inline Vector3 const & getScale()const
+			{
+				return m_scale;
 			}
 
 			inline MeshArray const & getMeshes()const
@@ -74,8 +101,10 @@ namespace LMP3D
 		private:
 			Quaternion m_orientation;
 			Vector3 m_position;
+			Vector3 m_scale;
 			MeshArray m_meshes;
 			MaterialArray m_materials;
+			Scene & m_scene;
 		};
 	}
 }

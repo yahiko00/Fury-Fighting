@@ -22,6 +22,9 @@
 
 #define GL_BGR 0x80E0
 #define GL_BGRA 0x80E1
+#define GL_RGB565 0x8D62
+#define GL_ARGB1555 0x8057
+#define GL_ARGB4444 0x804F
 
 #if !defined( GL_INVALID_INDEX )
 #	define GL_INVALID_INDEX 0xFFFFFFFF
@@ -31,6 +34,11 @@ namespace LMP3D
 {
 	namespace Graphics
 	{
+		struct TextureId
+		{
+			unsigned int id;
+		};
+
 		namespace Platform
 		{
 #if defined( NDEBUG )
@@ -54,22 +62,24 @@ namespace LMP3D
 					"Out Of Memory",
 				};
 
-				unsigned int l_error = glGetError();
-				bool l_return = l_error == GL_NO_ERROR;
+				unsigned int l_error = 0;
+				bool l_return = true;
 
-				if ( !l_return )
+				while ( ( l_error = glGetError() ) != GL_NO_ERROR )
 				{
+					logError( "Error encountered executing OpenGL function %s (0x%04x)", p_name, l_error );
 					l_error -= GL_INVALID_ENUM;
-					std::cerr << "Error encountered executing OpenGL function " << p_name << " ";
 
 					if ( l_error < ErrorCount )
 					{
-						std::cerr << Errors[l_error] << std::endl;
+						logError( "%s\n", Errors[l_error] );
 					}
 					else
 					{
-						std::cerr << "Unknow error (" << std::hex << ( l_error + GL_INVALID_ENUM ) << ")" << std::endl;
+						logError( "%s\n", "Unknown error" );
 					}
+
+					l_return = false;
 				}
 
 				return l_return;
@@ -85,10 +95,14 @@ namespace LMP3D
 					{
 					case RGB:
 					case BGR:
+					case RGB565:
+					case BGR565:
 						return 3;
 
 					case RGBA:
 					case BGRA:
+					case ARGB1555:
+					case ARGB4444:
 						return 4;
 
 					default:
@@ -107,11 +121,21 @@ namespace LMP3D
 					case BGR:
 						return GL_BGR;
 
+					case RGB565:
+					case BGR565:
+						return GL_RGB565;
+
 					case RGBA:
 						return GL_RGBA;
 
 					case BGRA:
 						return GL_BGRA;
+
+					case ARGB1555:
+						return GL_ARGB1555;
+
+					case ARGB4444:
+						return GL_ARGB4444;
 
 					default:
 						assert( false && "Unexpected texture format" );
@@ -120,7 +144,15 @@ namespace LMP3D
 				}
 			}
 
-			inline bool initialise()
+			inline void initialise()
+			{
+			}
+
+			inline void cleanup()
+			{
+			}
+
+			inline bool initialiseWindow()
 			{
 				glClearColor( 0.5f, 0.5f, 0.5f, 0.0f );
 				glEnable( GL_CULL_FACE );
@@ -128,6 +160,10 @@ namespace LMP3D
 				glAlphaFunc( GL_GREATER, 0.0f );
 				glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 				return checkGlError( "glInitialise" );
+			}
+
+			inline void cleanupWindow()
+			{
 			}
 
 			inline bool bindVertexPointer( Vector3Array const & data )
@@ -222,7 +258,7 @@ namespace LMP3D
 				glPopMatrix();
 			}
 
-			inline bool applyTransform( Vector3 const & position, Quaternion const & orientation )
+			inline bool applyTransform( Vector3 const & position, Vector3 const & scale, Quaternion const & orientation )
 			{
 				static float matrix[16];
 
@@ -235,25 +271,27 @@ namespace LMP3D
 				float const qwx( orientation.w * orientation.x );
 				float const qwy( orientation.w * orientation.y );
 				float const qwz( orientation.w * orientation.z );
-				matrix[0] = 1 - 2 * ( qyy + qzz );
-				matrix[1] = 2 * ( qxy + qwz );
-				matrix[2] = 2 * ( qxz - qwy );
+
+				matrix[0] = scale.x * ( 1 - 2 * ( qyy + qzz ) );
+				matrix[1] = scale.x * ( 2 * ( qxy + qwz ) );
+				matrix[2] = scale.x * ( 2 * ( qxz - qwy ) );
 				matrix[3] = 0;
 
-				matrix[4] = 2 * ( qxy - qwz );
-				matrix[5] = 1 - 2 * ( qxx + qzz );
-				matrix[6] = 2 * ( qyz + qwx );
+				matrix[4] = scale.y * ( 2 * ( qxy - qwz ) );
+				matrix[5] = scale.y * ( 1 - 2 * ( qxx + qzz ) );
+				matrix[6] = scale.y * ( 2 * ( qyz + qwx ) );
 				matrix[7] = 0;
 
-				matrix[8] = 2 * ( qxz + qwy );
-				matrix[9] = 2 * ( qyz - qwx );
-				matrix[10] = 1 - 2 * ( qxx + qyy );
+				matrix[8] = scale.z * ( 2 * ( qxz + qwy ) );
+				matrix[9] = scale.z * ( 2 * ( qyz - qwx ) );
+				matrix[10] = scale.z * ( 1 - 2 * ( qxx + qyy ) );
 				matrix[11] = 0;
 
 				matrix[12] = position.x;
 				matrix[13] = position.y;
 				matrix[14] = position.z;
 				matrix[15] = 1;
+
 				glMultMatrixf( matrix );
 				return checkGlError( "glTransform" );
 			}
@@ -282,24 +320,25 @@ namespace LMP3D
 				return checkGlError( "glOrtho" );
 			}
 
-			inline unsigned int createTexture()
+			inline void createTexture( TextureId *& id, ImageData *& data )
 			{
-				unsigned int ret = GL_INVALID_INDEX;
-				glGenTextures( 1, &ret );
-				return ret;
+				id = new TextureId;
+				id->id = GL_INVALID_INDEX;
+				data = new ImageData;
+				glGenTextures( 1, &id->id );
 			}
 
-			inline bool bindTexture( unsigned int id )
+			inline bool bindTexture( TextureId const & id )
 			{
-				glBindTexture( GL_TEXTURE_2D, id );
+				glBindTexture( GL_TEXTURE_2D, id.id );
 				return checkGlError( "glBindTexture" );
 			}
 
-			inline bool initialiseTexture( Size const & size, PixelFormat format, ByteArray const & data )
+			inline bool initialiseTexture( TextureId const & id, ImageData const & data )
 			{
-				glTexImage2D( GL_TEXTURE_2D, 0, getInternal( format ), size.x, size.y, 0, getFormat( format ), GL_UNSIGNED_BYTE, &data[0] );
-				glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-				glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+				glTexImage2D( GL_TEXTURE_2D, 0, getInternal( data.format ), data.size.x, data.size.y, 0, getFormat( data.format ), GL_UNSIGNED_BYTE, &data.data[0] );
+				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 				return checkGlError( "glTexImage2D" );
 			}
 
@@ -308,9 +347,13 @@ namespace LMP3D
 				glBindTexture( GL_TEXTURE_2D, 0 );
 			}
 
-			inline void deleteTexture( unsigned int id )
+			inline void deleteTexture( TextureId *& id, ImageData *& data )
 			{
-				glDeleteTextures( 1, &id );
+				glDeleteTextures( 1, &id->id );
+				delete id;
+				id = NULL;
+				delete data;
+				data = NULL;
 			}
 
 			inline bool draw( int count )
@@ -321,17 +364,15 @@ namespace LMP3D
 
 			inline bool enableBlending()
 			{
-				glEnable( GL_BLEND );
+				glEnable( GL_ALPHA_TEST );
 				glDisable( GL_CULL_FACE );
-				glDepthMask( GL_FALSE );
 				return checkGlError( "glEnableBlend" );
 			}
 
 			inline bool disableBlending()
 			{
-				glDisable( GL_BLEND );
+				glDisable( GL_ALPHA_TEST );
 				glEnable( GL_CULL_FACE );
-				glDepthMask( GL_TRUE );
 				return checkGlError( "glDisableBlend" );
 			}
 

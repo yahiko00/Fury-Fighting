@@ -1,7 +1,7 @@
 #ifndef ___LMP3D_Graphics_VertexBuffer_H___
 #define ___LMP3D_Graphics_VertexBuffer_H___
 
-#include "Common.h"
+#include "GraphicsCommon.h"
 
 namespace LMP3D
 {

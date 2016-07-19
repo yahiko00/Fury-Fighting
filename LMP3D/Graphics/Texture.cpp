@@ -1,6 +1,7 @@
 #include "Texture.h"
 
 #include "Platform.h"
+#include "../Platform.h"
 
 namespace LMP3D
 {
@@ -12,36 +13,41 @@ namespace LMP3D
 
 		Texture::~Texture()throw()
 		{
-			Platform::deleteTexture( m_id );
+			Platform::deleteTexture( m_id, m_data );
 		}
 
-		void Texture::setImage( Image const & image )
+		void Texture::load( std::string const fileName )
 		{
-			m_format = image.m_format;
-			m_id = Platform::createTexture();
-			Platform::bindTexture( m_id );
-			Platform::initialiseTexture( image.m_size, image.m_format, image.m_data );
+			Platform::createTexture( m_id, m_data );
+			LMP3D::Platform::loadImage( fileName, *m_data );
+			Platform::bindTexture( *m_id );
+			Platform::initialiseTexture( *m_id, *m_data );
 			Platform::unbindTexture();
 		}
 
 		bool Texture::bind()const
 		{
-			if ( m_format == RGBA || m_format == BGRA )
+			if ( m_data->format == RGBA || m_data->format == BGRA )
 			{
 				Platform::enableBlending();
 			}
 
-			return Platform::bindTexture( m_id );
+			return Platform::bindTexture( *m_id );
 		}
 
 		void Texture::unbind()const
 		{
 			Platform::unbindTexture();
 
-			if ( m_format == RGBA || m_format == BGRA )
+			if ( m_data->format == RGBA || m_data->format == BGRA )
 			{
 				Platform::disableBlending();
 			}
+		}
+
+		PixelFormat Texture::getFormat()const
+		{
+			return m_data->format;
 		}
 	}
 }
