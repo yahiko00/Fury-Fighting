@@ -13,6 +13,10 @@ namespace LMP3D
 {
 	namespace Graphics
 	{
+		/**
+		@brief
+			RGB colour.
+		*/
 		struct Colour3
 		{
 			float r;
@@ -26,7 +30,10 @@ namespace LMP3D
 			{
 			}
 		};
-
+		/**
+		@brief
+			RGBA colour.
+		*/
 		struct Colour4
 		{
 			float r;
