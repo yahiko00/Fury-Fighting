@@ -1,30 +1,57 @@
 #ifndef ___LMP3D_Graphics_Texture_H___
 #define ___LMP3D_Graphics_Texture_H___
 
-#include "Common.h"
+#include "GraphicsCommon.h"
 
 namespace LMP3D
 {
 	namespace Graphics
 	{
+		/**
+		@brief
+			A texture, with an image and platform specifics.
+		*/
 		class Texture
 		{
 		public:
+			/**
+			@brief
+				Constructor.
+			*/
 			explicit Texture();
+			/**
+			@brief
+				Destructor.
+			*/
 			~Texture()throw();
-
-			void setImage( Image const & image );
+			/**
+			@brief
+				Loads the texture image and initialises platform specifics.
+			@param[in]
+				The image file name.
+			*/
+			void load( std::string const fileName );
+			/**
+			@brief
+				Activates the texture.
+			@return
+				\p false if the texture was not bound.
+			*/
 			bool bind()const;
+			/**
+			@brief
+				Deactivates the texture.
+			*/
 			void unbind()const;
-
-			inline PixelFormat getFormat()const
-			{
-				return m_format;
-			}
+			/**
+			@return
+				The image pixel format.
+			*/
+			PixelFormat getFormat()const;
 
 		private:
-			PixelFormat m_format;
-			unsigned int m_id;
+			ImageData * m_data;
+			TextureId * m_id;
 		};
 	}
 }

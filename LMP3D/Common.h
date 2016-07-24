@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <cstdio>
 
 namespace LMP3D
 {
@@ -17,30 +18,61 @@ namespace LMP3D
 	typedef std::vector< std::string > StringArray;
 	typedef std::vector< uint8_t > ByteArray;
 
+	/**
+	@brief
+		RAII wrapper for a pointer.
+	*/
 	template< typename T >
 	struct pointer
 	{
 		typedef void( *dtorFunc )( T * );
 
+		/**
+		@brief
+			Constructor.
+		@param[in] pointer
+			The pointer to be responsible for.
+		@param[in] dtor
+			The pointer destructor function.
+		*/
 		inline pointer( T * pointer, dtorFunc dtor )
 			: m_pointer( pointer )
 			, m_dtor( dtor )
 		{
 		}
-
+		/**
+		@brief
+			Destructor, frees the pointer using the dtor given at construction.
+		*/
 		inline ~pointer()
 		{
 			( *m_dtor )( m_pointer );
 		}
-
-		inline T * operator->()
+		/**
+		@brief
+			Pointer member access operator.
+		*/
+		inline T * operator->()const
+		{
+			return m_pointer;
+		}
+		/**
+		@brief
+			Implicit conversion to pointer type.
+		*/
+		inline operator T*()const
 		{
 			return m_pointer;
 		}
 
-		inline operator T*()
+	private:
+		inline pointer( pointer< T > const & )
 		{
-			return m_pointer;
+		}
+
+		inline pointer & operator=( pointer< T > const & )
+		{
+			return *this;
 		}
 
 	private:
@@ -64,21 +96,28 @@ namespace LMP3D
 	{
 		RGB,
 		BGR,
+		RGB565,
+		BGR565,
 		RGBA,
-		BGRA
+		BGRA,
+		ARGB1555,
+		ARGB4444,
 	}	PixelFormat;
 
-	struct Image
+	struct ImageData
 	{
-		Image()
-			: m_format( RGB )
-		{
-		}
-
-		PixelFormat m_format;
-		Size m_size;
-		ByteArray m_data;
+		PixelFormat format;
+		Size size;
+		ByteArray data;
 	};
+
+#if !defined( NDEBUG )
+#	define logDebug( format, ... ) printf( format, __VA_ARGS__ )
+#else
+#	define logDebug( format, ... )
+#endif
+#define	logInfo( format, ... ) printf( format, __VA_ARGS__ )
+#define	logError( format, ... ) printf( format, __VA_ARGS__ )
 }
 
 #endif

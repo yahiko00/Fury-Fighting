@@ -1,12 +1,13 @@
 #ifndef ___LMP3D_Singleton_H___
 #define ___LMP3D_Singleton_H___
 
+#include <cassert>
+
 namespace LMP3D
 {
 	/**
 	@brief
 		Simple singleton class.
-
 	@remarks
 		In classes that derive from Singleton, you should create two functions:
 		- A static initialisation function that will initialise the singleton value, through doGetSingleton()
@@ -19,16 +20,28 @@ namespace LMP3D
 	class Singleton
 	{
 	protected:
+		/**
+		@brief
+			Constructor.
+		*/
 		inline Singleton()
 		{
 			assert( !doGetSingleton() );
 		}
-
+		/**
+		@brief
+			Destructor.
+		*/
 		inline ~Singleton()
 		{
 			assert( doGetSingleton() );
 		}
 
+	private:
+		/**
+		@return
+			The mutable singleton value.
+		*/
 		static inline T *& doGetSingleton()
 		{
 			static T * singleton = NULL;
@@ -36,6 +49,10 @@ namespace LMP3D
 		}
 
 	public:
+		/**
+		@return
+			The singleton value.
+		*/
 		static inline T * getSingleton()
 		{
 			return doGetSingleton();

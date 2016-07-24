@@ -1,24 +1,20 @@
 #include "LMP3D.h"
 
+#include "Platform.h"
+#include "Graphics/Platform.h"
+
 namespace LMP3D
 {
-	static SDL_Joystick *joystick = NULL;
-
-	void InitLMP3D()
+	void initialise()
 	{
-		SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK );
-
-		SDL_ShowCursor( 0 );
-		SDL_JoystickEventState( SDL_ENABLE );
-		joystick = SDL_JoystickOpen( 0 );
-
-		SDL_WM_SetIcon( NULL, NULL );
+		Platform::initialise();
+		Graphics::Platform::initialise();
 	}
 
-	void CloseLMP3D()
+	void cleanup()
 	{
-		SDL_JoystickClose( joystick );
-		SDL_Quit();
+		Graphics::Platform::cleanup();
+		Platform::cleanup();
 	}
 }
 
