@@ -2,6 +2,8 @@
 
 #include "StringUtils.h"
 
+#include "Platform.h"
+
 namespace LMP3D
 {
 	std::string getFileExtension( std::string const & filePath )
@@ -47,5 +49,15 @@ namespace LMP3D
 		}
 
 		return normalised;
+	}
+
+	std::string getCurrentDirectory()
+	{
+		return Platform::getCurrentDirectory();
+	}
+
+	std::string getDataDirectory()
+	{
+		return Platform::getDataDirectory();
 	}
 }

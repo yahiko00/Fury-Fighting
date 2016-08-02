@@ -44,35 +44,71 @@ macro( parse_subdir_files _FOLDER _GROUP )
 	source_group( "Source Files\\${_GROUP}" FILES ${_FOLDER_SOURCE_FILES} )
 endmacro()
 
-# Look for needed libraries
-find_package( OpenGL )
-
-set( SDL_BUILDING_LIBRARY ON )
-find_package( SDL )
-find_package( SDL_image )
-
-if( OPENGL_FOUND AND SDL_FOUND )
-	add_definitions( "-DUSE_GLFW -D_CRT_SECURE_NO_WARNINGS" )
-
+if ( DREAMCAST )
 	include_directories(
-		${GLEW_INCLUDE_DIR}
-		${SDL_INCLUDE_DIR}
-		${SDL_INCLUDE_DIR}/SDL
-		${SDL_IMAGE_INCLUDE_DIR}
+		$ENV{KOS_BASE}/include
+		$ENV{KOS_BASE}/addons/include
+		$ENV{KOS_BASE}/../kos-ports/include
 	)
+
+	link_directories(
+		$ENV{KOS_BASE}/lib/$ENV{KOS_ARCH}
+		$ENV{KOS_BASE}/addons/lib/$ENV{KOS_ARCH}
+		$ENV{KOS_BASE}/lib
+	)
+	
+	set( BASE_LIBRARIES
+		GL
+		SDL
+		png
+		z
+		m
+		kallisti
+		stdc++
+		gcc
+		c
+	)
+	
+	set( PLATFORM Dreamcast )
+	set( IS_OK TRUE )
+else ()
+	# Look for needed libraries
+	find_package( OpenGL )
+
+	set( SDL_BUILDING_LIBRARY ON )
+	find_package( SDL )
+	find_package( SDL_image )
+	
+
+	if( OPENGL_FOUND AND SDL_FOUND )
+		add_definitions( "-DUSE_GLFW -D_CRT_SECURE_NO_WARNINGS" )
+
+		include_directories(
+			${SDL_INCLUDE_DIR}
+			${SDL_INCLUDE_DIR}/SDL
+			${SDL_IMAGE_INCLUDE_DIR}
+		)
+
+		set( BASE_LIBRARIES
+			${OPENGL_gl_LIBRARY}
+			${OPENGL_glu_LIBRARY}
+			${GLEW_LIBRARY}
+			${SDL_LIBRARY}
+			${SDL_IMAGE_LIBRARY}
+		)
+
+		set( PLATFORM Desktop )		
+		set( IS_OK TRUE )
+	endif ()
+endif ()
+
+if( ${IS_OK} )
+	add_definitions( "-DUSE_GLFW -D_CRT_SECURE_NO_WARNINGS" )
 
 	add_subdirectory( LMP3D )
 
 	include_directories(
 		${CMAKE_SOURCE_DIR}
-	)
-
-	set( BASE_LIBRARIES
-		${OPENGL_gl_LIBRARY}
-		${OPENGL_glu_LIBRARY}
-		${GLEW_LIBRARY}
-		${SDL_LIBRARY}
-		${SDL_IMAGE_LIBRARY}
 	)
 
 	file( GLOB ${PROJECT_NAME}_HEADER_FILES
@@ -87,17 +123,40 @@ if( OPENGL_FOUND AND SDL_FOUND )
 		${CMAKE_CURRENT_SOURCE_DIR}/*.cc
 	)
 
-	add_executable( ${PROJECT_NAME} ${${PROJECT_NAME}_HEADER_FILES} ${${PROJECT_NAME}_SOURCE_FILES} )
+	if ( "Dreamcast" STREQUAL ${PLATFORM} )
+		set( ROMDISK_DATA romdisk )
+		set( ROMDISK_IMG ${ROMDISK_DATA}.img )
+		set( ROMDISK_OBJ ${ROMDISK_DATA}.o )
+		add_custom_command(
+			OUTPUT ${ROMDISK_IMG}
+			COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Bin/DATA ${ROMDISK_DATA}
+			COMMAND ${KOS_GENROMFS} -f ${ROMDISK_IMG} -d ${ROMDISK_DATA} -v
+			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+			COMMENT "Generating ${ROMDISK_IMG}"
+		)
+		add_custom_command(
+			OUTPUT ${ROMDISK_OBJ}
+			COMMAND ${KOS_BIN2O} ${ROMDISK_IMG} ${ROMDISK_DATA} ${ROMDISK_OBJ}
+			DEPENDS ${ROMDISK_IMG}
+			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+			COMMENT "Generating ${ROMDISK_OBJ}"
+		)
+		add_executable( ${PROJECT_NAME} ${${PROJECT_NAME}_HEADER_FILES} ${${PROJECT_NAME}_SOURCE_FILES} ${CMAKE_CURRENT_BINARY_DIR}/${ROMDISK_OBJ} )
+	else ()
+		add_executable( ${PROJECT_NAME} ${${PROJECT_NAME}_HEADER_FILES} ${${PROJECT_NAME}_SOURCE_FILES} )
+	endif ()
 
 	target_link_libraries( ${PROJECT_NAME}
 		${BASE_LIBRARIES}
 		LMP3D
 	)
 
-	copy_dll( ${PROJECT_NAME} ${SDL_LIBRARY} Debug )
-	copy_dll( ${PROJECT_NAME} ${SDL_LIBRARY} Release )
-	copy_dll( ${PROJECT_NAME} ${SDL_IMAGE_LIBRARY} Debug )
-	copy_dll( ${PROJECT_NAME} ${SDL_IMAGE_LIBRARY} Release )
+	if ( "Desktop" STREQUAL ${PLATFORM} )
+		copy_dll( ${PROJECT_NAME} ${SDL_LIBRARY} Debug )
+		copy_dll( ${PROJECT_NAME} ${SDL_LIBRARY} Release )
+		copy_dll( ${PROJECT_NAME} ${SDL_IMAGE_LIBRARY} Debug )
+		copy_dll( ${PROJECT_NAME} ${SDL_IMAGE_LIBRARY} Release )
+	endif ()
 else()
 	if ( NOT OPENGL_FOUND )
 		message( SEND_ERROR "OpenGL library not found" )

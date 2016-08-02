@@ -3,6 +3,11 @@
 #include "Object.h"
 
 #include "Platform.h"
+#include "FileUtils.h"
+#include "StringUtils.h"
+
+#include "ObjLoader.h"
+#include "SmdLoader.h"
 
 #include <algorithm>
 
@@ -14,7 +19,7 @@ namespace LMP3D
 		{
 			void displayObject( Object const & object, Mesh const & mesh, Material const & material )
 			{
-				if ( Platform::applyTransform( object.getPosition(), object.getOrientation() ) )
+				if ( Platform::applyTransform( object.getPosition(), object.getScale(), object.getOrientation() ) )
 				{
 					material.bind();
 					mesh.draw();
@@ -53,8 +58,40 @@ namespace LMP3D
 			}
 		}
 
+		ObjectPtr Scene::createObject( std::string const & filePath )
+		{
+			std::string extension = lowerCase( getFileExtension( filePath ) );
+			ObjectPtr result = NULL;
+
+			if ( extension == "obj" )
+			{
+				result = loadObjFile( filePath, *this );
+			}
+			else if ( extension == "smd" )
+			{
+				result = loadSmdFile( filePath, *this );
+			}
+			else
+			{
+				assert( false && "Unsupported file format" );
+			}
+
+			if ( result )
+			{
+				addObject( result );
+			}
+			else
+			{
+				logError( "Couldn't load object %s\n", filePath.c_str() );
+			}
+
+			return result;
+		}
+
 		void Scene::addObject( ObjectPtr object )
 		{
+			assert( object && "Null object given" );
+
 			if ( std::find( m_objects.begin(), m_objects.end(), object ) != m_objects.end() )
 			{
 				assert( false && "Object has already been added" );

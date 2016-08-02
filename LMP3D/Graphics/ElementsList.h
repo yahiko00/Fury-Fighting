@@ -1,12 +1,16 @@
 #ifndef ___LMP3D_Graphics_ElementsList_H___
 #define ___LMP3D_Graphics_ElementsList_H___
 
-#include "Common.h"
+#include "GraphicsCommon.h"
 
 namespace LMP3D
 {
 	namespace Graphics
 	{
+		/**
+		@brief
+			A wrapper around std::map to ease its use with named elements.
+		*/
 		template< typename T >
 		class ElementsList
 		{
@@ -17,10 +21,17 @@ namespace LMP3D
 			typedef typename ElementMap::const_iterator ConstIterator;
 
 		public:
+			/**
+			@brief
+				Constructor.
+			*/
 			inline ElementsList()
 			{
 			}
-
+			/**
+			@brief
+				Destructor, deletes all elements.
+			*/
 			inline ~ElementsList()throw()
 			{
 				for ( Iterator it = m_elements.begin(); it != m_elements.end(); ++it )
@@ -28,7 +39,14 @@ namespace LMP3D
 					delete it->second;
 				}
 			}
-
+			/**
+			@brief
+				Adds an element if it is not already in the map.
+			@param[in] name
+				The element name.
+			@return
+				The added element, or the existing one.
+			*/
 			inline ElementPtr addElement( std::string const & name )
 			{
 				ConstIterator it = m_elements.find( name );
@@ -40,7 +58,12 @@ namespace LMP3D
 
 				return it->second;
 			}
-
+			/**
+			@brief
+				Removes an element if it is in the map.
+			@param[in] name
+				The element name.
+			*/
 			inline void removeElement( std::string const & name )
 			{
 				Iterator it = m_elements.find( name );
@@ -50,7 +73,14 @@ namespace LMP3D
 					m_elements.erase( it );
 				}
 			}
-
+			/**
+			@brief
+				Gets an element from the map.
+			@param[in] name
+				The element name.
+			@return
+				The found element, NULL if not found.
+			*/
 			inline ElementPtr getElement( std::string const & name )const
 			{
 				ElementPtr ret = NULL;
