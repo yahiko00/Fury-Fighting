@@ -239,8 +239,7 @@ namespace LMP3D
 				glMatrixMode( GL_MODELVIEW );
 				glLoadIdentity();
 				gluLookAt( position.x, position.y, position.z,
-						   //position.x + lookAt.x, position.y + lookAt.y, position.z + lookAt.z,
-						   lookAt.x, lookAt.y, lookAt.z,
+						   position.x + lookAt.x, position.y + lookAt.y, position.z + lookAt.z,
 						   up.x, up.y, up.z );
 				return checkGlError( "gluLookAt" );
 			}

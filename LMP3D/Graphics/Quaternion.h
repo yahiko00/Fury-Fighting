@@ -81,8 +81,8 @@ namespace LMP3D
 			inline void fromAxisAngle( Vector3 const & axis, float angle )
 			{
 				float const h = angle * 0.5f;
-				float const s = sin( h * 0.5f );
-				w = cos( h * 0.5f );
+				float const s = sin( h );
+				w = cos( h );
 				x = axis.x * s;
 				y = axis.y * s;
 				z = axis.z * s;
@@ -132,10 +132,10 @@ namespace LMP3D
 				float sp = sin( pitch );
 				float sy = sin( yaw );
 				float sr = sin( roll );
-				w = cp * cr * cr + sp * sy * sr;
-				x = sp * cr * cr - cp * sy * sr;
-				y = cp * sr * cr + sp * cy * sr;
-				z = cp * cr * sr - sp * sy * cr;
+				w = ( cy * cr * cp ) - ( sy * sr * sp );
+				x = ( sy * sr * cp ) + ( cy * cr * sp );
+				y = ( sy * cr * cp ) + ( cy * sr * sp );
+				z = ( cy * sr * cp ) - ( sy * cr * sp );
 			}
 			/**
 			@brief

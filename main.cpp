@@ -30,24 +30,29 @@ void game( Windows::Window & window )
 	Graphics::Scene scene;
 	Graphics::ObjectPtr object = scene.createObject( LMP3D::getDataDirectory() + PATH_SEPARATOR + "Tidus.obj" );
 
-	scene.getCamera().translate( 0.0f, 1.0f, 5.0f );
+	Graphics::Camera & camera = scene.getCamera();
+	camera.translate( 0.0f, 1.0f, 5.0f );
+
 	Graphics::Quaternion rotate( Graphics::Vector3( 0, 1, 0 ), Graphics::radians( 10.0f ) );
 	Graphics::Quaternion rotate2( Graphics::Vector3( 0, 1, 0 ), Graphics::radians( -10.0f ) );
 	size_t count = 0u;
+	float angle = 0.0f;
 	Graphics::ObjectPtr clone = NULL;
 
 	while ( !window.getEvent().quit )
 	{
 		window.beginFrame();
-		object->rotate( rotate );
-		object->translate( 0, -0.05f, -0.1f );
+		//object->rotate( rotate );
+		//object->translate( 0, -0.05f, -0.1f );
 		window.pollEvent();
 		viewport.perspective();
 		scene.draw();
 
+		camera.rotate( 0, 0, Graphics::radians( 1 ) );
+
 		if ( count == 100 )
 		{
-			clone = object->clone();
+			//clone = object->clone();
 			++count;
 		}
 		else if ( count < 100 )
@@ -56,10 +61,12 @@ void game( Windows::Window & window )
 		}
 		else
 		{
-			clone->rotate( rotate2 );
-			clone->translate( -0.05f, 0, -0.1f );
+			//clone->rotate( rotate2 );
+			//clone->translate( -0.05f, 0, -0.1f );
 		}
 
 		window.endFrame( 30 );
+		angle += 1;
+		angle = fmod( angle, 360.0f );
 	}
 }

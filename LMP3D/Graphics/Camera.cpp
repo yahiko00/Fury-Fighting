@@ -18,10 +18,13 @@ namespace LMP3D
 
 		bool Camera::apply()const
 		{
-			float matrix[4][4];
+			static float matrix[16];
+			static Vector3 l_up( matrix[1], matrix[5], matrix[9] );
+			static Vector3 l_lookAt( matrix[2], matrix[6], matrix[10] );
+
 			getOrientation().toMatrix( reinterpret_cast< float * >( matrix ) );
-			Vector3 l_up( matrix[0][1], matrix[1][1], matrix[2][1] );
-			Vector3 l_lookAt( matrix[0][2], matrix[1][2], matrix[2][2] );
+			l_up = Vector3( matrix[1], matrix[5], matrix[9] );
+			l_lookAt = Vector3( matrix[2], matrix[6], matrix[10] );
 			return Platform::lookAt( getPosition(), l_lookAt, l_up );
 		}
 
