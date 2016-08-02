@@ -23,11 +23,22 @@ namespace LMP3D
 		public:
 			/**
 			@brief
+				Default constructor.
+			*/
+			inline Quaternion()
+				: x( 0.0f )
+				, y( 0.0f )
+				, z( 0.0f )
+				, w( 1.0f )
+			{
+			}
+			/**
+			@brief
 				Constructor from specified values.
 			@param[in] x,y,z,w
 				The values.
 			*/
-			inline Quaternion( float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 1.0f )
+			inline Quaternion( float x, float y, float z, float w )
 				: x( x )
 				, y( y )
 				, z( z )
@@ -46,6 +57,18 @@ namespace LMP3D
 			inline Quaternion( Vector3 const & axis, float angle )
 			{
 				fromAxisAngle( axis, angle );
+			}
+			/**
+			@brief
+				Constructor from axis and angle.
+			@param[in] axis
+				The axis.
+			@param[in] angle
+				The angle.
+			*/
+			inline Quaternion( float pitch, float yaw, float roll )
+			{
+				fromEulerAngles( pitch, yaw, roll );
 			}
 			/**
 			@brief
@@ -94,13 +117,75 @@ namespace LMP3D
 			}
 			/**
 			@brief
-				Computes the magnitude (norm) of the quaternion.
-			@return
-				The magnitude.
+				Sets this quaternion from Euler angles.
+			@param[in] pitch, yaw, roll
+				The angles.
 			*/
-			inline float getMagnitude()const
+			inline void fromEulerAngles( float pitch, float yaw, float roll )
 			{
-				return sqrt( x * x + y * y + z * z + w * w );
+				pitch *= 0.5f;
+				yaw *= 0.5f;
+				roll *= 0.5f;
+				float cp = cos( pitch );
+				float cy = cos( yaw );
+				float cr = cos( roll );
+				float sp = sin( pitch );
+				float sy = sin( yaw );
+				float sr = sin( roll );
+				w = cp * cr * cr + sp * sy * sr;
+				x = sp * cr * cr - cp * sy * sr;
+				y = cp * sr * cr + sp * cy * sr;
+				z = cp * cr * sr - sp * sy * cr;
+			}
+			/**
+			@brief
+				Retrieves Euler angles from this quaternion.
+			@param[out] pitch, yaw, roll
+				Receive the angles.
+			*/
+			inline void toEulerAngles( float & pitch, float & yaw, float & roll )const
+			{
+				roll = float( atan2( 2.0f * ( x * y + w * z ), w * w + x * x - y * y - z * z ) );
+				pitch = float( atan2( 2.0f * ( y * z + w * x ), w * w - x * x - y * y + z * z ) );
+				yaw = asin( -2.0f * ( x * z - w * y ) );
+			}
+			/**
+			@brief
+				Retrieves a rotation matrix from this quaternion.
+			@param[out] matrix
+				Receive the rotation matrix.
+			*/
+			inline void toMatrix( float * matrix )const
+			{
+				float const qxx( x * x );
+				float const qyy( y * y );
+				float const qzz( z * z );
+				float const qxz( x * z );
+				float const qxy( x * y );
+				float const qyz( y * z );
+				float const qwx( w * x );
+				float const qwy( w * y );
+				float const qwz( w * z );
+
+				matrix[0] = ( 1 - 2 * ( qyy + qzz ) );
+				matrix[1] = ( 2 * ( qxy + qwz ) );
+				matrix[2] = ( 2 * ( qxz - qwy ) );
+				matrix[3] = 0;
+
+				matrix[4] = ( 2 * ( qxy - qwz ) );
+				matrix[5] = ( 1 - 2 * ( qxx + qzz ) );
+				matrix[6] = ( 2 * ( qyz + qwx ) );
+				matrix[7] = 0;
+
+				matrix[8] = ( 2 * ( qxz + qwy ) );
+				matrix[9] = ( 2 * ( qyz - qwx ) );
+				matrix[10] = ( 1 - 2 * ( qxx + qyy ) );
+				matrix[11] = 0;
+
+				matrix[12] = 0;
+				matrix[13] = 0;
+				matrix[14] = 0;
+				matrix[15] = 1;
 			}
 			/**
 			@brief
@@ -284,14 +369,40 @@ namespace LMP3D
 		}
 		/**
 		@brief
-			Converts degrees to radians.
-		@param[in] degrees
-			The angle in degrees.
+			Computes the dot product of two quaternions.
+		@return
+			The dot product.
 		*/
-		inline float radians( float degrees )
+		inline float dot( Quaternion const & lhs, Quaternion const & rhs )
 		{
-			static double const pi = 3.1415926535897932384626433832795028841968;
-			return float( degrees * pi / 180.0 );
+			return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z + lhs.w * rhs.w;
+		}
+		/**
+		@brief
+			Computes the cross product of two quaternions.
+		@param[in] lhs, rhs
+			The operands.
+		@return
+			The cross product.
+		*/
+		inline Quaternion cross( Quaternion const & lhs, Quaternion const & rhs )
+		{
+			return Quaternion(
+				( lhs.w * rhs.x ) + ( lhs.x * rhs.w ) + ( lhs.y * rhs.z ) - ( lhs.z * rhs.y ),
+				( lhs.w * rhs.y ) + ( lhs.y * rhs.w ) + ( lhs.z * rhs.x ) - ( lhs.x * rhs.z ),
+				( lhs.w * rhs.z ) + ( lhs.z * rhs.w ) + ( lhs.x * rhs.y ) - ( lhs.y * rhs.x ),
+				( lhs.w * rhs.w ) - ( lhs.x * rhs.x ) - ( lhs.y * rhs.y ) - ( lhs.z * rhs.z )
+			);
+		}
+		/**
+		@brief
+			Computes the magnitude (norm) of the quaternion.
+		@return
+			The magnitude.
+		*/
+		inline float length( Quaternion const & quat )
+		{
+			return sqrt( dot( quat, quat ) );
 		}
 		/**
 		@brief
@@ -301,7 +412,7 @@ namespace LMP3D
 		*/
 		inline void normalise( Quaternion & quat )
 		{
-			float norm = quat.getMagnitude();
+			float norm = length( quat );
 
 			if ( norm != 0 )
 			{
@@ -310,6 +421,17 @@ namespace LMP3D
 				quat.z /= norm;
 				quat.w /= norm;
 			}
+		}
+		/**
+		@brief
+			Converts degrees to radians.
+		@param[in] degrees
+			The angle in degrees.
+		*/
+		inline float radians( float degrees )
+		{
+			static double const pi = 3.1415926535897932384626433832795028841968;
+			return float( degrees * pi / 180.0 );
 		}
 	}
 }

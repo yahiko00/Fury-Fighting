@@ -1,7 +1,7 @@
 #ifndef ___LMP3D_Graphics_Object_H___
 #define ___LMP3D_Graphics_Object_H___
 
-#include "Quaternion.h"
+#include "Movable.h"
 
 namespace LMP3D
 {
@@ -12,6 +12,7 @@ namespace LMP3D
 			Group of meshes, materials and spacial informations, representing an object in the scene.
 		*/
 		class Object
+			: public Movable
 		{
 		public:
 			/**
@@ -31,38 +32,6 @@ namespace LMP3D
 				The clone.
 			*/
 			ObjectPtr clone()const;
-			/**
-			@brief
-				Sets the object orientation.
-			@param[in] value
-				The new orientation.
-			*/
-			inline void setOrientation( Quaternion const & value )
-			{
-				m_orientation = value;
-			}
-			/**
-			@brief
-				Moves the object to given position.
-			@param[in] value
-				The new position.
-			*/
-			inline void moveTo( Vector3 const & value )
-			{
-				m_position = value;
-			}
-			/**
-			@brief
-				Moves the object to given position.
-			@param[in] x,y,z
-				The new position.
-			*/
-			inline void moveTo( float x, float y, float z )
-			{
-				m_position.x = x;
-				m_position.y = y;
-				m_position.z = z;
-			}
 			/**
 			@brief
 				Sets the object scale.
@@ -87,16 +56,6 @@ namespace LMP3D
 			}
 			/**
 			@brief
-				Rotates the object using a quaternion.
-			@param[in] value
-				The orientation.
-			*/
-			inline void rotate( Quaternion const & value )
-			{
-				m_orientation *= value;
-			}
-			/**
-			@brief
 				Scales the object by given scale.
 			@param[in] value
 				The scale.
@@ -118,44 +77,6 @@ namespace LMP3D
 				m_scale.x *= x;
 				m_scale.y *= y;
 				m_scale.z *= z;
-			}
-			/**
-			@brief
-				Translates the object by given vector.
-			@param[in] value
-				The translation vector.
-			*/
-			inline void translate( Vector3 const & value )
-			{
-				m_position += value;
-			}
-			/**
-			@brief
-				Translates the object by given vector.
-			@param[in] x,y,z
-				The translation vector.
-			*/
-			inline void translate( float x, float y, float z )
-			{
-				m_position.x += x;
-				m_position.y += y;
-				m_position.z += z;
-			}
-			/**
-			@return
-				The object's position.
-			*/
-			inline Vector3 const & getPosition()const
-			{
-				return m_position;
-			}
-			/**
-			@return
-				The object's orientation.
-			*/
-			inline Quaternion const & getOrientation()const
-			{
-				return m_orientation;
 			}
 			/**
 			@return

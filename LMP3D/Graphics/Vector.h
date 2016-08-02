@@ -184,7 +184,7 @@ namespace LMP3D
 		{
 			float norm = length( vec );
 
-			if ( std::abs( norm ) >= 0.000001 )
+			if ( norm != 0 )
 			{
 				vec.x /= norm;
 				vec.y /= norm;
@@ -387,7 +387,7 @@ namespace LMP3D
 		{
 			float norm = length( vec );
 
-			if ( std::abs( norm ) >= 0.000001 )
+			if ( norm != 0 )
 			{
 				vec.x /= norm;
 				vec.y /= norm;

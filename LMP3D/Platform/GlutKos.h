@@ -1,14 +1,7 @@
-#ifndef ___LMP3D_GLUT_H___
-#define ___LMP3D_GLUT_H___
+#ifndef ___LMP3D_Glut_Kos_H___
+#define ___LMP3D_Glut_Kos_H___
 
 #include "../Common.h"
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
-
-#include "LMP3D/FileUtils.h"
-#include "LMP3D/StringUtils.h"
 
 #define LMP3D_INIT_PLATFORM( rom )\
 	extern uint8_t rom[];\

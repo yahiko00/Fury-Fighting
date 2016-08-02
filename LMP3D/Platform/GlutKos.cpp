@@ -2,8 +2,13 @@
 
 #include "GlutKos.h"
 
+#include "LMP3D/FileUtils.h"
+#include "LMP3D/StringUtils.h"
+
 #include <GL/gl.h>
+#include <GL/glu.h>
 #include <GL/glut.h>
+
 #include <png/kospng.h>
 #include <kos.h>
 

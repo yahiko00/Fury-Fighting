@@ -14,7 +14,8 @@ namespace LMP3D
 	namespace Graphics
 	{
 		Object::Object( Scene & scene, MeshArray const & meshes, MaterialArray const & materials )
-			: m_meshes( meshes )
+			: Movable()
+			, m_meshes( meshes )
 			, m_materials( materials )
 			, m_scale( 1.0f, 1.0f, 1.0f )
 			, m_scene( scene )

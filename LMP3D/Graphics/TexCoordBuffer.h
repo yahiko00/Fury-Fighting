@@ -1,7 +1,7 @@
 #ifndef ___LMP3D_Graphics_TexCoordBuffer_H___
 #define ___LMP3D_Graphics_TexCoordBuffer_H___
 
-#include "GraphicsCommon.h"
+#include "Vector.h"
 
 namespace LMP3D
 {

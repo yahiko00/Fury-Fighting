@@ -7,9 +7,9 @@ namespace LMP3D
 	namespace Graphics
 	{
 		Camera::Camera()
-			: m_lookAt( 0.0f, 0.0f, -1.0f )
-			, m_up( 0.0f, 1.0f, 0.0f )
+			: Movable()
 		{
+			setOrientation( Quaternion( Vector3( 0, 1, 0 ), radians( 180 ) ) );
 		}
 
 		Camera::~Camera()
@@ -18,7 +18,11 @@ namespace LMP3D
 
 		bool Camera::apply()const
 		{
-			return Platform::lookAt( m_position, m_lookAt, m_up );
+			float matrix[4][4];
+			getOrientation().toMatrix( reinterpret_cast< float * >( matrix ) );
+			Vector3 l_up( matrix[0][1], matrix[1][1], matrix[2][1] );
+			Vector3 l_lookAt( matrix[0][2], matrix[1][2], matrix[2][2] );
+			return Platform::lookAt( getPosition(), l_lookAt, l_up );
 		}
 
 		//void MNS_camera_vue_sub( Camera *camera, Vector3 *a, float v, int *touche )
