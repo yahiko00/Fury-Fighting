@@ -174,25 +174,26 @@
 
 1465929991 source:/home/kannagi/Documents/SDK/dreamcast/Fury-Fighting/LMP3D/LMP3D_windows.cpp
 
-1467144242 source:j:\projets\c++\fury-fighting\lmp3d\fileutils.cpp
+1470172902 source:j:\projets\c++\fury-fighting\lmp3d\fileutils.cpp
 	"FileUtils.h"
 	"StringUtils.h"
+	"Platform.h"
 
-1467142606 j:\projets\c++\fury-fighting\lmp3d\fileutils.h
+1470172828 j:\projets\c++\fury-fighting\lmp3d\fileutils.h
 	<string>
 
-1467143076 j:\projets\c++\fury-fighting\lmp3d\stringutils.h
+1469379804 j:\projets\c++\fury-fighting\lmp3d\stringutils.h
 	<string>
 
-1466724310 source:j:\projets\c++\fury-fighting\lmp3d\graphics\camera.cpp
+1470176198 source:j:\projets\c++\fury-fighting\lmp3d\graphics\camera.cpp
 	"Camera.h"
 	"Platform.h"
 
-1466723340 j:\projets\c++\fury-fighting\lmp3d\graphics\camera.h
-	"Vector.h"
+1470168768 j:\projets\c++\fury-fighting\lmp3d\graphics\camera.h
+	"Movable.h"
 
-1466711378 j:\projets\c++\fury-fighting\lmp3d\graphics\vector.h
-	"Common.h"
+1470168768 j:\projets\c++\fury-fighting\lmp3d\graphics\vector.h
+	"GraphicsCommon.h"
 	<cmath>
 
 1467145768 j:\projets\c++\fury-fighting\lmp3d\graphics\common.h
@@ -203,39 +204,36 @@
 	<list>
 	"../Common.h"
 
-1466254236 j:\projets\c++\fury-fighting\lmp3d\common.h
+1470173612 j:\projets\c++\fury-fighting\lmp3d\common.h
 	<string>
 	<vector>
+	<cstdio>
 
-1466278178 j:\projets\c++\fury-fighting\lmp3d\graphics\platform.h
+1469376862 j:\projets\c++\fury-fighting\lmp3d\graphics\platform.h
 	"Platform/OpenGL.h"
-	"Platform/OpenGL.h"
+	"Platform/OpenGLKos.h"
 	"Platform/OpenGL.h"
 
-1467145784 j:\projets\c++\fury-fighting\lmp3d\graphics\platform\opengl.h
-	"../Quaternion.h"
-	<Windows.h>
-	<GL/gl.h>
-	<GL/glu.h>
+1470168768 j:\projets\c++\fury-fighting\lmp3d\graphics\platform\opengl.h
+	"../GraphicsCommon.h"
 
-1467141352 j:\projets\c++\fury-fighting\lmp3d\graphics\quaternion.h
+1470179462 j:\projets\c++\fury-fighting\lmp3d\graphics\quaternion.h
 	"Vector.h"
 
-1466724322 source:j:\projets\c++\fury-fighting\lmp3d\graphics\colourbuffer.cpp
+1467414038 source:j:\projets\c++\fury-fighting\lmp3d\graphics\colourbuffer.cpp
 	"ColourBuffer.h"
 	"Platform.h"
 
-1466260418 j:\projets\c++\fury-fighting\lmp3d\graphics\colourbuffer.h
-	"Common.h"
+1469376862 j:\projets\c++\fury-fighting\lmp3d\graphics\colourbuffer.h
+	"GraphicsCommon.h"
 
 1466254962 source:j:\projets\c++\fury-fighting\lmp3d\graphics\common.cpp
 	"Common.h"
 
-1467134904 source:j:\projets\c++\fury-fighting\lmp3d\graphics\graphics.cpp
+1469376862 source:j:\projets\c++\fury-fighting\lmp3d\graphics\graphics.cpp
 	"Graphics.h"
-	"Platform/OpenGL.h"
 
-1467145788 j:\projets\c++\fury-fighting\lmp3d\graphics\graphics.h
+1469376888 j:\projets\c++\fury-fighting\lmp3d\graphics\graphics.h
 	"Camera.h"
 	"Material.h"
 	"Mesh.h"
@@ -244,44 +242,44 @@
 	"Texture.h"
 	"Viewport.h"
 	"ElementsList.h"
-	"../Singleton.h"
+	"GraphicsCommon.h"
 
-1466723452 j:\projets\c++\fury-fighting\lmp3d\graphics\material.h
+1469376456 j:\projets\c++\fury-fighting\lmp3d\graphics\material.h
 	"Texture.h"
 
-1466276770 j:\projets\c++\fury-fighting\lmp3d\graphics\texture.h
-	"Common.h"
+1469377586 j:\projets\c++\fury-fighting\lmp3d\graphics\texture.h
+	"GraphicsCommon.h"
 
-1466260768 j:\projets\c++\fury-fighting\lmp3d\graphics\mesh.h
+1469376532 j:\projets\c++\fury-fighting\lmp3d\graphics\mesh.h
 	"NormalBuffer.h"
 	"TexCoordBuffer.h"
 	"VertexBuffer.h"
 	"Material.h"
 
-1466260424 j:\projets\c++\fury-fighting\lmp3d\graphics\normalbuffer.h
-	"Common.h"
+1470168768 j:\projets\c++\fury-fighting\lmp3d\graphics\normalbuffer.h
+	"Vector.h"
 
-1466260438 j:\projets\c++\fury-fighting\lmp3d\graphics\texcoordbuffer.h
-	"Common.h"
+1470168768 j:\projets\c++\fury-fighting\lmp3d\graphics\texcoordbuffer.h
+	"Vector.h"
 
-1466260446 j:\projets\c++\fury-fighting\lmp3d\graphics\vertexbuffer.h
-	"Common.h"
+1470168800 j:\projets\c++\fury-fighting\lmp3d\graphics\vertexbuffer.h
+	"Vector.h"
 
-1467143556 j:\projets\c++\fury-fighting\lmp3d\graphics\object.h
-	"Quaternion.h"
+1470168768 j:\projets\c++\fury-fighting\lmp3d\graphics\object.h
+	"Movable.h"
 
-1467144732 j:\projets\c++\fury-fighting\lmp3d\graphics\scene.h
+1469378080 j:\projets\c++\fury-fighting\lmp3d\graphics\scene.h
 	"Material.h"
 	"Mesh.h"
 	"ElementsList.h"
 	"Camera.h"
 	"Texture.h"
 
-1466723414 j:\projets\c++\fury-fighting\lmp3d\graphics\elementslist.h
-	"Common.h"
+1469376862 j:\projets\c++\fury-fighting\lmp3d\graphics\elementslist.h
+	"GraphicsCommon.h"
 
-1466256590 j:\projets\c++\fury-fighting\lmp3d\graphics\viewport.h
-	"Common.h"
+1469377782 j:\projets\c++\fury-fighting\lmp3d\graphics\viewport.h
+	"GraphicsCommon.h"
 
 1467144288 j:\projets\c++\fury-fighting\lmp3d\singleton.h
 
@@ -298,23 +296,22 @@
 	"NormalBuffer.h"
 	"Platform.h"
 
-1467145796 source:j:\projets\c++\fury-fighting\lmp3d\graphics\object.cpp
+1470168768 source:j:\projets\c++\fury-fighting\lmp3d\graphics\object.cpp
 	"Object.h"
 	"Material.h"
 	"Mesh.h"
-	"ObjLoader.h"
-	"SmdLoader.h"
+	"Scene.h"
 	"Platform.h"
 	"../FileUtils.h"
 	"../StringUtils.h"
 
-1467143326 j:\projets\c++\fury-fighting\lmp3d\graphics\objloader.h
-	"Common.h"
+1469377388 j:\projets\c++\fury-fighting\lmp3d\graphics\objloader.h
+	"GraphicsCommon.h"
 
-1467144082 j:\projets\c++\fury-fighting\lmp3d\graphics\smdloader.h
-	"Common.h"
+1469377436 j:\projets\c++\fury-fighting\lmp3d\graphics\smdloader.h
+	"GraphicsCommon.h"
 
-1467145800 source:j:\projets\c++\fury-fighting\lmp3d\graphics\objloader.cpp
+1469376862 source:j:\projets\c++\fury-fighting\lmp3d\graphics\objloader.cpp
 	"ObjLoader.h"
 	"Material.h"
 	"Mesh.h"
@@ -324,25 +321,18 @@
 	"Graphics.h"
 	"../StringUtils.h"
 	"../FileUtils.h"
-	"../Platform.h"
+	"../LMP3D.h"
 	<cstdlib>
 	<fstream>
 	<sstream>
 
-1466278198 j:\projets\c++\fury-fighting\lmp3d\platform.h
+1469376862 j:\projets\c++\fury-fighting\lmp3d\platform.h
 	"Platform/SDL.h"
-	"Platform/Glut.h"
+	"Platform/GlutKos.h"
 	"Platform/SDL.h"
 
-1467145808 j:\projets\c++\fury-fighting\lmp3d\platform\sdl.h
+1470168768 j:\projets\c++\fury-fighting\lmp3d\platform\sdl.h
 	"../Common.h"
-	"../StringUtils.h"
-	<SDL/SDL.h>
-	<SDL/SDL_image.h>
-	<cstdio>
-	<cstring>
-	<direct.h>
-	<unistd.h>
 
 1325720122 z:\libs\sdl-1.2.15\include\sdl\sdl.h
 	"SDL_main.h"
@@ -563,13 +553,17 @@
 	"begin_code.h"
 	"close_code.h"
 
-1467144968 source:j:\projets\c++\fury-fighting\lmp3d\graphics\scene.cpp
+1470180322 source:j:\projets\c++\fury-fighting\lmp3d\graphics\scene.cpp
 	"Scene.h"
 	"Object.h"
 	"Platform.h"
+	"LMP3D/FileUtils.h"
+	"LMP3D/StringUtils.h"
+	"ObjLoader.h"
+	"SmdLoader.h"
 	<algorithm>
 
-1467144178 source:j:\projets\c++\fury-fighting\lmp3d\graphics\smdloader.cpp
+1469376862 source:j:\projets\c++\fury-fighting\lmp3d\graphics\smdloader.cpp
 	"SmdLoader.h"
 	"Material.h"
 	"Mesh.h"
@@ -577,9 +571,9 @@
 	"Scene.h"
 	"Texture.h"
 	"Graphics.h"
-	"LMP3D/StringUtils.h"
-	"LMP3D/FileUtils.h"
-	"LMP3D/Platform.h"
+	"../StringUtils.h"
+	"../FileUtils.h"
+	"../Platform.h"
 	<cstdlib>
 	<fstream>
 	<sstream>
@@ -588,26 +582,31 @@
 	"TexCoordBuffer.h"
 	"Platform.h"
 
-1466724428 source:j:\projets\c++\fury-fighting\lmp3d\graphics\texture.cpp
+1470173160 source:j:\projets\c++\fury-fighting\lmp3d\graphics\texture.cpp
 	"Texture.h"
 	"Platform.h"
+	"../Platform.h"
 
 1466724450 source:j:\projets\c++\fury-fighting\lmp3d\graphics\vertexbuffer.cpp
 	"VertexBuffer.h"
 	"Platform.h"
 
-1466724438 source:j:\projets\c++\fury-fighting\lmp3d\graphics\viewport.cpp
+1469376862 source:j:\projets\c++\fury-fighting\lmp3d\graphics\viewport.cpp
 	"Viewport.h"
 	"Platform.h"
 
-1467144460 source:j:\projets\c++\fury-fighting\lmp3d\lmp3d.cpp
+1469376862 source:j:\projets\c++\fury-fighting\lmp3d\lmp3d.cpp
 	"LMP3D.h"
+	"Platform.h"
+	"Graphics/Platform.h"
 
-1467145590 j:\projets\c++\fury-fighting\lmp3d\lmp3d.h
-	<SDL/SDL.h>
-	"LMP3D_windows.h"
-	"LMP3D_Window.h"
+1470175096 j:\projets\c++\fury-fighting\lmp3d\lmp3d.h
+	"Window.h"
+	"Event.h"
+	"StringUtils.h"
+	"FileUtils.h"
 	"Graphics/Graphics.h"
+	"Platform.h"
 
 1466186588 j:\projets\c++\fury-fighting\lmp3d\lmp3d_windows.h
 	"LMP3D.h"
@@ -631,4 +630,69 @@
 1467145594 source:j:\projets\c++\fury-fighting\main.cpp
 	<SDL/SDL.h>
 	"LMP3D/LMP3D.h"
+
+1470179528 source:j:\projets\c++\fury-fighting\furyfighting\game.cpp
+	"Game.h"
+
+1470172306 j:\projets\c++\fury-fighting\furyfighting\game.h
+	"LMP3D/LMP3D.h"
+
+1470174894 j:\projets\c++\fury-fighting\lmp3d\window.h
+	"Event.h"
+
+1470179156 j:\projets\c++\fury-fighting\lmp3d\event.h
+	"Common.h"
+
+1470168768 j:\projets\c++\fury-fighting\lmp3d\graphics\movable.h
+	"Quaternion.h"
+
+1469378726 j:\projets\c++\fury-fighting\lmp3d\graphics\graphicscommon.h
+	<cassert>
+	<map>
+	<memory>
+	<list>
+	"../Common.h"
+
+1470168768 j:\projets\c++\fury-fighting\lmp3d\platform\glutkos.h
+	"../Common.h"
+
+1470173340 source:j:\projets\c++\fury-fighting\furyfighting\main.cpp
+	<LMP3D/LMP3D.h>
+	"Game.h"
+
+1470180298 source:j:\projets\c++\fury-fighting\lmp3d\event.cpp
+	"Event.h"
+	<cstring>
+
+1470168768 j:\projets\c++\fury-fighting\lmp3d\graphics\platform\openglkos.h
+	"../GraphicsCommon.h"
+
+1470180308 source:j:\projets\c++\fury-fighting\lmp3d\graphics\graphicscommon.cpp
+	"LMP3D/Common.h"
+
+1470170626 source:j:\projets\c++\fury-fighting\lmp3d\graphics\platform\opengl.cpp
+	"OpenGL.h"
+	"../Quaternion.h"
+	<Windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1470180342 source:j:\projets\c++\fury-fighting\lmp3d\platform\sdl.cpp
+	"SDL.h"
+	"../StringUtils.h"
+	"../FileUtils.h"
+	<SDL/SDL.h>
+	<SDL/SDL_image.h>
+	<cstring>
+	<Windows.h>
+	<unistd.h>
+	"LMP3D/Graphics/Platform.h"
+
+1470179270 source:j:\projets\c++\fury-fighting\lmp3d\window.cpp
+	"Window.h"
+	<SDL/SDL.h>
+	<cstring>
+	"Platform.h"
+	"Graphics/Platform.h"
+	"Graphics/Graphics.h"
 

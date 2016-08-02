@@ -132,10 +132,16 @@ namespace LMP3D
 				float sp = sin( pitch );
 				float sy = sin( yaw );
 				float sr = sin( roll );
-				w = ( cy * cr * cp ) - ( sy * sr * sp );
-				x = ( sy * sr * cp ) + ( cy * cr * sp );
-				y = ( sy * cr * cp ) + ( cy * sr * sp );
-				z = ( cy * sr * cp ) - ( sy * cr * sp );
+
+				w = cp * cr * cr + sp * sy * sr;
+				x = sp * cr * cr - cp * sy * sr;
+				y = cp * sr * cr + sp * cy * sr;
+				z = cp * cr * sr - sp * sy * cr;
+
+				//w = ( cy * cr * cp ) - ( sy * sr * sp );
+				//x = ( sy * sr * cp ) + ( cy * cr * sp );
+				//y = ( sy * cr * cp ) + ( cy * sr * sp );
+				//z = ( cy * sr * cp ) - ( sy * cr * sp );
 			}
 			/**
 			@brief
@@ -186,6 +192,20 @@ namespace LMP3D
 				matrix[13] = 0;
 				matrix[14] = 0;
 				matrix[15] = 1;
+			}
+			/**
+			@brief
+				Retrieves the coordinate system described by this quaternion.
+			@param[out] p_x, p_y, p_z
+				Receive the coordinate system.
+			*/
+			inline void toAxes( Vector3 & p_x, Vector3 & p_y, Vector3 & p_z )const
+			{
+				float matrix[16];
+				toMatrix( matrix );
+				p_x = Vector3( matrix[0], matrix[4], matrix[8] );
+				p_y = Vector3( matrix[1], matrix[5], matrix[9] );
+				p_z = Vector3( matrix[2], matrix[6], matrix[10] );
 			}
 			/**
 			@brief

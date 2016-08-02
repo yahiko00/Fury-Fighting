@@ -21,10 +21,17 @@ namespace LMP3D
 		void Texture::load( std::string const fileName )
 		{
 			Platform::createTexture( m_id, m_data );
-			LMP3D::Platform::loadImage( fileName, *m_data );
-			Platform::bindTexture( *m_id );
-			Platform::initialiseTexture( *m_id, *m_data );
-			Platform::unbindTexture();
+
+			if ( LMP3D::Platform::loadImage( fileName, *m_data ) )
+			{
+				Platform::bindTexture( *m_id );
+				Platform::initialiseTexture( *m_id, *m_data );
+				Platform::unbindTexture();
+			}
+			else
+			{
+				logError( "%s [%s]\n", "Couldn't load texture file", fileName.c_str() );
+			}
 		}
 
 		bool Texture::bind()const

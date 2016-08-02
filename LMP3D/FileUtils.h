@@ -56,6 +56,51 @@ namespace LMP3D
 		The datas directory.
 	*/
 	std::string getDataDirectory();
+
+	/**
+	@brief
+		Retrieves the given path's parent path.
+	@param[in] p_path
+		The path.
+	@return
+		The parent path.
+	*/
+	std::string getParentPath( std::string const & p_path );
+}
+/**
+@brief
+	Concatenates two paths using folder separator.
+*@param[in] p_lhs, p_rhs
+	The paths to concatenate.
+@return
+	The concatenated path (p_lhs / p_rhs).
+*/
+std::string operator/( std::string const & p_lhs, std::string const & p_rhs );
+
+/**
+@brief
+	Concatenates two paths using folder separator.
+*@param[in] p_lhs, p_rhs
+	The paths to concatenate.
+*@return
+	The concatenated path (p_lhs / p_rhs).
+*/
+inline std::string operator/( std::string const & p_lhs, char const * const p_rhs )
+{
+	return p_lhs / std::string{ p_rhs };
+}
+
+/**
+@brief
+	Concatenates two paths using folder separator.
+*@param[in] p_lhs, p_rhs
+	The paths to concatenate.
+*@return
+	The concatenated path (p_lhs / p_rhs).
+*/
+inline std::string operator/( char const * const p_lhs, std::string const & p_rhs )
+{
+	return std::string{ p_lhs } / p_rhs;
 }
 
 #endif

@@ -3,8 +3,9 @@
 #include "Object.h"
 
 #include "Platform.h"
-#include "FileUtils.h"
-#include "StringUtils.h"
+
+#include "LMP3D/FileUtils.h"
+#include "LMP3D/StringUtils.h"
 
 #include "ObjLoader.h"
 #include "SmdLoader.h"

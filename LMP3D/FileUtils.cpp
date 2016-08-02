@@ -61,3 +61,8 @@ namespace LMP3D
 		return Platform::getDataDirectory();
 	}
 }
+
+std::string operator/( std::string const & p_lhs, std::string const & p_rhs )
+{
+	return p_lhs + LMP3D::PATH_SEPARATOR + p_rhs;
+}

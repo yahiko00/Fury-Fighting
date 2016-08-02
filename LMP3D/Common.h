@@ -82,10 +82,22 @@ namespace LMP3D
 
 	struct Size
 	{
-		int x;
-		int y;
+		uint16_t x;
+		uint16_t y;
 
-		Size( int x = 0, int y = 0 )
+		Size( uint16_t x = 0, uint16_t y = 0 )
+			: x( x )
+			, y( y )
+		{
+		}
+	};
+
+	struct Position
+	{
+		int16_t x;
+		int16_t y;
+
+		Position( int16_t x = 0, int16_t y = 0 )
 			: x( x )
 			, y( y )
 		{

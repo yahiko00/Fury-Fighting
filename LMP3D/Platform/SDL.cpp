@@ -10,12 +10,10 @@
 #include <cstring>
 
 #ifdef _WIN32
-#	include <direct.h>
-#	define GetCurrentDir _getcwd
+#	include <Windows.h>
 #	undef main
 #else
 #	include <unistd.h>
-#	define GetCurrentDir getcwd
 #endif
 
 #include "LMP3D/Graphics/Platform.h"
@@ -116,23 +114,44 @@ namespace LMP3D
 
 		std::string getCurrentDirectory()
 		{
-			char currentPath[FILENAME_MAX];
-			memset( currentPath, 0, sizeof( currentPath ) );
-			GetCurrentDir( currentPath, sizeof( currentPath ) );
-			std::string current = currentPath;
+			std::string l_pathReturn;
 
-			if ( current.empty() )
+#if defined( _WIN32 )
+
+			char l_path[FILENAME_MAX] = { 0 };
+			DWORD l_result = ::GetModuleFileNameA( NULL, l_path, sizeof( l_path ) );
+
+			if ( l_result != 0 )
 			{
-				current = ".";
+				l_pathReturn = l_path;
 			}
 
-			current += PATH_SEPARATOR;
-			return current;
+#elif defined( __linux__ )
+
+			char l_path[FILENAME_MAX] = { 0 };
+			char l_buffer[32];
+			sprintf( l_buffer, "/proc/%d/exe", getpid() );
+			int l_bytes = std::min< std::size_t >( readlink( l_buffer, l_path, sizeof( l_path ) ), sizeof( l_path ) - 1 );
+
+			if ( l_bytes > 0 )
+			{
+				l_path[l_bytes] = '\0';
+				l_pathReturn = l_path;
+			}
+
+#else
+
+#	error "Unsupported platform"
+
+#endif
+
+			l_pathReturn = getFilePath( l_pathReturn );
+			return l_pathReturn;
 		}
 
 		std::string getDataDirectory()
 		{
-			return getCurrentDirectory() + "Data";
+			return getCurrentDirectory() / "Data";
 		}
 	}
 }

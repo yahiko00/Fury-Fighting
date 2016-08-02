@@ -1,24 +1,12 @@
 #ifndef ___LMP3D_Window_H___
 #define ___LMP3D_Window_H___
 
-#include "Common.h"
+#include "Event.h"
 
 namespace LMP3D
 {
 	namespace Windows
 	{
-		struct Event
-		{
-			Event();
-
-			int sourisx;
-			int sourisy;
-			char quit;
-			char clikdroit;
-			char clikgauche;
-			char touche[350];
-		};
-
 		class Window
 		{
 		public:
@@ -31,12 +19,12 @@ namespace LMP3D
 
 			inline Event const & getEvent() const
 			{
-				return event;
+				return m_event;
 			}
 
 		private:
-			Event event;
-			unsigned int savedTime;
+			Event m_event;
+			unsigned int m_savedTime;
 		};
 	}
 }
